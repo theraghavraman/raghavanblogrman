@@ -604,7 +604,109 @@
       const links = (store.posts || []).slice(0,6).map(p => p.cover);
       for (const href of links) {
         const l = document.createElement('link');
-        l.rel = 'prefetch'; l.as = 'image'; l.href = href;
+        l.rel = 'prefetch'; l.as = 'image'; l.href =Here’s a completely different blog template structure for your content, focusing on a clean and minimal approach with a centered layout and simplified sections:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raghav’s Blog — Data, Design, and Code</title>
+  <meta name="description" content="A minimal static blog for data, design, and code explorations." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: #f7f9fc;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #3b82f6;
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    header h1 {
+      margin: 0 0 0.5rem;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 0.5rem;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    main {
+      flex: 1;
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .post {
+      background: #fff;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .post h2 {
+      margin-top: 0;
+    }
+    .post .meta {
+      color: #6b7280;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
+      color: #6b7280;
+      border-top: 1px solid #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Raghav’s Blog</h1>
+    <p>Data • Design • Code</p>
+    <nav>
+      <a href="#posts">Posts</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="posts">
+    <article class="post">
+      <h2>Designing Data Pipelines That Scale</h2>
+      <div class="meta">September 1, 2025 • 6,200 reads</div>
+      <p>Patterns, tips, and guardrails for building resilient, observable data pipelines in the cloud.</p>
+    </article>
+
+    <article class="post">
+      <h2>From SQL to Stories: Analytical Dashboards that Persuade</h2>
+      <div class="meta">August 17, 2025 • 4,850 reads</div>
+      <p>Beyond charts—crafting narratives that guide decisions, with reproducible queries and semantics.</p>
+    </article>
+
+    <!-- More posts here -->
+  </main>
+
+  <footer>
+    © <span id="year"></span> Raghav Raman. Built for GitHub Pages.
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
+This template removes the complex animations, multi-theme system, and sidebar, focusing on a clear reading experience and a single-column layout. It’s easier to maintain and mobile-friendly. You can extend it with simple JavaScript if you want search, pagination, or tag filtering later. href;
         document.head.appendChild(l);
       }
     })();
