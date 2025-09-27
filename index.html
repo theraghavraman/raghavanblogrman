@@ -1,709 +1,78 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <!-- Meta -->
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Raghav’s Blog — Data, Design, and Code</title>
-  <meta name="description" content="A state-of-the-art static blog for GitHub Pages with themes, search, tags, and animations." />
-  <meta name="theme-color" content="#5b8cff" />
-
-  <!-- Icons & Fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-
-  <style>
-    /* ========== Root Themes and Design Tokens ========== */
-    :root {
-      --bg: #0b0d10;
-      --panel: #12151a;
-      --text: #dbe1e8;
-      --muted: #9aa4b2;
-      --brand: #5b8cff;
-      --brand-2: #9b5cf6;
-      --brand-3: #00d4a6;
-      --ring: #2a3340;
-      --shadow: 0 8px 30px rgba(0,0,0,0.25);
-      --radius: 14px;
-      --code-bg: #0f1318;
-      --accent-grad: linear-gradient(120deg, var(--brand), var(--brand-2) 50%, var(--brand-3));
-      --header-blur: saturate(1.2) blur(12px);
-      --font-ui: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f7f9fc;
-        --panel: #ffffff;
-        --text: #1f2937;
-        --muted: #5b6575;
-        --ring: #e5eaf2;
-        --code-bg: #f0f3f9;
-        --shadow: 0 6px 24px rgba(16,24,40,0.08);
-      }
-    }
-    /* Alternative palette: Solarized-like */
-    :root.theme-solarized {
-      --bg: #002b36;
-      --panel: #073642;
-      --text: #e1f3f4;
-      --muted: #93a1a1;
-      --brand: #b58900;
-      --brand-2: #cb4b16;
-      --brand-3: #2aa198;
-      --ring: #0a3b48;
-      --code-bg: #00212b;
-    }
-    /* Light palette toggle */
-    :root.theme-light {
-      --bg: #fafcff;
-      --panel: #ffffff;
-      --text: #101828;
-      --muted: #667085;
-      --brand: #3b82f6;
-      --brand-2: #8b5cf6;
-      --brand-3: #10b981;
-      --ring: #e5e7eb;
-      --code-bg: #f5f7fb;
-    }
-
-    /* ========== Base Resets ========== */
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      color: var(--text);
-      background: radial-gradient(1200px 800px at 10% -10%, rgba(91,140,255,0.12), transparent 50%),
-                  radial-gradient(1400px 900px at 110% 10%, rgba(155,92,246,0.12), transparent 55%),
-                  var(--bg);
-      font: 16px/1.6 var(--font-ui);
-      letter-spacing: 0.2px;
-    }
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-
-    /* ========== Sticky Header with Glass Blur ========== */
-    header.site {
-      position: sticky; top: 0; z-index: 50;
-      background: color-mix(in oklab, var(--panel) 80%, transparent);
-      backdrop-filter: var(--header-blur);
-      border-bottom: 1px solid var(--ring);
-    }
-    .wrap {
-      max-width: 1120px; margin: 0 auto; padding: 18px 20px;
-      display: flex; align-items: center; gap: 16px; justify-content: space-between;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-badge {
-      width: 36px; height: 36px; border-radius: 10px;
-      background: var(--accent-grad);
-      box-shadow: inset 0 -2px 8px rgba(0,0,0,0.25);
-    }
-    .brand h1 {
-      font-size: 18px; margin: 0; font-weight: 800; letter-spacing: 0.2px;
-    }
-
-    /* ========== Theme Switcher & Controls ========== */
-    .controls { display: flex; align-items: center; gap: 10px; }
-    .btn {
-      border: 1px solid var(--ring);
-      padding: 8px 12px; border-radius: 10px;
-      background: var(--panel); color: var(--text);
-      box-shadow: var(--shadow);
-      display: inline-flex; gap: 8px; align-items: center;
-      transition: transform .2s ease;
-      cursor: pointer;
-    }
-    .btn:active { transform: translateY(1px); }
-    .chip {
-      padding: 6px 10px; border-radius: 999px; font-size: 12px;
-      border: 1px solid var(--ring); background: color-mix(in oklab, var(--panel), black 2%);
-    }
-    .theme-dot {
-      width: 12px; height: 12px; border-radius: 999px; display: inline-block;
-      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.4);
-    }
-
-    /* ========== Hero Section ========== */
-    .hero {
-      max-width: 1120px; margin: 28px auto 10px; padding: 36px 20px 12px;
-      display: grid; gap: 26px; grid-template-columns: 1.08fr 0.92fr; align-items: center;
-    }
-    .hero .kicker { font-weight: 700; font-size: 13px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
-    .hero h2 {
-      font-size: clamp(28px, 4vw, 44px); line-height: 1.1; margin: 6px 0 10px;
-      background: linear-gradient(120deg, var(--text), color-mix(in oklab, var(--text), var(--brand) 30%));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-    }
-    .hero p { color: var(--muted); margin: 0 0 14px; }
-    .hero .cta { display: flex; gap: 10px; flex-wrap: wrap; }
-
-    .hero .panel {
-      background: linear-gradient(180deg, color-mix(in oklab, var(--panel), black 2%), color-mix(in oklab, var(--panel), white 2%));
-      border: 1px solid var(--ring);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      position: relative; overflow: hidden;
-    }
-    .spark {
-      position: absolute; inset: -50% -20% auto auto;
-      width: 70%; height: 70%; border-radius: 50%;
-      background: radial-gradient(closest-side, color-mix(in oklab, var(--brand) 35%, transparent), transparent 70%);
-      filter: blur(24px); opacity: 0.4; transform: rotate(8deg);
-    }
-    .hero .stats {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px;
-    }
-    .stat {
-      padding: 14px; border: 1px dashed var(--ring); border-radius: 12px; text-align: center;
-      background: color-mix(in oklab, var(--panel), black 4%);
-    }
-    .stat strong { display: block; font-size: 18px; }
-    .stat span { color: var(--muted); font-size: 12px; }
-
-    /* ========== Progress Bar (Scroll) ========== */
-    .progress {
-      position: fixed; top: 0; left: 0; height: 3px; background: var(--accent-grad);
-      width: 0; z-index: 60;
-    }
-
-    /* ========== Main Layout ========== */
-    main { max-width: 1120px; margin: 16px auto 60px; padding: 0 20px; display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
-
-    /* ========== Posts List ========== */
-    .cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-    .card {
-      grid-column: span 6;
-      background: linear-gradient(180deg, color-mix(in oklab, var(--panel), black 2%), color-mix(in oklab, var(--panel), white 2%));
-      border: 1px solid var(--ring);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden; display: grid; grid-template-rows: 180px auto; transition: transform .2s ease;
-    }
-    .card:hover { transform: translateY(-2px); }
-    .card figure {
-      margin: 0; position: relative; background: #0c1016;
-    }
-    .card img {
-      width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(1.1) contrast(1.02);
-    }
-    .card .content { padding: 14px 14px 16px; }
-    .card h3 { margin: 0 0 6px; font-size: 20px; }
-    .card .meta { display: flex; gap: 8px; align-items: center; color: var(--muted); font-size: 12px; }
-    .card .tags { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .tag { font-size: 12px; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--ring); background: color-mix(in oklab, var(--panel), black 3%); }
-    .card .excerpt { margin-top: 10px; color: var(--muted); font-size: 14px; }
-
-    /* ========== Sidebar ========== */
-    aside .box {
-      background: linear-gradient(180deg, color-mix(in oklab, var(--panel), black 2%), color-mix(in oklab, var(--panel), white 2%));
-      border: 1px solid var(--ring); border-radius: var(--radius); box-shadow: var(--shadow);
-      padding: 16px; margin-bottom: 16px;
-    }
-    .box h4 { margin: 0 0 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
-    .search { display: flex; gap: 8px; }
-    .search input {
-      flex: 1; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--ring);
-      background: color-mix(in oklab, var(--panel), white 2%); color: var(--text);
-    }
-    .list { display: flex; gap: 8px; flex-wrap: wrap; }
-    .list .chip { cursor: pointer; }
-    .list .chip.active { outline: 2px solid color-mix(in oklab, var(--brand), white 20%); }
-
-    /* ========== Pagination ========== */
-    .pagination { display: flex; gap: 8px; justify-content: center; margin-top: 16px; }
-    .page-btn {
-      padding: 8px 12px; border: 1px solid var(--ring); border-radius: 10px; background: var(--panel); cursor: pointer;
-    }
-    .page-btn[disabled] { opacity: 0.5; cursor: default; }
-
-    /* ========== Footer ========== */
-    footer.site {
-      border-top: 1px solid var(--ring);
-      background: color-mix(in oklab, var(--panel) 85%, transparent);
-      backdrop-filter: blur(6px);
-    }
-    .footer-wrap {
-      max-width: 1120px; margin: 0 auto; padding: 24px 20px; display: grid; gap: 12px;
-      grid-template-columns: 1fr auto; align-items: center;
-    }
-    .social { display: flex; gap: 10px; }
-    .social a { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--ring); background: var(--panel); }
-
-    /* ========== Utilities & Animations ========== */
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-    .appear { opacity: 0; transform: translateY(14px); transition: all .6s cubic-bezier(.2,.8,.2,1); }
-    .appear.show { opacity: 1; transform: translateY(0); }
-    .gradient-text { background: var(--accent-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-
-    /* ========== Responsive ========== */
-    @media (max-width: 960px) {
-      .hero { grid-template-columns: 1fr; }
-      main { grid-template-columns: 1fr; }
-      .card { grid-column: span 12; }
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Athena — A Dynamic Static Blog</title>
+  <meta name="description" content="A state‑of‑the‑art static blog powered by semantic HTML, modern CSS, and vanilla JS.">
+  <link rel="preload" href="styles.css" as="style">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" href="posts.json" as="fetch" crossorigin>
 </head>
-<body>
-  <!-- Scroll progress line -->
-  <div class="progress" id="progress"></div>
+<body class="theme-auto">
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- Header -->
-  <header class="site">
+  <header class="site-header" role="banner">
     <div class="wrap">
-      <div class="brand">
-        <div class="brand-badge" aria-hidden="true"></div>
-        <h1>Raghav’s Blog</h1>
-      </div>
-      <nav aria-label="Primary">
-        <div class="controls">
-          <button class="btn" id="themeToggle" title="Toggle theme">
-            <i class="fa-solid fa-circle-half-stroke"></i> Theme
-          </button>
-          <span class="chip"><span class="theme-dot" style="background:#5b8cff"></span> Classic</span>
-          <span class="chip"><span class="theme-dot" style="background:#b58900"></span> Solarized</span>
-          <a class="btn" href="#about"><i class="fa-regular fa-circle-question"></i> About</a>
-          <a class="btn" href="#contact"><i class="fa-regular fa-paper-plane"></i> Contact</a>
-        </div>
+      <a class="brand" href="/">Athena</a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="#latest">Latest</a></li>
+          <li><a href="#topics">Topics</a></li>
+          <li><button id="themeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle theme">🌗</button></li>
+        </ul>
       </nav>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div>
-      <div class="kicker">Data • Engineering • Design</div>
-      <h2><span class="gradient-text">A dynamic-looking static blog</span> built for GitHub Pages.</h2>
-      <p>Fast, themeable, searchable, and animated — no back-end or build step required. All content renders from embedded JSON to feel dynamic on a purely static host.</p>
-      <div class="cta">
-        <a class="btn" href="#posts"><i class="fa-solid fa-bolt"></i> See Posts</a>
-        <a class="btn" href="#subscribe"><i class="fa-regular fa-envelope"></i> Subscribe</a>
+  <main id="main" class="site-main" role="main">
+    <section class="hero">
+      <div class="wrap">
+        <h1 class="display">Ideas that move fast, pages that load faster</h1>
+        <p class="lede">A minimal, animated, accessible blog scaffold—no frameworks, just craft.</p>
+        <form class="search" role="search" aria-label="Site search">
+          <input id="q" name="q" type="search" placeholder="Search articles, tags…" autocomplete="off" inputmode="search" aria-controls="grid" aria-describedby="searchHelp">
+          <p id="searchHelp" class="sr">Type to filter posts by title, summary, or tag.</p>
+        </form>
       </div>
-      <div class="stats">
-        <div class="stat"><strong id="statPosts">0</strong><span>Posts</span></div>
-        <div class="stat"><strong id="statTags">0</strong><span>Tags</span></div>
-        <div class="stat"><strong id="statReads">0</strong><span>Reads</span></div>
-      </div>
-    </div>
-    <div class="panel appear">
-      <div class="spark"></div>
-      <h3 style="margin:0 0 8px;">What’s inside</h3>
-      <ul style="margin:0 0 6px 18px;">
-        <li>Multiple themes: dark, light, solarized</li>
-        <li>Client-side posts, tags, search, pagination</li>
-        <li>Scroll progress, lazy images, reveal animations</li>
-        <li>Zero frameworks, deploy-ready on GitHub Pages</li>
-      </ul>
-      <p style="color:var(--muted); margin:8px 0 0;">Tip: Use the Theme button or system preference to switch looks.</p>
-    </div>
-  </section>
-
-  <!-- Main -->
-  <main id="posts">
-    <!-- Posts column -->
-    <section aria-label="Articles">
-      <div class="cards" id="cards"></div>
-      <nav class="pagination" aria-label="Pagination">
-        <button class="page-btn" id="prevBtn">Prev</button>
-        <span class="chip" id="pageInfo">Page 1/1</span>
-        <button class="page-btn" id="nextBtn">Next</button>
-      </nav>
     </section>
 
-    <!-- Sidebar -->
-    <aside aria-label="Sidebar">
-      <div class="box">
-        <h4>Search</h4>
-        <div class="search">
-          <label for="q" class="sr-only">Search posts</label>
-          <input id="q" type="search" placeholder="Search posts, tags..." autocomplete="off" />
-          <button class="btn" id="clearSearch" title="Clear"><i class="fa-solid fa-xmark"></i></button>
-        </div>
+    <section id="latest" aria-labelledby="latestHeading" class="section">
+      <div class="wrap">
+        <h2 id="latestHeading">Latest</h2>
+        <div id="grid" class="card-grid" data-enhance="reveal"></div>
+        <template id="card-tpl">
+          <article class="card" data-tags="">
+            <a class="card-media" href="post.html">
+              <img loading="lazy" decoding="async" alt="">
+            </a>
+            <div class="card-body">
+              <header>
+                <h3 class="card-title"><a href="post.html"></a></h3>
+                <p class="card-meta"><time></time> · <span class="reading"></span></p>
+              </header>
+              <p class="card-excerpt"></p>
+              <footer class="card-tags" aria-label="Tags"></footer>
+            </div>
+          </article>
+        </template>
       </div>
-      <div class="box">
-        <h4>Tags</h4>
-        <div class="list" id="tagList"></div>
+    </section>
+
+    <section id="topics" aria-labelledby="topicsHeading" class="section">
+      <div class="wrap">
+        <h2 id="topicsHeading">Topics</h2>
+        <div id="tagCloud" class="tag-cloud" role="list"></div>
       </div>
-      <div class="box appear" id="about">
-        <h4>About</h4>
-        <p>Hello, this is a static, high-performance blog crafted for data and design explorations. Built for GitHub Pages, it uses only HTML, CSS, and vanilla JS.</p>
-      </div>
-      <div class="box appear" id="subscribe">
-        <h4>Subscribe</h4>
-        <p>Static sites can’t send emails on their own, but this button can open a mail client or a newsletter tool.</p>
-        <a class="btn" href="mailto:subscribe@example.com?subject=Subscribe"><i class="fa-regular fa-envelope"></i> Email Subscribe</a>
-      </div>
-    </aside>
+    </section>
   </main>
 
-  <!-- Contact and CTA -->
-  <section id="contact" class="hero" style="margin-top:10px;">
-    <div class="panel appear">
-      <div class="spark"></div>
-      <h3 style="margin:0 0 8px;">Say hello</h3>
-      <p class="muted">Questions, ideas, or collaborations are welcome. Static hosting; dynamic energy.</p>
-      <div class="cta">
-        <a class="btn" href="mailto:ramanraghav06@gmail.com"><i class="fa-regular fa-paper-plane"></i> Email</a>
-        <a class="btn" href="https://github.com/ramanraghav06" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
-        <a class="btn" href="https://www.linkedin.com/in/ramanraghav06" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
-      </div>
-    </div>
-    <div>
-      <div class="kicker">Performance-first</div>
-      <h2>Looks dynamic. Hosts static.</h2>
-      <p>Client-side rendering, caching hints, and progressive enhancement deliver an app-like feel without any server. Perfect for GitHub Pages.</p>
-      <div class="stats">
-        <div class="stat"><strong>~0ms</strong><span>Server time</span></div>
-        <div class="stat"><strong>100%</strong><span>Static assets</span></div>
-        <div class="stat"><strong>0 deps</strong><span>Vanilla JS</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="site">
-    <div class="footer-wrap">
-      <small>© <span id="year"></span> Raghav Raman. Built for GitHub Pages.</small>
-      <div class="social">
-        <a href="#top" title="Back to top"><i class="fa-solid fa-arrow-up"></i></a>
-        <a href="https://github.com" target="_blank" rel="noopener" title="GitHub"><i class="fa-brands fa-github"></i></a>
-        <a href="https://developer.mozilla.org/" target="_blank" rel="noopener" title="MDN"><i class="fa-solid fa-book"></i></a>
-      </div>
+  <footer class="site-footer" role="contentinfo">
+    <div class="wrap">
+      <p>© <span id="year"></span> Athena. Built with semantic HTML, modern CSS, and vanilla JS.</p>
     </div>
   </footer>
 
-  <!-- Embedded content “database” (editable) -->
-  <script id="data" type="application/json">
-  {
-    "posts": [
-      {
-        "id": "p1",
-        "title": "Designing Data Pipelines That Scale",
-        "date": "2025-09-01",
-        "cover": "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1600&auto=format&fit=crop",
-        "tags": ["ETL","Cloud","Python"],
-        "excerpt": "Patterns, tips, and guardrails for building resilient, observable data pipelines in the cloud.",
-        "reads": 6_200
-      },
-      {
-        "id": "p2",
-        "title": "From SQL to Stories: Analytical Dashboards that Persuade",
-        "date": "2025-08-17",
-        "cover": "https://images.unsplash.com/photo-1551281044-8a5ea3f70df4?q=80&w=1600&auto=format&fit=crop",
-        "tags": ["Analytics","Tableau","Storytelling"],
-        "excerpt": "Beyond charts—crafting narratives that guide decisions, with reproducible queries and semantics.",
-        "reads": 4_850
-      },
-      {
-        "id": "p3",
-        "title": "MongoDB for Real-Time Product Metrics",
-        "date": "2025-07-22",
-        "cover": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1600&auto=format&fit=crop",
-        "tags": ["MongoDB","NoSQL","Backend"],
-        "excerpt": "Schema patterns for time-series metrics, TTL indices, and read-heavy workloads.",
-        "reads": 3_150
-      },
-      {
-        "id": "p4",
-        "title": "Cost-Aware BigQuery: Speed Without Overspend",
-        "date": "2025-06-10",
-        "cover": "https://images.unsplash.com/photo-1520607162513-5f5b3d6f83f5?q=80&w=1600&auto=format&fit=crop",
-        "tags": ["BigQuery","GCP","Optimization"],
-        "excerpt": "Partitioning, clustering, and thought frameworks to trim costs without losing performance.",
-        "reads": 5_420
-      },
-      {
-        "id": "p5",
-        "title": "Kafka Mental Models for Data Engineers",
-        "date": "2025-05-12",
-        "cover": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1600&auto=format&fit=crop",
-        "tags": ["Kafka","Streaming","Event-Driven"],
-        "excerpt": "Topics, partitions, and consumer groups through intuitive, operational perspectives.",
-        "reads": 7_010
-      }
-    ],
-    "pageSize": 4
-  }
-  </script>
-
-  <script>
-    // Step 1: Initialize state, settings, and helpers
-    const $ = (sel, root=document) => root.querySelector(sel);
-    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
-    const store = { posts: [], page: 1, pageSize: 6, filtered: null, tag: null, q: "" };
-
-    // Step 2: Load content JSON from inline script
-    (function loadData(){
-      const json = JSON.parse($('#data').textContent);
-      store.posts = json.posts || [];
-      store.pageSize = json.pageSize || store.pageSize;
-      // Stats
-      $('#statPosts').textContent = store.posts.length.toString();
-      $('#statTags').textContent = new Set(store.posts.flatMap(p => p.tags)).size.toString();
-      $('#statReads').textContent = store.posts.reduce((a, p) => a + (p.reads||0), 0).toLocaleString();
-    })();
-
-    // Step 3: Theme application and toggle (system + user)
-    (function themeInit(){
-      const saved = localStorage.getItem('theme');
-      if (saved) document.documentElement.className = saved;
-      $('#themeToggle').addEventListener('click', () => {
-        const cls = document.documentElement.className;
-        const next = cls === 'theme-light' ? 'theme-solarized' : (cls === 'theme-solarized' ? '' : 'theme-light');
-        document.documentElement.className = next;
-        localStorage.setItem('theme', next);
-      });
-    })();
-
-    // Step 4: Render posts to cards grid with current filters and pagination
-    function render() {
-      const cards = $('#cards');
-      cards.innerHTML = '';
-      const base = store.filtered ?? store.posts;
-      const pageCount = Math.max(1, Math.ceil(base.length / store.pageSize));
-      store.page = Math.min(store.page, pageCount);
-
-      const start = (store.page - 1) * store.pageSize;
-      const view = base.slice(start, start + store.pageSize);
-
-      for (const p of view) {
-        const card = document.createElement('article');
-        card.className = 'card appear';
-        card.innerHTML = `
-          <figure>
-            <img loading="lazy" src="${p.cover}" alt="${p.title}" />
-          </figure>
-          <div class="content">
-            <div class="meta"><i class="fa-regular fa-calendar"></i> ${new Date(p.date).toLocaleDateString()} • <i class="fa-regular fa-eye"></i> ${p.reads.toLocaleString()} reads</div>
-            <h3>${p.title}</h3>
-            <div class="tags">${p.tags.map(t => `<span class="tag" data-tag="${t}">#${t}</span>`).join('')}</div>
-            <p class="excerpt">${p.excerpt}</p>
-          </div>
-        `;
-        cards.appendChild(card);
-      }
-
-      // Pagination UI
-      $('#pageInfo').textContent = `Page ${store.page}/${pageCount}`;
-      $('#prevBtn').disabled = (store.page <= 1);
-      $('#nextBtn').disabled = (store.page >= pageCount);
-
-      // Tag interactions on rendered cards
-      $$('#cards .tag').forEach(el => {
-        el.addEventListener('click', () => {
-          store.tag = el.getAttribute('data-tag');
-          filter();
-          activateTag(store.tag);
-          window.scrollTo({ top: $('#posts').offsetTop - 60, behavior: 'smooth' });
-        });
-      });
-
-      // Reveal animations
-      reveal();
-    }
-
-    // Step 5: Build sidebar tag list and wire filters
-    (function buildTags(){
-      const tags = Array.from(new Set(store.posts.flatMap(p => p.tags))).sort();
-      const tagList = $('#tagList');
-      tagList.innerHTML = '';
-      // "All" chip
-      const all = document.createElement('span');
-      all.className = 'chip active';
-      all.textContent = 'All';
-      all.addEventListener('click', () => { store.tag = null; filter(); activateTag(null); });
-      tagList.appendChild(all);
-      // Others
-      for (const t of tags) {
-        const chip = document.createElement('span');
-        chip.className = 'chip';
-        chip.textContent = t;
-        chip.dataset.tag = t;
-        chip.addEventListener('click', () => { store.tag = t; filter(); activateTag(t); });
-        tagList.appendChild(chip);
-      }
-    })();
-
-    function activateTag(tag) {
-      $$('#tagList .chip').forEach(c => {
-        c.classList.toggle('active', (tag ? c.dataset.tag === tag : c.textContent === 'All'));
-      });
-    }
-
-    // Step 6: Search logic combining title, excerpt, and tags
-    (function searchInit(){
-      const input = $('#q');
-      const clear = $('#clearSearch');
-      input.addEventListener('input', () => {
-        store.q = input.value.trim();
-        filter();
-      });
-      clear.addEventListener('click', () => {
-        input.value = '';
-        store.q = '';
-        filter();
-        input.focus();
-      });
-    })();
-
-    function filter() {
-      const text = store.q.toLowerCase();
-      const byTag = p => !store.tag || p.tags.includes(store.tag);
-      const byText = p =>
-        !text ||
-        p.title.toLowerCase().includes(text) ||
-        p.excerpt.toLowerCase().includes(text) ||
-        p.tags.join(' ').toLowerCase().includes(text);
-
-      store.filtered = store.posts.filter(p => byTag(p) && byText(p));
-      store.page = 1;
-      render();
-    }
-
-    // Step 7: Pagination handlers
-    $('#prevBtn').addEventListener('click', () => { store.page = Math.max(1, store.page - 1); render(); window.scrollTo({ top: $('#posts').offsetTop - 60, behavior: 'smooth' }); });
-    $('#nextBtn').addEventListener('click', () => { store.page = store.page + 1; render(); window.scrollTo({ top: $('#posts').offsetTop - 60, behavior: 'smooth' }); });
-
-    // Step 8: IntersectionObserver reveal for .appear items
-    const io = new IntersectionObserver((entries) => {
-      for (const e of entries) if (e.isIntersecting) e.target.classList.add('show');
-    }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
-    function reveal() { $$('.appear').forEach(el => io.observe(el)); }
-
-    // Step 9: Scroll progress bar
-    window.addEventListener('scroll', () => {
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      const pct = max ? (h.scrollTop / max) : 0;
-      $('#progress').style.width = `${pct * 100}%`;
-    });
-
-    // Step 10: Year stamp
-    $('#year').textContent = new Date().getFullYear().toString();
-
-    // Step 11: Initial display
-    filter(); // computes, sets filtered, renders
-
-    // Step 12: Smooth hash navigation enhancement
-    document.addEventListener('click', (e) => {
-      const a = e.target.closest('a[href^="#"]');
-      if (!a) return;
-      const id = a.getAttribute('href').slice(1);
-      const target = document.getElementById(id);
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-
-    // Step 13: Optional lightweight “cache hint” via prefetch (static-host-safe)
-    (function prefetchCovers(){
-      const links = (store.posts || []).slice(0,6).map(p => p.cover);
-      for (const href of links) {
-        const l = document.createElement('link');
-        l.rel = 'prefetch'; l.as = 'image'; l.href =Here’s a completely different blog template structure for your content, focusing on a clean and minimal approach with a centered layout and simplified sections:
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Raghav’s Blog — Data, Design, and Code</title>
-  <meta name="description" content="A minimal static blog for data, design, and code explorations." />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      background: #f7f9fc;
-      color: #1f2937;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      background: #3b82f6;
-      color: #fff;
-      text-align: center;
-      padding: 2rem 1rem;
-    }
-    header h1 {
-      margin: 0 0 0.5rem;
-    }
-    nav a {
-      color: #fff;
-      margin: 0 0.5rem;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    main {
-      flex: 1;
-      max-width: 800px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-    .post {
-      background: #fff;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-    .post h2 {
-      margin-top: 0;
-    }
-    .post .meta {
-      color: #6b7280;
-      font-size: 0.85rem;
-      margin-bottom: 0.5rem;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      font-size: 0.85rem;
-      color: #6b7280;
-      border-top: 1px solid #e5e7eb;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Raghav’s Blog</h1>
-    <p>Data • Design • Code</p>
-    <nav>
-      <a href="#posts">Posts</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
-  <main id="posts">
-    <article class="post">
-      <h2>Designing Data Pipelines That Scale</h2>
-      <div class="meta">September 1, 2025 • 6,200 reads</div>
-      <p>Patterns, tips, and guardrails for building resilient, observable data pipelines in the cloud.</p>
-    </article>
-
-    <article class="post">
-      <h2>From SQL to Stories: Analytical Dashboards that Persuade</h2>
-      <div class="meta">August 17, 2025 • 4,850 reads</div>
-      <p>Beyond charts—crafting narratives that guide decisions, with reproducible queries and semantics.</p>
-    </article>
-
-    <!-- More posts here -->
-  </main>
-
-  <footer>
-    © <span id="year"></span> Raghav Raman. Built for GitHub Pages.
-  </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <script src="app.js" defer></script>
 </body>
 </html>
-
-
