@@ -1,481 +1,738 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Relay — Tech • Lit • Philosophy • Science</title>
-<meta name="description" content="A neo‑brutalist single‑file blog. Bold typography, rigid grid, loud colors. No frameworks, just HTML+CSS+JS." />
+<title>Glassbook — Science • Philosophy • Technology • Literature</title>
+<meta name="description" content="A single-file glassmorphic flipbook website with page-turn effects for science, philosophy, technology, and literature—newspaper-style spreads with interactive flips." />
 
 <style>
-/* ==================== Neo‑Brutalist System ==================== */
+/* ===================== Root Theme ===================== */
 :root{
-  /* Ink + paper */
-  --paper: #fffefb;
-  --ink: #0c0c10;
-  --muted: #3a3a4a;
+  --page-bg: #eef3ff;
+  --ink: #0f1533;
+  --muted: #4e5b86;
 
-  /* Split‑complementary accents (base: cobalt) */
-  --acc-1: #2251ff; /* base */
-  --acc-2: #ff6a33; /* red‑orange (split) */
-  --acc-3: #19c37d; /* green (split) */
+  --glass: rgba(255,255,255,0.22);
+  --glass-strong: rgba(255,255,255,0.35);
+  --edge: rgba(255,255,255,0.55);
+  --border: rgba(20,24,40,0.14);
+  --shadow: rgba(15,21,51,0.22);
 
-  /* Utility */
-  --maxw: 1160px;
-  --grid-gap: 20px;
-  --radius: 6px;
+  --a1:#63b3ed; /* blue */
+  --a2:#a78bfa; /* purple */
+  --a3:#f472b6; /* pink */
+  --a4:#34d399; /* green */
+  --a5:#f6ad55; /* amber */
 
-  /* Borders: chunky */
-  --b1: 3px solid var(--ink);
-  --b2: 2px solid var(--ink);
+  --book-w: min(1024px, 92vw);
+  --book-h: min(680px, 78vh);
+  --gutter: 16px;
+  --radius: 18px;
+  --flip-dur: .8s;
+  --sheet-thickness: 2px;
 }
 
-/* Reset + base */
+/* Motion safety */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  :root{ --flip-dur: .01ms; }
+}
+
+/* ===================== Global ===================== */
 *{ box-sizing:border-box }
 html,body{ height:100% }
 html{ scroll-behavior:smooth }
 body{
-  margin:0; background: var(--paper); color: var(--ink);
-  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(99,179,237,0.18), transparent 60%),
+    radial-gradient(1200px 600px at 90% 15%, rgba(167,139,250,0.18), transparent 60%),
+    linear-gradient(180deg, #f7faff, #ecf2ff 38%, #f9fbff 100%);
+  color:var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  overflow-x:hidden;
 }
 
-/* Container + grid */
-.wrap{ width:calc(100% - 32px); max-width:var(--maxw); margin:0 auto; }
-.grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
-
-/* Utilities */
-.u-bar{ border: var(--b1); border-radius: var(--radius); }
-.u-pad{ padding:14px }
-.u-mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-.u-cap{ text-transform: uppercase; letter-spacing:.12em }
-.u-link{ text-decoration: underline; text-underline-offset: 2px }
-.u-chip{
-  display:inline-block; padding:.35rem .6rem; border: var(--b2); border-radius:20px; font-size:.82rem;
-  background:#fff; box-shadow: 4px 4px 0 0 var(--ink);
+/* Subtle noise overlay for paper vibe */
+.noise{
+  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.05;
+  background-image: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="1"/></svg>');
+  background-size: 280px 280px;
+  mix-blend-mode: multiply;
 }
-.u-chip[data-cat="tech"]{ background: #e9efff }
-.u-chip[data-cat="literature"]{ background: #ffece4 }
-.u-chip[data-cat="philosophy"]{ background: #e7fbf1 }
-.u-chip[data-cat="science"]{ background: #f5f7ff }
 
-/* Header */
+/* ===================== Header / Controls ===================== */
 .header{
-  margin:12px 0; display:flex; align-items:center; gap:16px; justify-content:space-between;
+  position:relative; z-index:2;
+  width:calc(100% - 2rem); max-width:1200px; margin: 10px auto 8px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
 }
 .brand{
-  display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;
+  display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit;
 }
 .logo{
-  width:42px; height:42px; border: var(--b1); border-radius:8px; display:grid; place-items:center;
-  background: linear-gradient(90deg, var(--acc-1) 40%, var(--acc-2) 40% 70%, var(--acc-3) 70%);
-  color:#000; font-weight:800; box-shadow: 6px 6px 0 0 var(--ink);
+  width:42px; height:42px; border-radius:12px;
+  background: conic-gradient(from 210deg, var(--a1), var(--a2), var(--a3), var(--a4), var(--a1));
+  position:relative; overflow:hidden; border:1px solid var(--border);
+  box-shadow: 0 8px 22px var(--shadow);
 }
-.brand h1{ font-size:1.02rem; margin:0; line-height:1; }
-.nav{ display:flex; gap:8px; flex-wrap:wrap }
-.nav a{
-  display:inline-block; padding:.6rem .8rem; border: var(--b2); border-radius:4px; color:inherit; text-decoration:none;
-  background:#fff; box-shadow: 4px 4px 0 0 var(--ink); font-weight:700;
+.logo::after{
+  content:""; position:absolute; inset:2px; border-radius:10px;
+  background: rgba(255,255,255,0.55);
+  border:1px solid rgba(20,24,40,0.12);
+  backdrop-filter: blur(4px);
 }
-.nav a:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink) }
+.brand h1{ margin:0; font-size:1.05rem; letter-spacing:.12em; text-transform:uppercase; color:#465185; }
 
-/* Hero banner */
-.hero{
-  display:grid; grid-template-columns: 7fr 5fr; gap: var(--grid-gap);
-  margin: 8px 0 18px;
-}
-.hero-left, .hero-right{ border: var(--b1); border-radius: var(--radius); padding: 18px; }
-.kicker{ color: var(--muted); font-size:.82rem; }
-.hero h2{
-  font-size: clamp(1.8rem, 3.4vw, 2.6rem); margin:.4rem 0 .5rem;
-  line-height:1.05;
-}
-.hero h2 .emA{ background: var(--acc-1); color: #fff; padding: .15rem .3rem; box-decoration-break: clone }
-.hero h2 .emB{ background: var(--acc-2); color: #fff; padding: .15rem .3rem; box-decoration-break: clone }
-.hero p{ color: var(--muted); max-width: 58ch }
-.cta{
-  display:flex; gap:10px; margin-top:.8rem; flex-wrap:wrap;
+.controls{
+  display:flex; align-items:center; gap:8px; flex-wrap:wrap;
 }
 .btn{
-  display:inline-flex; align-items:center; gap:.6rem; padding:.7rem 1rem; font-weight:800; text-decoration:none; color:var(--ink);
-  border: var(--b1); border-radius:4px; background:#fff; box-shadow: 6px 6px 0 0 var(--ink);
+  display:inline-flex; align-items:center; gap:.5rem; padding:.55rem .85rem;
+  border-radius:12px; background: rgba(255,255,255,0.9);
+  border:1px solid var(--border); color:var(--ink);
+  box-shadow: 0 6px 14px rgba(15,21,51,0.08);
+  text-decoration:none; font-weight:700;
 }
-.btn--acc1{ background: var(--acc-1); color:#fff }
-.btn--acc2{ background: var(--acc-2); color:#fff }
-.btn:hover{ transform: translate(-3px,-3px); box-shadow: 9px 9px 0 0 var(--ink) }
-
-/* Spotlight box (right) */
-.hero-right{
-  background: repeating-linear-gradient( -45deg, #fff, #fff 14px, #f5f5f5 14px, #f5f5f5 28px );
-}
-.tag{
-  display:inline-block; font-weight:900; padding:.3rem .55rem; border: var(--b2); background:#fff; border-radius:4px;
-  box-shadow: 4px 4px 0 0 var(--ink); margin-bottom:.6rem;
+.btn:hover{ filter:brightness(1.03) }
+.select{
+  padding:.55rem .7rem; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--ink); font-weight:600;
 }
 
-/* Sections */
-.section{ margin: 16px 0 }
-.section h3{ font-size:.96rem; margin:0 0 8px; }
-.section .u-cap{ color: var(--muted) }
-
-/* Cards grid */
-.cards{ display:grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
-.card{
-  grid-column: span 4; border: var(--b1); border-radius: var(--radius); background:#fff; display:flex; flex-direction:column;
-  box-shadow: 8px 8px 0 0 var(--ink); min-height: 240px; transition: transform .08s ease;
+/* ===================== Stage / Book ===================== */
+.stage{
+  position:relative; z-index:1;
+  width:100%; display:grid; place-items:center; padding: 10px 0 18px;
+  perspective: 2000px;
 }
-.card:hover{ transform: translate(-2px,-2px); box-shadow: 10px 10px 0 0 var(--ink) }
-.card-head{
-  height: 110px;
+
+.book-wrap{
+  position:relative;
+  width: var(--book-w);
+  height: var(--book-h);
+  transform-style: preserve-3d;
+}
+
+.book{
+  position:absolute; inset:0; transform-style: preserve-3d;
+  border-radius: calc(var(--radius) + 4px);
+}
+
+/* Back board and front board for thickness illusion */
+.board{
+  position:absolute; inset:0; transform: translateZ(calc(var(--sheet-thickness) * -18));
+  border-radius: calc(var(--radius) + 4px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.7));
+  border:1px solid var(--border);
+  box-shadow: 0 24px 40px rgba(15,21,51,0.18), 0 0 0 1px rgba(255,255,255,0.6) inset;
+}
+
+/* Spine */
+.spine{
+  position:absolute; top:0; bottom:0; left: calc(50% - 6px); width:12px;
+  background: linear-gradient(90deg, rgba(20,24,40,0.08), rgba(255,255,255,0.8), rgba(20,24,40,0.08));
+  filter:saturate(80%);
+  border-left:1px solid rgba(20,24,40,0.10);
+  border-right:1px solid rgba(20,24,40,0.10);
+  z-index:3; pointer-events:none;
+  border-radius: 8px;
+}
+
+/* ===================== Sheets (pages) ===================== */
+.sheet{
+  position:absolute; top:0; bottom:0;
+  width:50%;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform var(--flip-dur) cubic-bezier(.2,.8,.2,1), z-index .2s linear;
+}
+
+/* left stack sits on left, flips to left; right stack flips to right with different origin */
+.sheet.right{
+  left:50%;
+  transform-origin: right center;
+}
+
+/* default positions: right side pages closed stack over left */
+.sheet .paper{
+  position:absolute; inset:0; border-radius: var(--radius);
+  background: var(--glass);
+  border:1px solid var(--border);
+  backdrop-filter: blur(12px) saturate(140%);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  box-shadow:
+    0 18px 36px rgba(15,21,51,0.18),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+  overflow:hidden;
+}
+
+/* Edge highlights */
+.paper::before{
+  content:""; position:absolute; inset:0;
   background:
-    linear-gradient(90deg, var(--acc-1) 0 40%, var(--acc-2) 40% 70%, var(--acc-3) 70% 100%);
-  border-bottom: var(--b1);
+    linear-gradient(90deg, rgba(255,255,255,0.35), transparent 35%),
+    linear-gradient(180deg, rgba(255,255,255,0.2), transparent 50%, rgba(0,0,0,0.04) 100%);
+  pointer-events:none;
+  mix-blend-mode: screen;
 }
-.card-body{ padding: 12px 14px }
-.meta{ color:var(--muted); font-size:.85rem; }
-.card h4{ margin: .4rem 0; font-size:1.08rem }
-.card p{ margin:.2rem 0 .6rem; color:#222 }
 
-/* Reader drawer */
-.reader{
-  position: fixed; left:0; right:0; bottom:0; transform: translateY(110%);
-  transition: transform .28s ease-out; background:#fff; border-top: var(--b1); box-shadow: 0 -12px 0 0 var(--ink);
-  max-height: 88vh; overflow:auto;
+/* Pseudo paper fibers */
+.paper::after{
+  content:""; position:absolute; inset:0; opacity:.06; pointer-events:none;
+  background-image: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23f)"/></svg>');
+  background-size: 320px 320px;
 }
-.reader.open{ transform: translateY(0) }
-.reader .wrap{ padding:16px; max-width: 860px }
-.reader .close{ float:right }
-.reader h2{ margin:.2rem 0 .6rem; }
-.reader .byline{ color:var(--muted); font-size:.92rem }
-.reader article{ line-height:1.68 }
-.reader article h3{ margin:1rem 0 .35rem }
 
-/* Footer */
-.footer{ margin: 22px 0 32px; padding:12px 14px; border: var(--b1); border-radius: var(--radius); background:#fff; }
+/* Page content halves (front/back) */
+.page{
+  position:absolute; inset:0;
+  display:grid; grid-template-rows: auto 1fr auto;
+  padding: 16px;
+}
+.headerline{
+  display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px;
+}
+.kicker{ text-transform:uppercase; letter-spacing:.18em; color:#6572a4; font-size:.78rem; font-weight:800; }
+.pageno{ color:#5b6793; font-weight:700; font-size:.8rem; }
+.hrule{
+  height:1px; background: linear-gradient(90deg, rgba(20,24,40,0.12), rgba(255,255,255,0.9), rgba(20,24,40,0.12));
+  margin-bottom:8px; border-radius:1px;
+}
+.title{
+  font-weight:900; font-size: clamp(1.2rem, 2.2vw, 1.6rem); line-height:1.15; margin:2px 0 6px;
+}
+.subtitle{ color:var(--muted); font-weight:600; margin:0 0 8px; }
+.body{ color:#1b234f; line-height:1.72; font-size:.98rem; }
+.body p{ margin:.55rem 0 }
+.tags{ display:flex; gap:6px; flex-wrap:wrap; }
+.tag{
+  padding:.32rem .6rem; border-radius:999px; font-size:.78rem; font-weight:800; color:#20305f;
+  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
+}
+.tag[data-t="science"]{ border-color: rgba(52,211,153,0.55); }
+.tag[data-t="philosophy"]{ border-color: rgba(244,114,182,0.55); }
+.tag[data-t="tech"]{ border-color: rgba(99,179,237,0.55); }
+.tag[data-t="literature"]{ border-color: rgba(167,139,250,0.55); }
+
+/* Curl highlight near flipping edge */
+.curl{
+  position:absolute; top:0; bottom:0; width:28px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
+  pointer-events:none; mix-blend-mode: screen; opacity:.0; transition: opacity .3s ease;
+}
+.sheet.right .curl{ left: 0; }
+.sheet.left .curl{ right: 0; }
+
+/* Turned states */
+.sheet.right.turned{
+  transform: rotateY(-180deg);
+  z-index: 2;
+}
+.sheet.left.turned{
+  transform: rotateY(180deg);
+  z-index: 2;
+}
+.sheet:hover .curl{ opacity:.7 }
+
+/* Depth staggering: later sheets above earlier */
+.sheet{ z-index: 2; }
+.sheet[data-i="1"]{ z-index: 6; }
+.sheet[data-i="2"]{ z-index: 8; }
+.sheet[data-i="3"]{ z-index: 10; }
+.sheet[data-i="4"]{ z-index: 12; }
+.sheet[data-i="5"]{ z-index: 14; }
+
+/* Nav zones */
+.navzone{
+  position:absolute; top:0; bottom:0; width: 18%;
+  z-index: 20; cursor: pointer;
+}
+.navzone.left{ left:0; }
+.navzone.right{ right:0; }
+
+/* HUD */
+.hud{
+  position:absolute; bottom:-42px; left:50%; transform: translateX(-50%);
+  display:flex; align-items:center; gap:8px;
+}
+.hud .btn{
+  background: rgba(255,255,255,0.92);
+}
+
+/* Index rail */
+.index{
+  position:absolute; left:50%; transform: translateX(-50%);
+  top:-52px; display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+}
+.index button{
+  padding:.38rem .6rem; border-radius:999px; border:1px solid var(--border); background:rgba(255,255,255,0.9);
+  font-weight:800; color:#223167;
+}
+.index button[data-cat="science"]{ border-color: rgba(52,211,153,0.6); }
+.index button[data-cat="philosophy"]{ border-color: rgba(244,114,182,0.6); }
+.index button[data-cat="tech"]{ border-color: rgba(99,179,237,0.6); }
+.index button[data-cat="literature"]{ border-color: rgba(167,139,250,0.6); }
+
+/* Help tip */
+.tip{
+  position:absolute; bottom: -70px; left:50%; transform: translateX(-50%);
+  color:#5c6aa0; font-weight:700; font-size:.9rem;
+}
+
+/* Fallback if backdrop-filter not supported: strengthen white bg */
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))){
+  .paper{ background: rgba(255,255,255,0.92); }
+}
 
 /* Responsive */
-@media (max-width: 980px){
-  .hero{ grid-template-columns: 1fr }
-  .card{ grid-column: span 6 }
+@media (max-width: 860px){
+  :root{ --book-h: min(720px, 82vh); }
+  .title{ font-size: clamp(1.2rem, 2.8vw, 1.5rem); }
 }
-@media (max-width: 680px){
-  .nav{ display:none }
-  .card{ grid-column: span 12 }
+@media (max-width: 640px){
+  :root{ --book-w: 96vw; --book-h: 78vh; }
+  .index{ top: -46px }
+  .tip{ bottom: -64px }
 }
-
-/* Focus + selections */
-:focus-visible{ outline: 3px solid var(--acc-1); outline-offset: 2px }
-::selection{ background: var(--acc-1); color:#fff }
 </style>
 </head>
 
 <body>
-<header class="wrap header">
-  <a href="#" class="brand">
-    <div class="logo" aria-hidden="true">R</div>
-    <h1>Relay</h1>
+<div class="noise" aria-hidden="true"></div>
+
+<header class="header">
+  <a class="brand" href="#">
+    <div class="logo" aria-hidden="true"></div>
+    <h1>Glassbook</h1>
   </a>
-  <nav class="nav" aria-label="Primary">
-    <a href="#latest">Latest</a>
-    <a href="#essays">Essays</a>
-    <a href="#reviews">Reviews</a>
-    <a href="#about">About</a>
-  </nav>
+  <div class="controls">
+    <button class="btn" id="prevBtn" aria-label="Previous">&#9664; Prev</button>
+    <button class="btn" id="nextBtn" aria-label="Next">Next &#9654;</button>
+    <select class="select" id="jumpSelect" aria-label="Jump to section">
+      <option value="0">Cover</option>
+      <option value="1">Science</option>
+      <option value="2">Philosophy</option>
+      <option value="3">Technology</option>
+      <option value="4">Literature</option>
+      <option value="5">Essays</option>
+    </select>
+  </div>
 </header>
 
-<main class="wrap">
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-left">
-      <div class="kicker u-cap">Technology • Literature • Philosophy • Science</div>
-      <h2>Make ideas <span class="emA">loud</span>, keep code <span class="emB">lean</span></h2>
-      <p>Brutalist rhythm, rigid grids, and zero fluff. Essays that punch above the fold, reviews that read like manifestos, and notes that respect attention.</p>
-      <div class="cta">
-        <a href="#latest" class="btn btn--acc1">Read latest</a>
-        <a href="#subscribe" class="btn btn--acc2">Get updates</a>
+<main class="stage">
+  <div class="book-wrap">
+    <div class="book" id="book">
+      <div class="board" aria-hidden="true"></div>
+      <div class="spine" aria-hidden="true"></div>
+
+      <!-- Index -->
+      <div class="index" id="index">
+        <button data-go="0">Cover</button>
+        <button data-go="1" data-cat="science">Science</button>
+        <button data-go="2" data-cat="philosophy">Philosophy</button>
+        <button data-go="3" data-cat="tech">Tech</button>
+        <button data-go="4" data-cat="literature">Literature</button>
+        <button data-go="5">Essays</button>
       </div>
-      <div class="section" style="margin-top:10px">
-        <span class="u-chip" data-cat="tech">Tech</span>
-        <span class="u-chip" data-cat="literature">Lit</span>
-        <span class="u-chip" data-cat="philosophy">Philo</span>
-        <span class="u-chip" data-cat="science">Science</span>
+
+      <!-- Invisible navigation zones -->
+      <div class="navzone left" id="zoneLeft" aria-label="Flip left"></div>
+      <div class="navzone right" id="zoneRight" aria-label="Flip right"></div>
+
+      <!-- ============= SHEETS STACK ============= -->
+      <!-- Sheet order from top to bottom; each sheet has left or right orientation -->
+      <!-- Sheet 1 (topmost right): Cover -> flips right -->
+      <section class="sheet right" data-i="1" data-pair="0">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">The Daily Aether</div>
+              <div class="pageno">Cover</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Science, Philosophy, Tech, Literature—on frosted pages</h2>
+            <div class="subtitle">Flip the glass and the story continues—like wizarding papers brought to the web.</div>
+            <div class="body">
+              <p>Welcome to a living broadsheet where ideas move as pages turn. Each spread holds a feature; the next reveals a reply, a counterpoint, or a new angle—just flip.</p>
+              <p>Use arrow keys or tap edges. The index above jumps between sections instantly. This book respects motion preferences and runs with pure HTML, CSS, and JS.</p>
+              <div class="tags">
+                <span class="tag" data-t="science">Science</span>
+                <span class="tag" data-t="philosophy">Philosophy</span>
+                <span class="tag" data-t="tech">Technology</span>
+                <span class="tag" data-t="literature">Literature</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 2 (left): Back of cover (table of contents) -->
+      <section class="sheet left" data-i="2" data-pair="0">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Table of Contents</div>
+              <div class="pageno">i</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">This issue</h2>
+            <div class="body">
+              <p><strong>Science</strong>: Planck Time and Desire—on the smallest tick and the longest longing.</p>
+              <p><strong>Philosophy</strong>: Against Reduction—why not all meaning fits a metric.</p>
+              <p><strong>Technology</strong>: Edge Compute, Edge Culture—presence near the margins.</p>
+              <p><strong>Literature</strong>: Footnotes to a Dream—Kafka, annotation, and the data of desire.</p>
+              <p><strong>Essays</strong>: Signals, Symbols, Souls—representation between neurons and notions.</p>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 3 (right): Science front -->
+      <section class="sheet right" data-i="3" data-pair="1">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Science</div>
+              <div class="pageno">1</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Planck Time and Desire</h2>
+            <div class="subtitle">When the instant is granular, but longing is continuous.</div>
+            <div class="body">
+              <p>Between the quantum tick and the human ache sits a paradox: discreteness beneath a feeling that doesn’t split. Models refine constants; experience resists rounding.</p>
+              <p>The book of nature has margins full of corrections; the book of love does not submit errata. Yet both are revised by better instruments, including attention.</p>
+              <div class="tags">
+                <span class="tag" data-t="science">Science</span>
+                <span class="tag">Physics</span>
+                <span class="tag">Time</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 4 (left): Science back + Philosophy front (split as two pages across turns) -->
+      <section class="sheet left" data-i="4" data-pair="1">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Science</div>
+              <div class="pageno">2</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">The Gentle Violence of Measurement</h2>
+            <div class="subtitle">Observation changes what is observed—and who observes.</div>
+            <div class="body">
+              <p>Every instrument is also an argument about what the world is allowed to say. Calibration is a creed; the readout is a confession.</p>
+              <p>Precision makes comfort until it moves the ground beneath it. Constants console—until experiments write their elegy.</p>
+              <div class="tags">
+                <span class="tag" data-t="science">Science</span>
+                <span class="tag">Measurement</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 5 (right): Philosophy front -->
+      <section class="sheet right" data-i="5" data-pair="2">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Philosophy</div>
+              <div class="pageno">3</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Against Reduction</h2>
+            <div class="subtitle">What matters often refuses the comfort of metrics.</div>
+            <div class="body">
+              <p>Counting is a kind of courage, but it can also be a comfort. Some values survive statistics by stepping aside; they’re present as remainder, not residue.</p>
+              <p>Philosophy isn’t anti-measure; it is for the measured refusal to flatten wonder. The remainder is a teacher.</p>
+              <div class="tags">
+                <span class="tag" data-t="philosophy">Philosophy</span>
+                <span class="tag">Meaning</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 6 (left): Philosophy back -->
+      <section class="sheet left" data-i="6" data-pair="2">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Philosophy</div>
+              <div class="pageno">4</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">The Algorithm as Critic</h2>
+            <div class="subtitle">Transformers quantify context; metaphors wager on remainder.</div>
+            <div class="body">
+              <p>Optimization converges to minima; reading converges to meanings. Keep them distinct and the dialogue becomes fruitful instead of flat.</p>
+              <div class="tags">
+                <span class="tag" data-t="philosophy">Philosophy</span>
+                <span class="tag">Critique</span>
+                <span class="tag" data-t="tech">AI</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 7 (right): Technology front -->
+      <section class="sheet right" data-i="7" data-pair="3">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Technology</div>
+              <div class="pageno">5</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Edge Compute, Edge Culture</h2>
+            <div class="subtitle">Near-user inference edits our sense of presence.</div>
+            <div class="body">
+              <p>When the server steps closer, the story does too. Latency becomes a literary device: tension authored by time saved.</p>
+              <p>Architectures migrate outward; aesthetics follow—light, responsive, humane.</p>
+              <div class="tags">
+                <span class="tag" data-t="tech">Technology</span>
+                <span class="tag">Edge</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 8 (left): Technology back -->
+      <section class="sheet left" data-i="8" data-pair="3">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Technology</div>
+              <div class="pageno">6</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Latency Is a Literary Device</h2>
+            <div class="subtitle">Waiting shapes meaning in servers and sentences.</div>
+            <div class="body">
+              <p>Speed is not the only kindness. Rhythm makes memory; delay makes desire legible.</p>
+              <div class="tags">
+                <span class="tag" data-t="tech">Technology</span>
+                <span class="tag">Latency</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 9 (right): Literature front -->
+      <section class="sheet right" data-i="9" data-pair="4">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Literature</div>
+              <div class="pageno">7</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Footnotes to a Dream</h2>
+            <div class="subtitle">We annotate the night and call it a model; the dream resists.</div>
+            <div class="body">
+              <p>Criticism is a choreography of care. It doesn’t pin the butterfly; it learns to dance with it.</p>
+              <div class="tags">
+                <span class="tag" data-t="literature">Literature</span>
+                <span class="tag">Kafka</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 10 (left): Literature back -->
+      <section class="sheet left" data-i="10" data-pair="4">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Literature</div>
+              <div class="pageno">8</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Margins, Kerning, Meaning</h2>
+            <div class="subtitle">Typography as thought: spacing teaches breath.</div>
+            <div class="body">
+              <p>Form is a teacher. A good margin is not empty; it’s an agreement to listen.</p>
+              <div class="tags">
+                <span class="tag" data-t="literature">Literature</span>
+                <span class="tag">Typography</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 11 (right): Essays front -->
+      <section class="sheet right" data-i="11" data-pair="5">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Essays</div>
+              <div class="pageno">9</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Signals, Symbols, Souls</h2>
+            <div class="subtitle">Representation between neurons and notions.</div>
+            <div class="body">
+              <p>Signals are mapped; symbols are meant; souls are met. Each asks a different discipline to be patient with the others.</p>
+              <div class="tags">
+                <span class="tag" data-t="philosophy">Philosophy</span>
+                <span class="tag" data-t="science">Cognition</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- Sheet 12 (left): Back matter -->
+      <section class="sheet left" data-i="12" data-pair="5">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline">
+              <div class="kicker">Back Matter</div>
+              <div class="pageno">10</div>
+            </div>
+            <div class="hrule"></div>
+            <h2 class="title">Colophon</h2>
+            <div class="body">
+              <p>Set in system fonts for speed; composed with CSS perspective, transforms, and frosted glass layers.</p>
+              <p>Use the index or keys to navigate; on small screens, tap near edges to flip. Thanks for reading.</p>
+              <div class="tags">
+                <span class="tag">Single file</span>
+                <span class="tag">Vanilla JS</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+      <!-- =========== END SHEETS =========== -->
+
+      <div class="hud">
+        <button class="btn" id="prevHud" aria-label="Previous page">Prev</button>
+        <button class="btn" id="nextHud" aria-label="Next page">Next</button>
       </div>
+      <div class="tip">Tip: Arrow keys or tap edges to flip</div>
     </div>
-    <aside class="hero-right">
-      <div class="tag u-mono">Spotlight</div>
-      <h3 style="margin:.3rem 0;">The Algorithm as Critic: Can Gradient Descent Read Poetry?</h3>
-      <p style="color:var(--muted)">Transformers count; metaphors counter. Where the model ends, the reader begins.</p>
-      <div style="display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:.6rem;">
-        <span class="u-mono" style="font-size:.9rem; color:var(--muted)">12 min • Philosophy</span>
-        <a class="btn" href="#" data-open="The Algorithm as Critic: Can Gradient Descent Read Poetry?">Open</a>
-      </div>
-    </aside>
-  </section>
-
-  <!-- LATEST -->
-  <section class="section" id="latest">
-    <h3 class="u-cap">Latest</h3>
-    <div class="cards">
-      <!-- Card -->
-      <article class="card" data-cat="tech">
-        <div class="card-head"></div>
-        <div class="card-body">
-          <div class="meta u-mono">8 min • Technology</div>
-          <h4>Edge Compute, Edge Culture</h4>
-          <p>Latency isn’t just a metric; it’s a mood.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="Edge Compute, Edge Culture">Read</a>
-            <span class="u-chip" data-cat="tech">Tech</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card" data-cat="literature">
-        <div class="card-head"></div>
-        <div class="card-body">
-          <div class="meta u-mono">6 min • Literature</div>
-          <h4>Margins, Kerning, Meaning</h4>
-          <p>Typography is craft that teaches thought to breathe.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="Margins, Kerning, Meaning">Read</a>
-            <span class="u-chip" data-cat="literature">Lit</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card" data-cat="philosophy">
-        <div class="card-head"></div>
-        <div class="card-body">
-          <div class="meta u-mono">10 min • Philosophy</div>
-          <h4>Against Reduction</h4>
-          <p>What matters often refuses metrics.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="Against Reduction">Read</a>
-            <span class="u-chip" data-cat="philosophy">Philo</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card" data-cat="science">
-        <div class="card-head"></div>
-        <div class="card-body">
-          <div class="meta u-mono">9 min • Science</div>
-          <h4>Planck Time and Desire</h4>
-          <p>The smallest tick, the longest longing.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="Planck Time and Desire">Read</a>
-            <span class="u-chip" data-cat="science">Sci</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card" data-cat="science">
-        <div class="card-head"></div>
-        <div class="card-body">
-          <div class="meta u-mono">7 min • Science</div>
-          <h4>The Gentle Violence of Measurement</h4>
-          <p>Observation changes the observed—and the observer.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="The Gentle Violence of Measurement">Read</a>
-            <span class="u-chip" data-cat="science">Sci</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card" data-cat="literature">
-        <div class="card-head"></div>
-        <div class="card-body">
-          <div class="meta u-mono">11 min • Literature</div>
-          <h4>Footnotes to a Dream</h4>
-          <p>We annotate the night and call it a model.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="Footnotes to a Dream">Read</a>
-            <span class="u-chip" data-cat="literature">Lit</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- ESSAYS -->
-  <section class="section" id="essays">
-    <h3 class="u-cap">Featured Essays</h3>
-    <div class="cards">
-      <article class="card" data-cat="philosophy">
-        <div class="card-body">
-          <div class="meta u-mono">Longform • Philosophy</div>
-          <h4>Signals, Symbols, Souls</h4>
-          <p>Representation from neurons to notions.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="Signals, Symbols, Souls">Read</a>
-            <span class="u-chip" data-cat="philosophy">Philo</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card" data-cat="tech">
-        <div class="card-body">
-          <div class="meta u-mono">Longform • Technology</div>
-          <h4>Latency Is a Literary Device</h4>
-          <p>Waiting shapes meaning in servers and sentences.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="Latency Is a Literary Device">Read</a>
-            <span class="u-chip" data-cat="tech">Tech</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="card" data-cat="science">
-        <div class="card-body">
-          <div class="meta u-mono">Longform • Science</div>
-          <h4>Elegy for a Constant</h4>
-          <p>When universals drift under precision.</p>
-          <div style="display:flex; gap:10px">
-            <a class="btn" href="#" data-open="Elegy for a Constant">Read</a>
-            <span class="u-chip" data-cat="science">Sci</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- SUBSCRIBE -->
-  <section class="section" id="subscribe">
-    <h3 class="u-cap">Stay Sharp</h3>
-    <div class="u-bar u-pad" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-      <div style="flex:1; min-width:220px">
-        <div class="u-mono" style="color:var(--muted)">Letters, not spam</div>
-        <div style="font-weight:900; font-size:1.2rem">Monthly notes on systems and sentences</div>
-      </div>
-      <form id="subForm" class="u-mono" style="display:flex; gap:8px; flex-wrap:wrap;">
-        <input required name="email" type="email" placeholder="email@domain.com"
-               style="padding:.7rem .9rem; border: var(--b1); border-radius:4px; background:#fff; min-width:240px;">
-        <button class="btn btn--acc3" type="submit" style="background:var(--acc-3); color:#072e1e">Subscribe</button>
-      </form>
-    </div>
-  </section>
+  </div>
 </main>
 
-<!-- Reader -->
-<section class="reader" id="reader" aria-label="Reading panel" aria-hidden="true">
-  <div class="wrap">
-    <a href="#" class="btn close" id="closeReader">Close</a>
-    <h2 id="readerTitle">Title</h2>
-    <div class="byline u-mono">By Relay • <span id="readerMeta">Reading time</span></div>
-    <article id="readerBody">
-      <h3>Opening</h3>
-      <p>This reading surface is plain on purpose: ink, paper, and punchy headings.</p>
-      <h3>Idea</h3>
-      <p>Cut chrome, keep character. Let language carry the layout.</p>
-    </article>
-  </div>
-</section>
-
-<footer class="wrap footer">
-  <span>© <span id="year"></span> Relay</span>
-  <span class="u-mono">Neo‑brutalist • No framework</span>
+<footer class="header" style="justify-content:center; margin-top:6px;">
+  <span style="color:#5a6695; font-weight:700;">© <span id="year"></span> Glassbook • Single-file flipbook</span>
 </footer>
 
 <script>
-/* Content registry */
-const posts = {
-  "The Algorithm as Critic: Can Gradient Descent Read Poetry?": {
-    time: "12 min • Philosophy",
-    body: `
-      <h3>1 — Machines and Meaning</h3>
-      <p>Counting context isn’t reading; it’s preparation. The poem resists paraphrase for a reason.</p>
-      <h3>2 — Gradient and Grace</h3>
-      <p>Optimization finds minima; criticism finds moments. Keep them distinct.</p>
-    `
-  },
-  "Edge Compute, Edge Culture": {
-    time: "8 min • Technology",
-    body: `
-      <h3>Latency and Liturgy</h3>
-      <p>Near-user inference turns waiting into a feature—not a bug.</p>
-    `
-  },
-  "Margins, Kerning, Meaning": {
-    time: "6 min • Literature",
-    body: `
-      <h3>Typography as Thought</h3>
-      <p>Spacing is cognition made visible.</p>
-    `
-  },
-  "Against Reduction": {
-    time: "10 min • Philosophy",
-    body: `
-      <h3>Metrics, Meet Mystery</h3>
-      <p>Some values refuse quantization. That refusal is informative.</p>
-    `
-  },
-  "Planck Time and Desire": {
-    time: "9 min • Science",
-    body: `
-      <h3>Smallest Tick</h3>
-      <p>Continuity of ache meets discreteness of time.</p>
-    `
-  },
-  "The Gentle Violence of Measurement": {
-    time: "7 min • Science",
-    body: `
-      <h3>Observer Effect</h3>
-      <p>Every instrument is an argument. Choose arguments wisely.</p>
-    `
-  },
-  "Footnotes to a Dream": {
-    time: "11 min • Literature",
-    body: `
-      <h3>Kafkaesque Data</h3>
-      <p>Annotation dreams of control; the dream dreams otherwise.</p>
-    `
-  },
-  "Signals, Symbols, Souls": {
-    time: "Longform • Philosophy",
-    body: `
-      <h3>Representation</h3>
-      <p>Signals map; symbols mean; persons meet.</p>
-    `
-  },
-  "Latency Is a Literary Device": {
-    time: "Longform • Technology",
-    body: `
-      <h3>Meaning of Delay</h3>
-      <p>Rhythm, not raw speed, frames experience.</p>
-    `
-  },
-  "Elegy for a Constant": {
-    time: "Longform • Science",
-    body: `
-      <h3>Precision and Drift</h3>
-      <p>We fix numbers to feel fixed. Experiments undo that comfort.</p>
-    `
-  }
-};
+/* ============================================================
+   Flipbook Engine (vanilla JS)
+   Inspired by common CSS flip/flipbook patterns; extends to stacked sheets
+   with right/left orientation and glassmorphic pages.
+   ============================================================ */
+const sheets = Array.from(document.querySelectorAll('.sheet'));
+const rightSheets = sheets.filter(s => s.classList.contains('right'));
+const leftSheets  = sheets.filter(s => s.classList.contains('left'));
+const totalPairs = Math.ceil(sheets.length/2); // pair index 0..5 in this build
 
-/* Reader open/close */
-const reader = document.getElementById('reader');
-const readerTitle = document.getElementById('readerTitle');
-const readerMeta = document.getElementById('readerMeta');
-const readerBody = document.getElementById('readerBody');
-function openReader(title){
-  const post = posts[title];
-  if(!post) return;
-  readerTitle.textContent = title;
-  readerMeta.textContent = post.time;
-  readerBody.innerHTML = post.body;
-  reader.classList.add('open'); reader.setAttribute('aria-hidden','false');
+// Current spread index (0 = cover on right closed)
+let spread = 0;
+
+// Map pair -> two sheets (right then left)
+const pairs = [];
+for (let i = 0; i < totalPairs; i++) {
+  const r = sheets.find(s => +s.dataset.pair === i && s.classList.contains('right'));
+  const l = sheets.find(s => +s.dataset.pair === i && s.classList.contains('left'));
+  pairs.push({r, l});
 }
-function closeReader(){ reader.classList.remove('open'); reader.setAttribute('aria-hidden','true'); }
-document.addEventListener('click', (e)=>{
-  const el = e.target.closest('[data-open]');
-  if(el){ e.preventDefault(); openReader(el.getAttribute('data-open')); }
-});
-document.getElementById('closeReader').addEventListener('click', (e)=>{ e.preventDefault(); closeReader(); });
-document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeReader(); });
 
-/* Year + simple filter */
+// Initialization: make sure only earlier pairs are turned when spread > 0
+function sync() {
+  // All pairs before 'spread' should be turned (cover -> spread-1)
+  pairs.forEach((p, idx) => {
+    if (!p.r || !p.l) return;
+    if (idx < spread) {
+      p.r.classList.add('turned');
+      p.l.classList.add('turned');
+      // Move turned pages behind
+      p.r.style.zIndex = 2 + idx * 2;
+      p.l.style.zIndex = 3 + idx * 2;
+    } else {
+      p.r.classList.remove('turned');
+      p.l.classList.remove('turned');
+      // Not turned: keep higher z for later pairs
+      const base = 10 + (totalPairs - idx) * 2;
+      p.r.style.zIndex = base;
+      p.l.style.zIndex = base + 1;
+    }
+  });
+
+  // Update select
+  const js = document.getElementById('jumpSelect');
+  if (js) js.value = String(Math.min(spread, js.options.length-1));
+}
+
+function next() {
+  if (spread >= totalPairs) return;
+  spread++;
+  sync();
+}
+function prev() {
+  if (spread <= 0) return;
+  spread--;
+  sync();
+}
+function goTo(target) {
+  spread = Math.max(0, Math.min(totalPairs, target));
+  sync();
+}
+
+// Controls
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+document.getElementById('nextHud').addEventListener('click', next);
+document.getElementById('prevHud').addEventListener('click', prev);
+
+// Index and select jump
+document.getElementById('jumpSelect').addEventListener('change', (e)=> goTo(+e.target.value));
+document.getElementById('index').addEventListener('click', (e)=>{
+  const b = e.target.closest('button[data-go]');
+  if (!b) return;
+  goTo(+b.dataset.go);
+});
+
+// Edge zones click (mobile-friendly)
+document.getElementById('zoneLeft').addEventListener('click', prev);
+document.getElementById('zoneRight').addEventListener('click', next);
+
+// Keyboard
+document.addEventListener('keydown', (e)=>{
+  if (e.key === 'ArrowRight') next();
+  if (e.key === 'ArrowLeft') prev();
+});
+
+// Year
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Initial sync
+sync();
 </script>
 </body>
 </html>
