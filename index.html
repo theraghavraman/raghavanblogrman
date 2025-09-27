@@ -74,7 +74,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 /* Noise texture */
 .noise{
   position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.05;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/200/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="1"/></svg>');
+  background-image: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="1"/></svg>');
   background-size: 280px 280px;
   mix-blend-mode: multiply;
 }
@@ -267,6 +267,52 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 /* Backdrop-filter fallback */
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))){
   .paper{ background: rgba(255,255,255,0.96); }
+
+  /* ===== GPU flip, backface hiding, and small a11y/perf fixes ===== */
+.stage { perspective: 2000px; } /* keep perspective on stable parent */ /* compositor-friendly */
+
+.book { transform-style: preserve-3d; contain: layout paint; will-change: transform; }
+
+.sheet {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: transform var(--flip-dur) cubic-bezier(.2,.8,.2,1), z-index .2s linear;
+}
+
+.sheet.right { transform-origin: right center; }
+.sheet.left  { transform-origin: left center; }
+
+.sheet .paper {
+  transform: translateZ(0);              /* older engines promotion nudge */
+  will-change: transform, opacity;       /* overridden to auto outside flip */
+  backface-visibility: hidden;           /* reduce text shimmer on rotate */
+}
+
+.sheet .paper { will-change: auto; }     /* default after flip */
+.sheet.flipping .paper { will-change: transform, opacity; } /* during flip */
+
+.sheet.right.turned { transform: rotateY(-180deg); }
+.sheet.left.turned  { transform: rotateY(180deg); }
+
+.page { backface-visibility: hidden; transform: translateZ(0); }
+
+.curl { will-change: opacity; transition: opacity .3s ease; }
+
+/* Focus visibility improvements */
+.index button:focus-visible,
+.thumb:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* Thumbs semantics-friendly */
+.thumbs { list-style: none; }
+.thumb  { display: inline-block; }
+
+/* Print coherency */
+@media print{
+  .sheet, .page { page-break-inside: avoid; }
+  .sheet { page-break-after: always; }
+}
+
 }
 </style>
 </head>
@@ -887,6 +933,129 @@ hydrateEdges();
 
 /* Hash deep link on load even without user interaction */
 window.addEventListener('DOMContentLoaded', ()=> { if (!location.hash) updateHash(); });
+
+  /* ===== Flip timing helper tied to CSS durations ===== */
+function getFlipMs(el){
+  const cs = getComputedStyle(el);
+  const durs = cs.transitionDuration.split(',').map(s=>parseFloat(s)*1000);
+  const valid = durs.filter(n=>!Number.isNaN(n) && n>0);
+  return (valid.length ? Math.max(...valid) : 800);
+}
+
+/* ===== Accessibility: mark active in index and select ===== */
+const indexRail = document.getElementById('index');
+function markIndexCurrent(){
+  if (!indexRail) return;
+  indexRail.querySelectorAll('button[data-go]').forEach((b,i)=>{
+    const active = i === spread;
+    if (active) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+  });
+}
+function markSelectCurrent(){
+  const sel = document.getElementById('jumpSelect');
+  if (sel) sel.value = String(spread);
+}
+
+/* ===== Wrap sync to add transient GPU promotion + edge hydration ===== */
+const __orig_sync = sync;
+sync = function(){
+  __orig_sync();
+
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion){
+    const p = pairs[Math.max(0, Math.min(pairs.length-1, spread))];
+    [p?.r, p?.l].forEach(el=>{
+      if (!el) return;
+      el.classList.add('flipping');
+      const ms = getFlipMs(el);
+      setTimeout(()=> el.classList.remove('flipping'), ms + 50);
+    });
+  }
+
+  // ensure curls/thumbnails density is near the active spread only
+  hydrateEdges();
+
+  // a11y markers
+  markIndexCurrent();
+  markSelectCurrent();
+};
+
+/* ===== Dialog focus safety for Keyboard overlay ===== */
+let __lastFocused = null;
+function openKB(){
+  kb.style.display='flex';
+  kbBtn.setAttribute('aria-expanded','true');
+  kb.setAttribute('aria-modal','true');
+  __lastFocused = document.activeElement;
+  kb.tabIndex = -1;
+  kb.focus();
+}
+function closeKB(){
+  kb.style.display='none';
+  kbBtn.setAttribute('aria-expanded','false');
+  kb.removeAttribute('aria-modal');
+  if (__lastFocused && __lastFocused.focus) __lastFocused.focus();
+}
+
+/* ===== Safer search fallback: wrap text nodes, not innerHTML ===== */
+function applyHighlights(str){
+  clearHighlights();
+  if (!str) return;
+  const root = document.querySelector('.book');
+  if (highlightsSupported){
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const ranges=[]; let node; const q=str.toLowerCase();
+    while(node = walker.nextNode()){
+      const t = node.textContent.toLowerCase(); let i=0;
+      while((i = t.indexOf(q, i)) !== -1){
+        const r = new Range(); r.setStart(node, i); r.setEnd(node, i+q.length);
+        ranges.push(r); i += q.length;
+      }
+    }
+    const hl = new Highlight(...ranges);
+    CSS.highlights.set('search-hit', hl);
+  } else {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const q = str.toLowerCase(); const targets=[]; let node;
+    while(node = walker.nextNode()){
+      if (!node.parentElement.closest('.page')) continue;
+      const txt = node.textContent; const low = txt.toLowerCase();
+      let i=0; const parts=[];
+      while(true){
+        const j = low.indexOf(q, i);
+        if (j === -1){ parts.push(document.createTextNode(txt.slice(i))); break; }
+        if (j>i) parts.push(document.createTextNode(txt.slice(i, j)));
+        const m = document.createElement('mark'); m.setAttribute('data-hit',''); m.textContent = txt.slice(j, j+q.length);
+        parts.push(m); i = j+q.length;
+      }
+      targets.push([node, parts]);
+    }
+    targets.forEach(([node, parts])=>{
+      const frag = document.createDocumentFragment();
+      parts.forEach(p=>frag.appendChild(p));
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+}
+
+/* ===== Debounced hash updates to avoid thrash during fast flips ===== */
+let __hashRAF = null;
+function updateHash(){
+  const h = `#page-${spread}`;
+  if (location.hash === h) return;
+  if (__hashRAF) cancelAnimationFrame(__hashRAF);
+  __hashRAF = requestAnimationFrame(()=> history.replaceState(null,'',h));
+}
+
+/* ===== Ensure hydrateEdges runs on init too (it already runs in sync) ===== */
+hydrateEdges();
+
+/* ===== Optional: pause pointer sheen work when lowPerf is true ===== */
+if (typeof lowPerf !== 'undefined' && lowPerf){
+  // here one could remove heavy listeners if any are added later
+}
+
 
 </script>
 </body>
