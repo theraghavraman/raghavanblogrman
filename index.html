@@ -698,7 +698,49 @@ document.getElementById('subForm').addEventListener('submit', (e)=>{
 });
 
 /* ======= Keyboard: close reader with ESC ======= */
-document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closePanel(); });
+document.addEventListener('keydown', (e)=>{ if(e.key =To switch the website from dark mode to a light purple theme, you can adjust the CSS variables and backgrounds in the <style> block. Here is how to do it:
+
+1. Update root color variables
+:root {
+  --bg-1: #f7f3fb;       /* Light lavender */
+  --bg-2: #f0ebf7;       /* Slightly deeper lavender */
+  --glass: rgba(255, 255, 255, 0.6); /* Softer glass on light */
+  --glass-strong: rgba(255, 255, 255, 0.8);
+  --border: rgba(160, 120, 200, 0.4);
+  --inner: rgba(140, 100, 180, 0.35);
+  --text: #2e1f3f;       /* Deep purple text */
+  --muted: #6b4e87;      /* Muted purple for subtext */
+  --accent-1: #b892ff;   /* Soft violet */
+  --accent-2: #d3a9ff;   /* Pastel lavender */
+  --accent-3: #f6b8ff;   /* Pink lavender */
+  --accent-4: #c5a3f0;   /* Gentle lilac */
+  --shadow: 0 10px 30px rgba(70, 50, 120, 0.15);
+}
+
+2. Change the body background
+body {
+  background: radial-gradient(1200px 800px at 10% 10%, #fdfaff 0%, transparent 60%),
+              radial-gradient(1000px 700px at 90% 30%, #f3ebff 0%, transparent 55%),
+              radial-gradient(1200px 900px at 50% 85%, #f8f1ff 0%, transparent 60%), var(--bg-2);
+  color: var(--text);
+}
+
+3. Adjust the animated gradient background
+.bg-anim {
+  background: linear-gradient(-45deg, #e5d4ff, #f0e8ff, #d6c6f5, #f6edff);
+  background-size: 400% 400%;
+}
+
+4. Glass and chip adjustments
+* Glass elements (.glass) already work, but look better with a slightly darker border.
+* Chips and buttons should retain enough contrast against the light purple background.
+
+5. Text and accents
+* All headings, body text, and muted text automatically switch using --text and --muted.
+* The gradient text will now shift in pastel purples and pinks.
+
+Apply these updates in the <style> section to get a soft light purple aesthetic across the site. It will feel airy, elegant, and easy on the eyes.
+== 'Escape') closePanel(); });
 </script>
 </body>
 </html>
