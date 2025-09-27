@@ -1,157 +1,28 @@
-<!doctype html>
-<html lang="en" data-page="post">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title id="docTitle">Post • Athena</title>
-  <meta name="description" content="">
-  <link rel="preload" href="styles.css" as="style">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog Post</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="theme-auto">
-  <a class="skip-link" href="#content">Skip to content</a>
-
-  <header class="site-header" role="banner">
-    <div class="wrap">
-      <a class="brand" href="/">Athena</a>
-      <nav class="site-nav" aria-label="Primary">
-        <ul>
-          <li><button id="themeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle theme">🌗</button></li>
-        </ul>
-      </nav>
-    </div>
-    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+<body>
+  <header>
+    Philosophy & Tech Blog
+    <nav>
+      <a href="index.html">Home</a>
+    </nav>
   </header>
 
-  <main id="content" class="article-main" role="main">
-    <article class="post">
-      <header class="post-header">
-        <h1 id="postTitle"></h1>
-        <p class="post-meta">
-          <time id="postDate" datetime=""></time> · <span id="postReading"></span> · <span id="postTags"></span>
-        </p>
-        <figure class="post-hero">
-          <img id="postCover" alt="" loading="eager" decoding="async">
-          <figcaption id="postCaption"></figcaption>
-        </figure>
-        <nav id="toc" class="toc" aria-label="Table of contents"></nav>
-      </header>
-
-      <section id="postBody" class="prose"></section>
-
-      <footer class="post-footer">
-        <section aria-labelledby="aboutAuthor">
-          <h2 id="aboutAuthor">About the author</h2>
-          <p>A short bio goes here. Add links and social profiles.</p>
-        </section>
-
-        <section aria-labelledby="comments" class="comments">
-          <h2 id="comments">Comments</h2>
-          <p>Static site? Embed a provider (Giscus/Utterances/Staticman) or email link.</p>
-        </section>
-      </footer>
+  <div class="container">
+    <article>
+      <h1 class="post-title" id="post-title">Loading...</h1>
+      <div class="post-meta" id="post-meta"></div>
+      <div class="post-content" id="post-content"></div>
     </article>
-  </main>
+  </div>
 
-  <footer class="site-footer" role="contentinfo">
-    <div class="wrap">
-      <p>© <span id="year"></span> Athena.</p>
-    </div>
-  </footer>
-
-  <script src="app.js" defer></script>
+  <footer>&copy; 2025 Philosophy & Tech Blog</footer>
+  <script src="app.js"></script>
 </body>
 </html>
-SEO & Accessibility
-Current State	Enhanced Recommendation
-meta description is empty; images may lack alt text	
-<meta name="description" content="Insightful blog covering tech and design.">
-<img src="cover.jpg" alt="Hero image showing design concept">
-</details> |
-| No canonical link present                                | Include canonical link <details><summary>Code</summary>
-
-<link rel="canonical" href="https://example.com/blog/post">
-</details> |
-| Language declared only at document level                 | Add lang to multilingual sections <details><summary>Code</summary>
-
-<section lang="fr">…</section>
-</details> |
-
-Performance
-Current State	Enhanced Recommendation
-All images load eagerly	
-<img src="post.jpg" alt="Post" loading="lazy">
-</details> |
-| Fonts not preloaded              | Preload web fonts <details><summary>Code</summary>
-
-<link rel="preload" href="/fonts/roboto.woff2" as="font" type="font/woff2" crossorigin>
-</details> |
-| No asset hints                   | Add prefetch/dns-prefetch <details><summary>Code</summary>
-
-<link rel="dns-prefetch" href="//cdn.example.com">
-<link rel="prefetch" href="/next-page.html">
-</details> |
-
-Social Sharing
-Current State	Enhanced Recommendation
-No Open Graph or Twitter meta tags	
-<meta property="og:title" content="Post Title">
-<meta name="twitter:card" content="summary_large_image">
-</details> |
-| No structured data implemented         | Implement JSON-LD blog schema <details><summary>Code</summary>
-
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"BlogPosting",
-  "headline":"Post Title"
-}
-</script>
-</details> |
-
-Content & Navigation
-Current State	Enhanced Recommendation
-#toc is empty and static	
-document.querySelectorAll('h2').forEach((h2,i)=>{
-  // Append to #toc
-});
-</details> |
-| Placeholder comments section                         | Integrate Giscus <details><summary>Code</summary>
-
-<script src="https://giscus.app/client.js" data-repo="user/repo" ...></script>
-</details> |
-
-Theme & UX
-Current State	Enhanced Recommendation
-Theme toggle does not persist state	
-localStorage.setItem('theme','dark');
-document.body.classList.add('dark');
-</details> |
-| Limited keyboard accessibility visibility      | Add focus styles <details><summary>Code</summary>
-
-button:focus { outline: 2px solid #3b82f6; }
-</details> |
-
-Footer & Branding
-Current State	Enhanced Recommendation
-#year is static	
-document.getElementById('year').textContent = new Date().getFullYear();
-</details> |
-| Footer only has copyright text    | Add links/icons <details><summary>Code</summary>
-
-<a href="/about">About</a>
-<a href="https://twitter.com/example">Twitter</a>
-</details> |
-
-Content Handling
-Current State	Enhanced Recommendation
-Minimal ARIA landmarks and limited rich content	
-<main role="main">…</main>
-<img src="image.jpg" srcset="image@2x.jpg 2x">
-</details> |
-
-Security & Best Practices
-Current State	Enhanced Recommendation
-No CSP, SRI, or integrity checks	
-<script src="app.js" integrity="sha384-abc123" crossorigin="anonymous"></script>
-</details> |
