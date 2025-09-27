@@ -3,24 +3,215 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Philosophy & Tech Blog</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Enlight Blog – Tech · Literature · Philosophy · Science</title>
+
+  <!-- ========  MONOLITHIC CSS  ======== -->
+  <style>
+    /* --- Base reset --- */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+      background:#121212;color:#e0e0e0;line-height:1.6;overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    a{color:#00d8ff;text-decoration:none;transition:.3s}
+    a:hover{color:#00a8cc}
+
+    /* --- Header & nav --- */
+    header{
+      background:linear-gradient(90deg,#060b12,#0e1a28);
+      padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;
+      position:sticky;top:0;z-index:1000;box-shadow:0 2px 12px #000a}
+    .logo{
+      font:900 1.8rem/1 "Courier New",monospace;letter-spacing:2px;
+      color:#01f7ff;text-transform:uppercase;user-select:none}
+    nav{display:flex;gap:2rem}
+    nav a{font-weight:600;border-bottom:2px solid transparent;padding-bottom:4px}
+    nav a.active,nav a:hover{border-color:#0ff}
+
+    /* --- Layout --- */
+    main{max-width:1100px;margin:2rem auto;padding:0 2rem}
+    section{margin-bottom:4rem}
+    h2{font-size:2.4rem;margin-bottom:1rem;color:#00d8ff;text-shadow:0 0 10px #00d8ff88}
+
+    /* --- Card grid --- */
+    .posts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2rem}
+    article.post{
+      background:#1c2633;border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;
+      box-shadow:0 0 8px #00d8ff44;transition:.3s;cursor:pointer;height:100%}
+    article.post:hover{transform:translateY(-10px);box-shadow:0 15px 30px #00d8ffaa}
+    article.post header{font:800 1.4rem "Courier New",monospace;color:#adebeb;margin-bottom:.5rem}
+    article.post .summary{flex-grow:1;color:#cce7ea;margin-bottom:1rem}
+    article.post footer{font-size:.85rem;color:#00a8cc99}
+
+    /* --- Fancy scrollbar (desktop) --- */
+    ::-webkit-scrollbar{width:8px;height:8px}
+    ::-webkit-scrollbar-track{background:#222}
+    ::-webkit-scrollbar-thumb{background:#00d8ffaa;border-radius:4px}
+
+    /* --- Footer --- */
+    .site-footer{background:#060b12;color:#555;text-align:center;font-size:.9rem;padding:1rem 2rem;border-top:1px solid #0e1a28}
+
+    /* --- Post overlay --- */
+    .post-overlay{
+      position:fixed;inset:0;background:rgba(18,18,18,.96);display:none;justify-content:center;
+      align-items:center;padding:2rem;z-index:1500;overflow-y:auto}
+    .post-overlay.active{display:flex;animation:fadeIn .3s forwards}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .post-content{
+      background:#1c2633;border-radius:14px;max-width:700px;width:100%;padding:2rem;
+      box-shadow:0 0 25px #00d8ffbb;color:#def8fb}
+    .post-content h3{margin-top:0;color:#00d8ff;font-family:"Courier New",monospace;margin-bottom:1rem}
+    .close-btn{
+      position:absolute;top:1rem;right:2rem;font-size:2rem;background:none;border:none;
+      color:#00a8cc;font-weight:bold;cursor:pointer;transition:.3s}
+    .close-btn:hover{color:#00d8ff}
+
+    /* --- Responsive tweaks --- */
+    @media(max-width:680px){nav{gap:1rem}main{padding:0 1rem}}
+  </style>
 </head>
+
 <body>
+  <!-- ========  HEADER  ======== -->
   <header>
-    Philosophy & Tech Blog
+    <div class="logo">Enlight Blog</div>
     <nav>
-      <a href="index.html">Home</a>
+      <a href="#technology" class="active" onclick="setActive(event)">Technology</a>
+      <a href="#literature"  onclick="setActive(event)">Literature</a>
+      <a href="#philosophy"  onclick="setActive(event)">Philosophy</a>
+      <a href="#science"     onclick="setActive(event)">Science</a>
     </nav>
   </header>
 
-  <div class="container">
-    <ul class="post-list" id="post-list">
-      <!-- Blog post summaries will be injected here by app.js -->
-    </ul>
+  <!-- ========  MAIN CONTENT  ======== -->
+  <main>
+    <!-- Technology Section -->
+    <section id="technology">
+      <h2>Technology</h2>
+      <div class="posts-grid">
+        <article class="post" tabindex="0" onclick="openPost(0)">
+          <header>Advances in AI: The New Frontier</header>
+          <div class="summary">How artificial intelligence is reshaping industries—and the ethics at stake.</div>
+          <footer>Sep 27 2025</footer>
+        </article>
+        <article class="post" tabindex="0" onclick="openPost(1)">
+          <header>Quantum Computing Explained</header>
+          <div class="summary">A beginner-friendly dive into qubits, superposition, and real-world use-cases.</div>
+          <footer>Sep 20 2025</footer>
+        </article>
+      </div>
+    </section>
+
+    <!-- Literature Section -->
+    <section id="literature">
+      <h2>Literature</h2>
+      <div class="posts-grid">
+        <article class="post" tabindex="0" onclick="openPost(2)">
+          <header>The Renaissance of Modern Poetry</header>
+          <div class="summary">Digital platforms are fueling a creative revival—see how poets adapt.</div>
+          <footer>Sep 22 2025</footer>
+        </article>
+        <article class="post" tabindex="0" onclick="openPost(3)">
+          <header>Exploring Magical Realism</header>
+          <div class="summary">Blending reality and fantasy to critique society and self.</div>
+          <footer>Sep 25 2025</footer>
+        </article>
+      </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section id="philosophy">
+      <h2>Philosophy</h2>
+      <div class="posts-grid">
+        <article class="post" tabindex="0" onclick="openPost(4)">
+          <header>Nietzsche and the Will to Power</header>
+          <div class="summary">Unpacking a core idea that shaped modern thought.</div>
+          <footer>Sep 21 2025</footer>
+        </article>
+        <article class="post" tabindex="0" onclick="openPost(5)">
+          <header>Existentialism in the 21st Century</header>
+          <div class="summary">Freedom, angst, authenticity—revisited for today’s challenges.</div>
+          <footer>Sep 19 2025</footer>
+        </article>
+      </div>
+    </section>
+
+    <!-- Science Section -->
+    <section id="science">
+      <h2>Science</h2>
+      <div class="posts-grid">
+        <article class="post" tabindex="0" onclick="openPost(6)">
+          <header>The Mysteries of Dark Matter</header>
+          <div class="summary">Latest theories and experiments hunting the universe’s missing mass.</div>
+          <footer>Sep 23 2025</footer>
+        </article>
+        <article class="post" tabindex="0" onclick="openPost(7)">
+          <header>CRISPR & Gene-Editing’s Promise</header>
+          <div class="summary">Revolutionizing medicine and agriculture—plus the ethical minefield.</div>
+          <footer>Sep 18 2025</footer>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========  FOOTER  ======== -->
+  <footer class="site-footer">© 2025 Enlight Blog. All rights reserved.</footer>
+
+  <!-- ========  POST OVERLAY  ======== -->
+  <div class="post-overlay" id="postOverlay">
+    <button class="close-btn" onclick="closePost()">&times;</button>
+    <article class="post-content" id="postContent"><!-- dynamic content --></article>
   </div>
 
-  <footer>&copy; 2025 Philosophy & Tech Blog</footer>
-  <script src="app.js"></script>
+  <!-- ========  MINIMAL JS  ======== -->
+  <script>
+    /* -------- Blog posts data -------- */
+    const posts=[
+      {title:"Advances in AI: The New Frontier",
+       content:`Artificial Intelligence is transforming every facet of life—from healthcare diagnostics to climate modelling. Yet this rapid progress raises urgent ethical questions: privacy, bias, and workforce disruption. A responsible future depends on transparent policies and human-centric design.`},
+
+      {title:"Quantum Computing Explained",
+       content:`Quantum computers use qubits that exist in superposition, enabling exponential parallelism. Entanglement and interference further turbo-charge calculations, promising breakthroughs in cryptography, materials science, and optimization problems once thought intractable.`},
+
+      {title:"The Renaissance of Modern Poetry",
+       content:`Social media, spoken-word events, and interactive e-zines are revitalizing poetry. New voices merge multimedia with verse, challenging traditional forms while preserving the emotional core that defines poetic art.`},
+
+      {title:"Exploring Magical Realism",
+       content:`Magical realism interweaves fantastical elements into everyday settings to spotlight cultural realities. From García Márquez to Murakami, the genre invites readers to question accepted truths and embrace the uncanny.`},
+
+      {title:"Nietzsche and the Will to Power",
+       content:`For Nietzsche, the "will to power" underpins human creativity and striving. Far from mere domination, it signals self-overcoming—an eternal push towards higher states of being.`},
+
+      {title:"Existentialism in the 21st Century",
+       content:`Existentialist themes of freedom, angst, and authenticity resonate amid today’s hyper-connected yet fragmented world. Re-examining Sartre, de Beauvoir, and Camus offers guidance for living meaningfully in uncertain times.`},
+
+      {title:"The Mysteries of Dark Matter",
+       content:`Dark matter outweighs visible matter five-to-one, yet it neither emits nor absorbs light. Scientists deploy gravitational lensing, particle detectors, and cosmic surveys to reveal its elusive nature.`},
+
+      {title:"CRISPR & Gene-Editing’s Promise",
+       content:`CRISPR-Cas9 allows precise DNA edits, fuelling hopes for curing genetic diseases and boosting crop yields. Balancing innovation with ethical safeguards is crucial as the technology matures.`}
+    ];
+
+    /* -------- Open & close overlay -------- */
+    function openPost(i){
+      const overlay=document.getElementById("postOverlay");
+      const container=document.getElementById("postContent");
+      container.innerHTML=`<h3>${posts[i].title}</h3><p>${posts[i].content}</p>`;
+      overlay.classList.add("active");document.body.style.overflow="hidden";
+    }
+    function closePost(){
+      document.getElementById("postOverlay").classList.remove("active");
+      document.body.style.overflow="";
+    }
+
+    /* -------- Smooth section nav -------- */
+    function setActive(e){
+      e.preventDefault();
+      document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
+      e.target.classList.add("active");
+      document.querySelector(e.target.getAttribute("href"))
+              .scrollIntoView({behavior:"smooth"});
+    }
+  </script>
 </body>
 </html>
