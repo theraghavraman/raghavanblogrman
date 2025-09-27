@@ -75,4 +75,126 @@
 
   <script src="app.js" defer></script>
 </body>
+</html><!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RedmarC - The Raghav's Blog</title>
+  <meta name="description" content="A state‑of‑the‑art static blog powered by semantic HTML, modern CSS, and vanilla JS.">
+  <link rel="preload" href="styles.css" as="style">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preload" href="posts.json" as="fetch" crossorigin>
+</head>
+<body class="theme-auto">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- =============================================================
+       TABLE OF CONTENTS - COMPONENT MAP
+1. Site Header Component
+2. Main Content Component
+          2.1 Hero Section Component
+          2.2 Latest Posts Section Component
+              2.2a Card Template Component
+          2.3 Topics Section Component
+1. Site Footer Component
+2. Scripts Component
+       ============================================================= -->
+
+  <!-- #region 1. SITE HEADER COMPONENT -->
+  <header class="site-header" role="banner">
+    <div class="wrap">
+      <a class="brand" href="/">RedmarC</a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="#latest">Latest</a></li>
+          <li><a href="#topics">Topics</a></li>
+          <li>
+            <button id="themeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle theme">🌗</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <!-- #endregion 1. SITE HEADER COMPONENT -->
+
+
+  <!-- #region 2. MAIN CONTENT COMPONENT -->
+  <main id="main" class="site-main" role="main">
+
+    <!-- #region 2.1 HERO SECTION COMPONENT -->
+    <section class="hero">
+      <div class="wrap">
+        <h1 class="display">Ideas that move fast, pages that load faster</h1>
+        <p class="lede">A minimal, animated, accessible blog scaffold—no frameworks, just craft.</p>
+
+        <!-- #region 2.1a SEARCH FORM SUB-COMPONENT -->
+        <form class="search" role="search" aria-label="Site search">
+          <input id="q" name="q" type="search" placeholder="Search articles, tags…" 
+                 autocomplete="off" inputmode="search" aria-controls="grid" aria-describedby="searchHelp">
+          <p id="searchHelp" class="sr">Type to filter posts by title, summary, or tag.</p>
+        </form>
+        <!-- #endregion 2.1a SEARCH FORM SUB-COMPONENT -->
+
+      </div>
+    </section>
+    <!-- #endregion 2.1 HERO SECTION COMPONENT -->
+
+
+    <!-- #region 2.2 LATEST POSTS SECTION COMPONENT -->
+    <section id="latest" aria-labelledby="latestHeading" class="section">
+      <div class="wrap">
+        <h2 id="latestHeading">Latest</h2>
+        <div id="grid" class="card-grid" data-enhance="reveal"></div>
+
+        <!-- #region 2.2a CARD TEMPLATE COMPONENT -->
+        <template id="card-tpl">
+          <article class="card" data-tags="">
+            <a class="card-media" href="post.html">
+              <img loading="lazy" decoding="async" alt="">
+            </a>
+            <div class="card-body">
+              <header>
+                <h3 class="card-title"><a href="post.html"></a></h3>
+                <p class="card-meta"><time></time> · <span class="reading"></span></p>
+              </header>
+              <p class="card-excerpt"></p>
+              <footer class="card-tags" aria-label="Tags"></footer>
+            </div>
+          </article>
+        </template>
+        <!-- #endregion 2.2a CARD TEMPLATE COMPONENT -->
+
+      </div>
+    </section>
+    <!-- #endregion 2.2 LATEST POSTS SECTION COMPONENT -->
+
+
+    <!-- #region 2.3 TOPICS SECTION COMPONENT -->
+    <section id="topics" aria-labelledby="topicsHeading" class="section">
+      <div class="wrap">
+        <h2 id="topicsHeading">Topics</h2>
+        <div id="tagCloud" class="tag-cloud" role="list"></div>
+      </div>
+    </section>
+    <!-- #endregion 2.3 TOPICS SECTION COMPONENT -->
+
+  </main>
+  <!-- #endregion 2. MAIN CONTENT COMPONENT -->
+
+
+  <!-- #region 3. SITE FOOTER COMPONENT -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="wrap">
+      <p>© <span id="year"></span> RedmarC. Built with semantic HTML, modern CSS, and vanilla JS.</p>
+    </div>
+  </footer>
+  <!-- #endregion 3. SITE FOOTER COMPONENT -->
+
+
+  <!-- #region 4. SCRIPTS COMPONENT -->
+  <script src="app.js" defer></script>
+  <!-- #endregion 4. SCRIPTS COMPONENT -->
+
+</body>
 </html>
