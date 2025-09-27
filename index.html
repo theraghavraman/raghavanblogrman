@@ -3,208 +3,218 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Enlight Blog – Tech · Literature · Philosophy · Science</title>
+  <title>Chromatic Muse – Tech • Literature • Philosophy • Science</title>
 
-  <!-- ========  MONOLITHIC CSS  ======== -->
+  <!-- ------------  MONOLITHIC CSS  ------------ -->
   <style>
-    /* --- Base reset --- */
+    /* Base reset */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{
-      font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
-      background:#121212;color:#e0e0e0;line-height:1.6;overflow-x:hidden;
+      font-family:"Poppins",sans-serif;
+      background:linear-gradient(135deg,#fceabb,#f8b500,#ec5050,#6a2c70);
+      min-height:100vh;overflow-x:hidden;color:#222;
       -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-    a{color:#00d8ff;text-decoration:none;transition:.3s}
-    a:hover{color:#00a8cc}
 
-    /* --- Header & nav --- */
+    /* Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&family=Pacifico&display=swap');
+
+    /* Header */
     header{
-      background:linear-gradient(90deg,#060b12,#0e1a28);
-      padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;
-      position:sticky;top:0;z-index:1000;box-shadow:0 2px 12px #000a}
-    .logo{
-      font:900 1.8rem/1 "Courier New",monospace;letter-spacing:2px;
-      color:#01f7ff;text-transform:uppercase;user-select:none}
-    nav{display:flex;gap:2rem}
-    nav a{font-weight:600;border-bottom:2px solid transparent;padding-bottom:4px}
-    nav a.active,nav a:hover{border-color:#0ff}
+      text-align:center;padding:2.2rem 3rem;
+      font:400 3rem/1 "Pacifico",cursive;color:#fff;
+      text-shadow:2px 2px 10px #0007}
 
-    /* --- Layout --- */
-    main{max-width:1100px;margin:2rem auto;padding:0 2rem}
-    section{margin-bottom:4rem}
-    h2{font-size:2.4rem;margin-bottom:1rem;color:#00d8ff;text-shadow:0 0 10px #00d8ff88}
+    /* Nav */
+    nav{text-align:center;margin-bottom:3rem}
+    nav a{
+      margin:0 1.2rem;padding:.3rem .8rem;font-size:1.2rem;font-weight:600;
+      color:#fff;text-decoration:none;border-radius:16px;
+      background:rgba(255,255,255,.2);backdrop-filter:blur(12px);
+      transition:.4s}
+    nav a:hover,
+    nav a.active{background:#fff;color:#f2709c;box-shadow:0 0 15px #f2709c;font-weight:700;transform:scale(1.1)}
 
-    /* --- Card grid --- */
-    .posts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:2rem}
+    /* Layout */
+    main{max-width:1000px;margin:0 auto 5rem;padding:0 2rem}
+    section{margin-bottom:5rem}
+    section h2{
+      margin-bottom:2rem;font-size:2.8rem;font-weight:600;text-align:center;
+      background:linear-gradient(90deg,#f2709c,#ff9472);-webkit-background-clip:text;color:transparent;
+      filter:drop-shadow(0 0 5px #fff8)}
+
+    /* Card grid */
+    .posts-grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
     article.post{
-      background:#1c2633;border-radius:12px;padding:1.5rem;display:flex;flex-direction:column;
-      box-shadow:0 0 8px #00d8ff44;transition:.3s;cursor:pointer;height:100%}
-    article.post:hover{transform:translateY(-10px);box-shadow:0 15px 30px #00d8ffaa}
-    article.post header{font:800 1.4rem "Courier New",monospace;color:#adebeb;margin-bottom:.5rem}
-    article.post .summary{flex-grow:1;color:#cce7ea;margin-bottom:1rem}
-    article.post footer{font-size:.85rem;color:#00a8cc99}
+      background:linear-gradient(145deg,#f2709c,#ff9472);color:#fff;
+      padding:1.8rem 1.5rem;border-radius:20px;display:flex;flex-direction:column;
+      box-shadow:0 8px 15px #0005;transition:.35s;cursor:pointer;height:100%}
+    article.post:hover{transform:translateY(-12px) scale(1.03);box-shadow:0 16px 35px #ff9292b3;z-index:10}
+    article.post header{font-size:1.5rem;font-weight:700;margin-bottom:1rem;text-shadow:0 0 6px #0006}
+    article.post .summary{flex-grow:1;font-weight:300;line-height:1.55;margin-bottom:1rem;text-shadow:0 1px 3px #0004}
+    article.post footer{font-size:.9rem;font-style:italic;text-align:right;opacity:.8}
 
-    /* --- Fancy scrollbar (desktop) --- */
-    ::-webkit-scrollbar{width:8px;height:8px}
-    ::-webkit-scrollbar-track{background:#222}
-    ::-webkit-scrollbar-thumb{background:#00d8ffaa;border-radius:4px}
-
-    /* --- Footer --- */
-    .site-footer{background:#060b12;color:#555;text-align:center;font-size:.9rem;padding:1rem 2rem;border-top:1px solid #0e1a28}
-
-    /* --- Post overlay --- */
+    /* Overlay */
     .post-overlay{
-      position:fixed;inset:0;background:rgba(18,18,18,.96);display:none;justify-content:center;
-      align-items:center;padding:2rem;z-index:1500;overflow-y:auto}
-    .post-overlay.active{display:flex;animation:fadeIn .3s forwards}
+      position:fixed;inset:0;background:#121212f9;backdrop-filter:blur(6px);
+      display:none;justify-content:center;align-items:center;padding:3rem 2rem;z-index:9999;overflow-y:auto}
+    .post-overlay.active{display:flex;animation:fadeIn .4s forwards}
     @keyframes fadeIn{from{opacity:0}to{opacity:1}}
     .post-content{
-      background:#1c2633;border-radius:14px;max-width:700px;width:100%;padding:2rem;
-      box-shadow:0 0 25px #00d8ffbb;color:#def8fb}
-    .post-content h3{margin-top:0;color:#00d8ff;font-family:"Courier New",monospace;margin-bottom:1rem}
-    .close-btn{
-      position:absolute;top:1rem;right:2rem;font-size:2rem;background:none;border:none;
-      color:#00a8cc;font-weight:bold;cursor:pointer;transition:.3s}
-    .close-btn:hover{color:#00d8ff}
+      background:radial-gradient(circle at center,#f2709c 0%,#ff9472 100%);
+      color:#fff;padding:2.5rem 3rem;border-radius:30px;max-width:700px;width:100%;
+      box-shadow:0 12px 32px #ff9292cc;font-size:1.15rem;font-weight:300;line-height:1.75;position:relative}
+    .post-content h3{margin:0 0 1.2rem;font:400 2.4rem "Pacifico",cursive;text-shadow:0 0 15px #fffcae}
 
-    /* --- Responsive tweaks --- */
-    @media(max-width:680px){nav{gap:1rem}main{padding:0 1rem}}
+    /* Close button */
+    .close-btn{
+      position:absolute;top:1.5rem;right:2rem;background:none;border:none;
+      font-size:2.5rem;font-weight:900;color:#fff;text-shadow:0 0 15px #ff9472;
+      cursor:pointer;transition:.3s}
+    .close-btn:hover{color:#fceabb;text-shadow:0 0 25px #fceabb,0 0 40px #f2709c}
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:8px;height:8px}
+    ::-webkit-scrollbar-track{background:#222}
+    ::-webkit-scrollbar-thumb{background:#ff9472aa;border-radius:4px}
+
+    /* Responsive tweaks */
+    @media(max-width:600px){
+      header{font-size:2.2rem;padding:1.6rem 1rem}
+      main{padding:0 1rem}
+      .post-content{padding:2rem 1.5rem;font-size:1rem}
+      .close-btn{font-size:2rem;right:1rem;top:1rem}
+      nav a{margin:0 .7rem;font-size:1rem}
+    }
   </style>
 </head>
 
 <body>
-  <!-- ========  HEADER  ======== -->
-  <header>
-    <div class="logo">Enlight Blog</div>
-    <nav>
-      <a href="#technology" class="active" onclick="setActive(event)">Technology</a>
-      <a href="#literature"  onclick="setActive(event)">Literature</a>
-      <a href="#philosophy"  onclick="setActive(event)">Philosophy</a>
-      <a href="#science"     onclick="setActive(event)">Science</a>
-    </nav>
-  </header>
+  <!-- ------------  HEADER & NAV  ------------ -->
+  <header>Chromatic Muse</header>
+  <nav>
+    <a href="#technology" class="active" onclick="setActive(event)">Technology</a>
+    <a href="#literature"  onclick="setActive(event)">Literature</a>
+    <a href="#philosophy"  onclick="setActive(event)">Philosophy</a>
+    <a href="#science"     onclick="setActive(event)">Science</a>
+  </nav>
 
-  <!-- ========  MAIN CONTENT  ======== -->
+  <!-- ------------  MAIN  ------------ -->
   <main>
-    <!-- Technology Section -->
+    <!-- Technology -->
     <section id="technology">
       <h2>Technology</h2>
       <div class="posts-grid">
         <article class="post" tabindex="0" onclick="openPost(0)">
-          <header>Advances in AI: The New Frontier</header>
-          <div class="summary">How artificial intelligence is reshaping industries—and the ethics at stake.</div>
+          <header>Renaissance of AI & Machine Learning</header>
+          <div class="summary">Unveiling the vibrant ecosystem transforming industries through AI innovation.</div>
           <footer>Sep 27 2025</footer>
         </article>
         <article class="post" tabindex="0" onclick="openPost(1)">
-          <header>Quantum Computing Explained</header>
-          <div class="summary">A beginner-friendly dive into qubits, superposition, and real-world use-cases.</div>
-          <footer>Sep 20 2025</footer>
+          <header>Blockchain Beyond Cryptocurrency</header>
+          <div class="summary">Exploring the boundless applications of blockchain technology in society.</div>
+          <footer>Sep 16 2025</footer>
         </article>
       </div>
     </section>
 
-    <!-- Literature Section -->
+    <!-- Literature -->
     <section id="literature">
       <h2>Literature</h2>
       <div class="posts-grid">
         <article class="post" tabindex="0" onclick="openPost(2)">
-          <header>The Renaissance of Modern Poetry</header>
-          <div class="summary">Digital platforms are fueling a creative revival—see how poets adapt.</div>
+          <header>Colors of Contemporary Poetry</header>
+          <div class="summary">How poets weave vivid tapestries with words for our modern age.</div>
           <footer>Sep 22 2025</footer>
         </article>
         <article class="post" tabindex="0" onclick="openPost(3)">
-          <header>Exploring Magical Realism</header>
-          <div class="summary">Blending reality and fantasy to critique society and self.</div>
-          <footer>Sep 25 2025</footer>
-        </article>
-      </div>
-    </section>
-
-    <!-- Philosophy Section -->
-    <section id="philosophy">
-      <h2>Philosophy</h2>
-      <div class="posts-grid">
-        <article class="post" tabindex="0" onclick="openPost(4)">
-          <header>Nietzsche and the Will to Power</header>
-          <div class="summary">Unpacking a core idea that shaped modern thought.</div>
-          <footer>Sep 21 2025</footer>
-        </article>
-        <article class="post" tabindex="0" onclick="openPost(5)">
-          <header>Existentialism in the 21st Century</header>
-          <div class="summary">Freedom, angst, authenticity—revisited for today’s challenges.</div>
+          <header>Myth & Metaphor: Literary Elements</header>
+          <div class="summary">Decoding symbolic language and timeless stories in literature.</div>
           <footer>Sep 19 2025</footer>
         </article>
       </div>
     </section>
 
-    <!-- Science Section -->
+    <!-- Philosophy -->
+    <section id="philosophy">
+      <h2>Philosophy</h2>
+      <div class="posts-grid">
+        <article class="post" tabindex="0" onclick="openPost(4)">
+          <header>Philosophical Musings on Color & Perception</header>
+          <div class="summary">How colors shape our understanding of reality and aesthetics.</div>
+          <footer>Sep 21 2025</footer>
+        </article>
+        <article class="post" tabindex="0" onclick="openPost(5)">
+          <header>Socratic Dialogues Today</header>
+          <div class="summary">The enduring power of questioning in the modern world.</div>
+          <footer>Sep 25 2025</footer>
+        </article>
+      </div>
+    </section>
+
+    <!-- Science -->
     <section id="science">
       <h2>Science</h2>
       <div class="posts-grid">
         <article class="post" tabindex="0" onclick="openPost(6)">
-          <header>The Mysteries of Dark Matter</header>
-          <div class="summary">Latest theories and experiments hunting the universe’s missing mass.</div>
+          <header>The Spectrum of Light and Energy</header>
+          <div class="summary">A scientific journey through color, light, and electromagnetic waves.</div>
           <footer>Sep 23 2025</footer>
         </article>
         <article class="post" tabindex="0" onclick="openPost(7)">
-          <header>CRISPR & Gene-Editing’s Promise</header>
-          <div class="summary">Revolutionizing medicine and agriculture—plus the ethical minefield.</div>
+          <header>Bioluminescence in Nature</header>
+          <div class="summary">The dazzling biological lights that illuminate the natural world.</div>
           <footer>Sep 18 2025</footer>
         </article>
       </div>
     </section>
   </main>
 
-  <!-- ========  FOOTER  ======== -->
-  <footer class="site-footer">© 2025 Enlight Blog. All rights reserved.</footer>
+  <!-- ------------  FOOTER  ------------ -->
+  <footer style="text-align:center;color:#fff;background:#42275a;padding:1rem 2rem;font-weight:300">
+    © 2025 Chromatic Muse — Curated with colors and care.
+  </footer>
 
-  <!-- ========  POST OVERLAY  ======== -->
+  <!-- ------------  POST OVERLAY  ------------ -->
   <div class="post-overlay" id="postOverlay">
     <button class="close-btn" onclick="closePost()">&times;</button>
-    <article class="post-content" id="postContent"><!-- dynamic content --></article>
+    <article class="post-content" id="postContent"></article>
   </div>
 
-  <!-- ========  MINIMAL JS  ======== -->
+  <!-- ------------  MINIMAL JS  ------------ -->
   <script>
-    /* -------- Blog posts data -------- */
+    /* Post data */
     const posts=[
-      {title:"Advances in AI: The New Frontier",
-       content:`Artificial Intelligence is transforming every facet of life—from healthcare diagnostics to climate modelling. Yet this rapid progress raises urgent ethical questions: privacy, bias, and workforce disruption. A responsible future depends on transparent policies and human-centric design.`},
-
-      {title:"Quantum Computing Explained",
-       content:`Quantum computers use qubits that exist in superposition, enabling exponential parallelism. Entanglement and interference further turbo-charge calculations, promising breakthroughs in cryptography, materials science, and optimization problems once thought intractable.`},
-
-      {title:"The Renaissance of Modern Poetry",
-       content:`Social media, spoken-word events, and interactive e-zines are revitalizing poetry. New voices merge multimedia with verse, challenging traditional forms while preserving the emotional core that defines poetic art.`},
-
-      {title:"Exploring Magical Realism",
-       content:`Magical realism interweaves fantastical elements into everyday settings to spotlight cultural realities. From García Márquez to Murakami, the genre invites readers to question accepted truths and embrace the uncanny.`},
-
-      {title:"Nietzsche and the Will to Power",
-       content:`For Nietzsche, the "will to power" underpins human creativity and striving. Far from mere domination, it signals self-overcoming—an eternal push towards higher states of being.`},
-
-      {title:"Existentialism in the 21st Century",
-       content:`Existentialist themes of freedom, angst, and authenticity resonate amid today’s hyper-connected yet fragmented world. Re-examining Sartre, de Beauvoir, and Camus offers guidance for living meaningfully in uncertain times.`},
-
-      {title:"The Mysteries of Dark Matter",
-       content:`Dark matter outweighs visible matter five-to-one, yet it neither emits nor absorbs light. Scientists deploy gravitational lensing, particle detectors, and cosmic surveys to reveal its elusive nature.`},
-
-      {title:"CRISPR & Gene-Editing’s Promise",
-       content:`CRISPR-Cas9 allows precise DNA edits, fuelling hopes for curing genetic diseases and boosting crop yields. Balancing innovation with ethical safeguards is crucial as the technology matures.`}
+      {title:"Renaissance of AI & Machine Learning",
+       content:`Artificial Intelligence and Machine Learning are at the heart of this new renaissance. From neural networks to reinforcement learning, these technologies pave pathways to automated innovations transforming sectors from healthcare to entertainment.`},
+      {title:"Blockchain Beyond Cryptocurrency",
+       content:`Blockchain is evolving far beyond digital coins. Decentralized apps, supply chains, digital identity, and voting systems are some fields where blockchain builds trust and transparency.`},
+      {title:"Colors of Contemporary Poetry",
+       content:`Modern poets use the palette of language and imagery to evoke emotions and ideas, blending traditional forms with new media to captivate diverse audiences.`},
+      {title:"Myth & Metaphor: Literary Elements",
+       content:`Dive into storytelling's roots with myth and metaphor—timeless tools that reveal cultural truths and deepen literary meaning.`},
+      {title:"Philosophical Musings on Color & Perception",
+       content:`Colors influence how we interpret the world. This article probes the philosophy behind color perception and its roles in art, science, and human experience.`},
+      {title:"Socratic Dialogues Today",
+       content:`The Socratic method remains relevant, teaching us to uncover truth through questions, fostering critical thought amid today's information overload.`},
+      {title:"The Spectrum of Light and Energy",
+       content:`Explore the scientific principles of light and energy, including the electromagnetic spectrum, wave-particle duality, and how colors manifest in nature and technology.`},
+      {title:"Bioluminescence in Nature",
+       content:`Bioluminescence is nature’s own light show, seen in creatures from fireflies to deep-sea fish, illuminating the mysteries of evolution and survival.`}
     ];
 
-    /* -------- Open & close overlay -------- */
+    /* Open & close overlay */
     function openPost(i){
-      const overlay=document.getElementById("postOverlay");
-      const container=document.getElementById("postContent");
-      container.innerHTML=`<h3>${posts[i].title}</h3><p>${posts[i].content}</p>`;
-      overlay.classList.add("active");document.body.style.overflow="hidden";
+      document.getElementById("postContent").innerHTML=
+        `<h3>${posts[i].title}</h3><p>${posts[i].content}</p>`;
+      document.getElementById("postOverlay").classList.add("active");
+      document.body.style.overflow="hidden";
     }
     function closePost(){
       document.getElementById("postOverlay").classList.remove("active");
       document.body.style.overflow="";
     }
 
-    /* -------- Smooth section nav -------- */
+    /* Smooth nav */
     function setActive(e){
       e.preventDefault();
       document.querySelectorAll("nav a").forEach(a=>a.classList.remove("active"));
