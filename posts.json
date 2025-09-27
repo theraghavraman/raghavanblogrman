@@ -1,0 +1,25 @@
+[
+  {
+    "slug": "neon-typography",
+    "title": "Neon Typography for Quotes",
+    "date": "2025-09-18",
+    "tags": ["design", "typography", "quotes"],
+    "excerpt": "Build luminous type treatments using pure CSS layer blend and variable fonts.",
+    "cover": "assets/neon.jpg",
+    "coverAlt": "Neon light typography on dark wall",
+    "caption": "CSS-only glow with layered shadows.",
+    "wordcount": 800,
+    "html": "<p>Start with a bold variable font and control weight and width via CSS custom properties.</p><h2>CSS Glow</h2><pre><code>.glow{ text-shadow: 0 0 8px #6ee7ff, 0 0 20px #a78bfa }</code></pre><h3>Layering</h3><p>Use multiple shadows and mix-blend-mode for intensity.</p><blockquote>\"What is not started today is never finished tomorrow.\"</blockquote>"
+  },
+  {
+    "slug": "jekyll-to-vanilla",
+    "title": "From Jekyll to Vanilla",
+    "date": "2025-09-05",
+    "tags": ["webdev", "performance", "static"],
+    "excerpt": "Drop frameworks for a hand-crafted stack that screams.",
+    "cover": "assets/perf.jpg",
+    "coverAlt": "Speed lines with neon gradient",
+    "wordcount": 950,
+    "html": "<p>Reducing JS payloads improves INP and LCP significantly.</p><h2>Critical Path</h2><p>Inline critical CSS and defer the rest.</p><h2>Lazy Everything</h2><p>Images and below-the-fold sections load only when needed.</p>"
+  }
+]
