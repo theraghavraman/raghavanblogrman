@@ -3,429 +3,293 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Asteria — Tech, Literature, Philosophy, Science</title>
-<meta name="description" content="A state-of-the-art single-file blog in a light, white, multi-color pastel style using glassmorphism, elegant typography, and subtle gradients." />
+<title>Relay — Tech • Lit • Philosophy • Science</title>
+<meta name="description" content="A neo‑brutalist single‑file blog. Bold typography, rigid grid, loud colors. No frameworks, just HTML+CSS+JS." />
 
 <style>
-/* ================= Root: Light Theme, Accessibility ================= */
+/* ==================== Neo‑Brutalist System ==================== */
 :root{
-  --page-bg: #fafbff;
-  --paper: rgba(255,255,255,0.65);
-  --paper-strong: rgba(255,255,255,0.82);
-  --paper-border: rgba(20,24,40,0.08);
-  --inner: rgba(255,255,255,0.9);
-  --text: #1a2240;
-  --muted: #4c587a;
-  --muter: #6d79a1;
-  --accent-1:#63b3ed; /* blue */
-  --accent-2:#a78bfa; /* purple */
-  --accent-3:#f472b6; /* pink */
-  --accent-4:#34d399; /* green */
-  --ring: rgba(99,179,237,0.7);
-  --radius-xl: 22px;
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --glass-blur: 12px;
-  --shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
-  --max-w: 1200px;
+  /* Ink + paper */
+  --paper: #fffefb;
+  --ink: #0c0c10;
+  --muted: #3a3a4a;
+
+  /* Split‑complementary accents (base: cobalt) */
+  --acc-1: #2251ff; /* base */
+  --acc-2: #ff6a33; /* red‑orange (split) */
+  --acc-3: #19c37d; /* green (split) */
+
+  /* Utility */
+  --maxw: 1160px;
+  --grid-gap: 20px;
+  --radius: 6px;
+
+  /* Borders: chunky */
+  --b1: 3px solid var(--ink);
+  --b2: 2px solid var(--ink);
 }
 
-/* Prefer reduced motion */
-@media (prefers-reduced-motion: reduce){
-  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-}
-
-/* Prefer higher contrast: strengthen borders/text */
-@media (prefers-contrast: more){
-  :root{
-    --paper: rgba(255,255,255,0.92);
-    --paper-border: rgba(20,24,40,0.22);
-    --muted: #2a3357;
-  }
-}
-
-/* ================= Global ================= */
-*{box-sizing:border-box}
-html,body{height:100%}
+/* Reset + base */
+*{ box-sizing:border-box }
+html,body{ height:100% }
+html{ scroll-behavior:smooth }
 body{
-  margin:0;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color:var(--text);
-  background: var(--page-bg);
-  overflow-x:hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  margin:0; background: var(--paper); color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
 }
 
-/* Ambient animated pastel background */
-.bg-anim{
-  position:fixed; inset:-12vmax;
-  z-index:-2;
-  background:
-    radial-gradient(900px 600px at 15% 8%, rgba(255,182,193,0.18), transparent 60%),
-    radial-gradient(1000px 700px at 85% 12%, rgba(167,139,250,0.18), transparent 60%),
-    radial-gradient(1100px 800px at 50% 92%, rgba(99,179,237,0.18), transparent 55%),
-    radial-gradient(900px 700px at 10% 85%, rgba(52,211,153,0.14), transparent 60%),
-    linear-gradient(180deg, #ffffff, #f7f9ff);
-  animation: drift 30s ease-in-out infinite alternate;
-  will-change: background-position;
-}
-@keyframes drift{
-  0%{ background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%, 0 0; }
-  100%{ background-position: 10% 8%, 90% 12%, 52% 96%, 6% 86%, 0 0; }
-}
+/* Container + grid */
+.wrap{ width:calc(100% - 32px); max-width:var(--maxw); margin:0 auto; }
+.grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
 
-/* Soft grain for texture */
-.grain{
-  position:fixed; inset:0; z-index:-1; pointer-events:none;
-  background-image: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.06"/></svg>');
-  background-size: 280px 280px;
-  mix-blend-mode: multiply;
+/* Utilities */
+.u-bar{ border: var(--b1); border-radius: var(--radius); }
+.u-pad{ padding:14px }
+.u-mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+.u-cap{ text-transform: uppercase; letter-spacing:.12em }
+.u-link{ text-decoration: underline; text-underline-offset: 2px }
+.u-chip{
+  display:inline-block; padding:.35rem .6rem; border: var(--b2); border-radius:20px; font-size:.82rem;
+  background:#fff; box-shadow: 4px 4px 0 0 var(--ink);
 }
-
-/* Layout */
-.container{ width:calc(100% - 2rem); max-width:var(--max-w); margin:0 auto; }
-
-/* ================= Glass, Rings, Utilities ================= */
-.glass{
-  background: var(--paper);
-  backdrop-filter: blur(var(--glass-blur)) saturate(130%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(130%);
-  border:1px solid var(--paper-border);
-  box-shadow: var(--shadow);
-}
-.inner-edge{ box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45); }
-.ring{
-  position:relative; border-radius: inherit;
-}
-.ring:after{
-  content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
-  background: linear-gradient(120deg, rgba(99,179,237,0.35), rgba(167,139,250,0.25), rgba(244,114,182,0.35), rgba(52,211,153,0.35));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor; mask-composite: exclude;
-  padding:1px;
-}
-
-/* Gradient text */
-.gradient-text{
-  background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-4));
-  background-size: 220% 220%;
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
-  animation: hueflow 18s ease-in-out infinite;
-}
-@keyframes hueflow{
-  0%{ background-position: 0% 50%; }
-  50%{ background-position: 100% 50%; }
-  100%{ background-position: 0% 50%; }
-}
-
-/* Buttons */
-.button{
-  display:inline-flex; align-items:center; gap:.55rem;
-  padding:.75rem 1rem; border-radius:999px; text-decoration:none;
-  color:var(--text); font-weight:600; letter-spacing:.01em;
-  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.7));
-  border:1px solid rgba(20,24,40,0.12);
-  transition: transform .18s ease, box-shadow .18s ease, background .25s ease;
-  box-shadow: 0 6px 14px rgba(16,24,40,0.07);
-}
-.button:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(16,24,40,0.10); }
-.button--accent{
-  background: linear-gradient(90deg, rgba(99,179,237,0.18), rgba(167,139,250,0.18), rgba(244,114,182,0.18));
-  border-image: linear-gradient(90deg, var(--accent-1), var(--accent-2)) 1;
-}
-
-/* Chips */
-.chips{ display:flex; gap:.6rem; flex-wrap:wrap; }
-.chip{
-  padding:.42rem .75rem; border-radius:999px; font-size:.86rem; color:var(--muted);
-  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
-  transition: transform .18s ease, background .25s ease;
-}
-.chip:hover{ transform: translateY(-2px); background: var(--paper-strong); }
-.chip[data-cat="tech"]{ border-color: rgba(99,179,237,0.5); }
-.chip[data-cat="literature"]{ border-color: rgba(167,139,250,0.5); }
-.chip[data-cat="philosophy"]{ border-color: rgba(244,114,182,0.5); }
-.chip[data-cat="science"]{ border-color: rgba(52,211,153,0.5); }
+.u-chip[data-cat="tech"]{ background: #e9efff }
+.u-chip[data-cat="literature"]{ background: #ffece4 }
+.u-chip[data-cat="philosophy"]{ background: #e7fbf1 }
+.u-chip[data-cat="science"]{ background: #f5f7ff }
 
 /* Header */
 .header{
-  padding: .9rem 0;
-  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  margin:12px 0; display:flex; align-items:center; gap:16px; justify-content:space-between;
 }
-.brand{ display:flex; align-items:center; gap:.8rem; text-decoration:none; color:var(--text); }
+.brand{
+  display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;
+}
 .logo{
-  width:44px; height:44px; border-radius:14px;
-  background: conic-gradient(from 210deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-4), var(--accent-1));
-  position:relative; overflow:hidden; box-shadow: 0 6px 18px rgba(16,24,40,0.10);
+  width:42px; height:42px; border: var(--b1); border-radius:8px; display:grid; place-items:center;
+  background: linear-gradient(90deg, var(--acc-1) 40%, var(--acc-2) 40% 70%, var(--acc-3) 70%);
+  color:#000; font-weight:800; box-shadow: 6px 6px 0 0 var(--ink);
 }
-.logo:before{
-  content:""; position:absolute; inset:1px; border-radius:12px;
-  background: rgba(255,255,255,0.6);
-  border:1px solid rgba(20,24,40,0.12);
-  backdrop-filter: blur(5px);
+.brand h1{ font-size:1.02rem; margin:0; line-height:1; }
+.nav{ display:flex; gap:8px; flex-wrap:wrap }
+.nav a{
+  display:inline-block; padding:.6rem .8rem; border: var(--b2); border-radius:4px; color:inherit; text-decoration:none;
+  background:#fff; box-shadow: 4px 4px 0 0 var(--ink); font-weight:700;
 }
-.brand h1{ font-size:1.02rem; letter-spacing:.12em; text-transform:uppercase; margin:0; color:var(--muted); }
+.nav a:hover{ transform: translate(-2px,-2px); box-shadow: 6px 6px 0 0 var(--ink) }
 
-/* Nav + search */
-.nav{ display:flex; gap:.4rem; flex-wrap:wrap; align-items:center;}
-.nav a{ font-size:.95rem }
-.search{
-  display:flex; align-items:center; gap:.5rem; padding:.5rem .75rem; border-radius:999px; color:var(--muted);
-  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
-}
-.search input{
-  background: transparent; border:0; outline:0; color:var(--text); width:12ch;
-}
-.search input::placeholder{ color:#8893b3; }
-
-/* Hero */
+/* Hero banner */
 .hero{
-  margin-top: .3rem; border-radius: var(--radius-xl); position:relative; overflow:hidden;
+  display:grid; grid-template-columns: 7fr 5fr; gap: var(--grid-gap);
+  margin: 8px 0 18px;
 }
-.hero::before{
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background:
-    radial-gradient(700px 360px at 12% 10%, rgba(99,179,237,0.20), transparent 60%),
-    radial-gradient(700px 360px at 88% 18%, rgba(167,139,250,0.18), transparent 55%),
-    radial-gradient(900px 500px at 45% 95%, rgba(52,211,153,0.16), transparent 60%);
+.hero-left, .hero-right{ border: var(--b1); border-radius: var(--radius); padding: 18px; }
+.kicker{ color: var(--muted); font-size:.82rem; }
+.hero h2{
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem); margin:.4rem 0 .5rem;
+  line-height:1.05;
 }
-.hero-content{
-  display:grid; grid-template-columns: 1.2fr 1fr; gap: 2rem;
-  padding: clamp(1rem, 2.2vw, 1.6rem);
+.hero h2 .emA{ background: var(--acc-1); color: #fff; padding: .15rem .3rem; box-decoration-break: clone }
+.hero h2 .emB{ background: var(--acc-2); color: #fff; padding: .15rem .3rem; box-decoration-break: clone }
+.hero p{ color: var(--muted); max-width: 58ch }
+.cta{
+  display:flex; gap:10px; margin-top:.8rem; flex-wrap:wrap;
 }
-.hero-left{
-  padding: clamp(1rem, 2.2vw, 1.6rem); border-radius: var(--radius-lg);
+.btn{
+  display:inline-flex; align-items:center; gap:.6rem; padding:.7rem 1rem; font-weight:800; text-decoration:none; color:var(--ink);
+  border: var(--b1); border-radius:4px; background:#fff; box-shadow: 6px 6px 0 0 var(--ink);
 }
-.kicker{ color:#6d79a1; letter-spacing:.22em; text-transform:uppercase; font-size:.78rem; margin-bottom:.55rem; }
-.hero h2{ font-size: clamp(1.9rem, 4vw, 3rem); line-height:1.12; margin:.1rem 0 .6rem; }
-.hero p{ color:var(--muted); font-size:1.05rem; margin:0 0 1.1rem; }
+.btn--acc1{ background: var(--acc-1); color:#fff }
+.btn--acc2{ background: var(--acc-2); color:#fff }
+.btn:hover{ transform: translate(-3px,-3px); box-shadow: 9px 9px 0 0 var(--ink) }
 
-/* Spotlight */
-.spotlight{
-  border-radius: var(--radius-lg);
-  position:relative; overflow:hidden;
-  display:flex; flex-direction:column; justify-content:flex-end; min-height: 320px;
-  background: linear-gradient(160deg, rgba(255,255,255,0.95), rgba(255,255,255,0.78));
-  border:1px solid rgba(20,24,40,0.12);
+/* Spotlight box (right) */
+.hero-right{
+  background: repeating-linear-gradient( -45deg, #fff, #fff 14px, #f5f5f5 14px, #f5f5f5 28px );
 }
-.spotlight .tag{
-  position:absolute; top:14px; left:14px;
-  padding:.35rem .65rem; border-radius:999px; font-size:.76rem; text-transform:uppercase;
-  background: rgba(255,255,255,0.95); border:1px solid rgba(20,24,40,0.12);
+.tag{
+  display:inline-block; font-weight:900; padding:.3rem .55rem; border: var(--b2); background:#fff; border-radius:4px;
+  box-shadow: 4px 4px 0 0 var(--ink); margin-bottom:.6rem;
 }
-.spotlight h3{ margin:0; font-size:1.32rem; }
-.spotlight p{ margin:.35rem 0 0; color:#374267; }
-.spotlight-footer{ display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:.6rem; }
 
 /* Sections */
-.section{ margin: 2.2rem 0; }
-.section h4{ margin:.2rem 0 1rem; color:#5b6793; letter-spacing:.18em; text-transform:uppercase; font-size:.82rem; }
+.section{ margin: 16px 0 }
+.section h3{ font-size:.96rem; margin:0 0 8px; }
+.section .u-cap{ color: var(--muted) }
 
-/* Grid */
-.grid{ display:grid; gap:1.1rem; grid-template-columns: repeat(12, 1fr); }
+/* Cards grid */
+.cards{ display:grid; grid-template-columns: repeat(12, 1fr); gap: var(--grid-gap); }
 .card{
-  grid-column: span 4; border-radius: var(--radius-lg); overflow:hidden; position:relative;
-  transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
-  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
+  grid-column: span 4; border: var(--b1); border-radius: var(--radius); background:#fff; display:flex; flex-direction:column;
+  box-shadow: 8px 8px 0 0 var(--ink); min-height: 240px; transition: transform .08s ease;
 }
-.card:hover{ transform: translateY(-4px); box-shadow: 0 16px 28px rgba(16,24,40,0.12); }
-.card-media{
-  height: 150px; position:relative; overflow:hidden;
-  background: linear-gradient(135deg, rgba(99,179,237,0.22), rgba(167,139,250,0.22), rgba(244,114,182,0.22));
+.card:hover{ transform: translate(-2px,-2px); box-shadow: 10px 10px 0 0 var(--ink) }
+.card-head{
+  height: 110px;
+  background:
+    linear-gradient(90deg, var(--acc-1) 0 40%, var(--acc-2) 40% 70%, var(--acc-3) 70% 100%);
+  border-bottom: var(--b1);
 }
-.card-media::after{
-  content:""; position:absolute; inset:0;
-  background: radial-gradient(340px 200px at 85% 15%, rgba(255,255,255,0.7), transparent 60%),
-              radial-gradient(360px 220px at 10% 85%, rgba(255,255,255,0.55), transparent 60%);
-  mix-blend-mode: screen; opacity:.7;
-}
-.card-body{ padding:1rem; }
-.card .meta{ display:flex; gap:.6rem; align-items:center; color:#5c6999; font-size:.86rem; }
-.card h5{ margin:.55rem 0 .35rem; font-size:1.1rem; }
-.card p{ margin:0; color:var(--muter); }
+.card-body{ padding: 12px 14px }
+.meta{ color:var(--muted); font-size:.85rem; }
+.card h4{ margin: .4rem 0; font-size:1.08rem }
+.card p{ margin:.2rem 0 .6rem; color:#222 }
 
-/* Reader drawer (light sheet) */
+/* Reader drawer */
 .reader{
-  position: fixed; inset:auto 0 0 0; translate: 0 110%;
-  transition: translate .42s cubic-bezier(.2,.8,.2,1);
-  border-top-left-radius: 22px; border-top-right-radius:22px;
-  max-height: 90vh; overflow:auto;
-  background: var(--paper-strong);
-  border:1px solid rgba(20,24,40,0.12);
-  box-shadow: 0 -10px 28px rgba(16,24,40,0.12);
+  position: fixed; left:0; right:0; bottom:0; transform: translateY(110%);
+  transition: transform .28s ease-out; background:#fff; border-top: var(--b1); box-shadow: 0 -12px 0 0 var(--ink);
+  max-height: 88vh; overflow:auto;
 }
-.reader.open{ translate: 0 0; }
-.reader .wrap{ padding: 1.1rem; max-width: 840px; margin: 0 auto; }
-.reader h2{ margin:.2rem 0 .6rem; font-size:1.7rem; }
-.reader .byline{ color:#56618a; font-size:.95rem; }
-.reader article{ color:#2a3357; line-height:1.72; }
-.reader article h3{ margin:1.1rem 0 .4rem; }
-.reader .close{ position:sticky; top:.8rem; margin-left:auto; display:inline-flex; align-items:center; gap:.4rem; }
+.reader.open{ transform: translateY(0) }
+.reader .wrap{ padding:16px; max-width: 860px }
+.reader .close{ float:right }
+.reader h2{ margin:.2rem 0 .6rem; }
+.reader .byline{ color:var(--muted); font-size:.92rem }
+.reader article{ line-height:1.68 }
+.reader article h3{ margin:1rem 0 .35rem }
 
 /* Footer */
-.footer{
-  margin: 2.4rem 3px 3rem; padding:1rem; border-radius: var(--radius-lg);
-  color:#4c587a; font-size:.95rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:.8rem;
-  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
-}
+.footer{ margin: 22px 0 32px; padding:12px 14px; border: var(--b1); border-radius: var(--radius); background:#fff; }
 
 /* Responsive */
 @media (max-width: 980px){
-  .hero-content{ grid-template-columns: 1fr; }
-  .grid .card{ grid-column: span 6; }
+  .hero{ grid-template-columns: 1fr }
+  .card{ grid-column: span 6 }
 }
 @media (max-width: 680px){
-  .nav{ display:none; }
-  .grid .card{ grid-column: span 12; }
-  .hero p{ font-size:1rem; }
+  .nav{ display:none }
+  .card{ grid-column: span 12 }
 }
 
-/* Subtle shimmer */
-.shimmer{ position:relative; overflow:hidden; }
-.shimmer::after{
-  content:""; position:absolute; inset:-200%;
-  background: linear-gradient(120deg, transparent 45%, rgba(255,255,255,0.45) 50%, transparent 55%);
-  animation: shine 6s ease-in-out infinite;
-}
-@keyframes shine{ 0%{ transform: translateX(-30%);} 100%{ transform: translateX(30%);} }
+/* Focus + selections */
+:focus-visible{ outline: 3px solid var(--acc-1); outline-offset: 2px }
+::selection{ background: var(--acc-1); color:#fff }
 </style>
 </head>
 
 <body>
-<div class="bg-anim" aria-hidden="true"></div>
-<div class="grain" aria-hidden="true"></div>
-
-<header class="container header">
-  <a class="brand" href="#" aria-label="Asteria Home">
-    <div class="logo ring" aria-hidden="true"></div>
-    <h1>Asteria Press</h1>
+<header class="wrap header">
+  <a href="#" class="brand">
+    <div class="logo" aria-hidden="true">R</div>
+    <h1>Relay</h1>
   </a>
   <nav class="nav" aria-label="Primary">
-    <a class="button" href="#latest">Latest</a>
-    <a class="button" href="#essays">Essays</a>
-    <a class="button" href="#reviews">Reviews</a>
-    <a class="button button--accent" href="#subscribe">Subscribe</a>
+    <a href="#latest">Latest</a>
+    <a href="#essays">Essays</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#about">About</a>
   </nav>
-  <label class="search" aria-label="Search posts">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    <input id="q" type="search" placeholder="Search…" />
-  </label>
 </header>
 
-<main class="container">
+<main class="wrap">
   <!-- HERO -->
-  <section class="hero glass ring inner-edge" id="hero" role="region" aria-label="Hero">
-    <div class="hero-content">
-      <div class="hero-left">
-        <div class="kicker">Technology • Literature • Philosophy • Science</div>
-        <h2 class="gradient-text">Where ideas meet elegant engineering</h2>
-        <p>Deep dives and lyrical essays at the edge of code and culture—crafted for minds that love systems and sentences alike.</p>
-        <div style="display:flex; gap:.7rem; flex-wrap:wrap;">
-          <a href="#latest" class="button">Read latest</a>
-          <a href="#subscribe" class="button button--accent">Get updates</a>
-        </div>
-        <div class="section" style="margin-top:1rem">
-          <div class="chips" role="group" aria-label="Filter categories">
-            <button class="chip" data-cat="tech">Technology</button>
-            <button class="chip" data-cat="literature">Literature</button>
-            <button class="chip" data-cat="philosophy">Philosophy</button>
-            <button class="chip" data-cat="science">Science</button>
-          </div>
-        </div>
+  <section class="hero">
+    <div class="hero-left">
+      <div class="kicker u-cap">Technology • Literature • Philosophy • Science</div>
+      <h2>Make ideas <span class="emA">loud</span>, keep code <span class="emB">lean</span></h2>
+      <p>Brutalist rhythm, rigid grids, and zero fluff. Essays that punch above the fold, reviews that read like manifestos, and notes that respect attention.</p>
+      <div class="cta">
+        <a href="#latest" class="btn btn--acc1">Read latest</a>
+        <a href="#subscribe" class="btn btn--acc2">Get updates</a>
       </div>
-
-      <div class="spotlight shimmer" role="article" aria-labelledby="spot-title">
-        <span class="tag">Spotlight</span>
-        <div style="padding:1rem 1rem 1.1rem; background: linear-gradient(180deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.65) 100%);">
-          <h3 id="spot-title">The Algorithm as Critic: Can Gradient Descent Read Poetry?</h3>
-          <p>Exploring meaning-making from transformers to transcendence—and what machines misunderstand about metaphor.</p>
-          <div class="spotlight-footer">
-            <span class="meta">12 min • Philosophy</span>
-            <a class="button" href="#" data-open="The Algorithm as Critic: Can Gradient Descent Read Poetry?">Open</a>
-          </div>
-        </div>
+      <div class="section" style="margin-top:10px">
+        <span class="u-chip" data-cat="tech">Tech</span>
+        <span class="u-chip" data-cat="literature">Lit</span>
+        <span class="u-chip" data-cat="philosophy">Philo</span>
+        <span class="u-chip" data-cat="science">Science</span>
       </div>
     </div>
+    <aside class="hero-right">
+      <div class="tag u-mono">Spotlight</div>
+      <h3 style="margin:.3rem 0;">The Algorithm as Critic: Can Gradient Descent Read Poetry?</h3>
+      <p style="color:var(--muted)">Transformers count; metaphors counter. Where the model ends, the reader begins.</p>
+      <div style="display:flex; gap:10px; align-items:center; justify-content:space-between; margin-top:.6rem;">
+        <span class="u-mono" style="font-size:.9rem; color:var(--muted)">12 min • Philosophy</span>
+        <a class="btn" href="#" data-open="The Algorithm as Critic: Can Gradient Descent Read Poetry?">Open</a>
+      </div>
+    </aside>
   </section>
 
   <!-- LATEST -->
-  <section class="section" id="latest" aria-label="Latest posts">
-    <h4>Latest</h4>
-    <div class="grid">
-      <article class="card ring" data-cat="tech">
-        <div class="card-media"></div>
+  <section class="section" id="latest">
+    <h3 class="u-cap">Latest</h3>
+    <div class="cards">
+      <!-- Card -->
+      <article class="card" data-cat="tech">
+        <div class="card-head"></div>
         <div class="card-body">
-          <div class="meta">8 min • Technology</div>
-          <h5>Edge Compute, Edge Culture</h5>
-          <p>Why pushing inference to the margins changes both latency and literature.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="Edge Compute, Edge Culture">Read</a>
-            <span class="chip" data-cat="tech">Tech</span>
+          <div class="meta u-mono">8 min • Technology</div>
+          <h4>Edge Compute, Edge Culture</h4>
+          <p>Latency isn’t just a metric; it’s a mood.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="Edge Compute, Edge Culture">Read</a>
+            <span class="u-chip" data-cat="tech">Tech</span>
           </div>
         </div>
       </article>
 
-      <article class="card ring" data-cat="literature">
-        <div class="card-media"></div>
+      <article class="card" data-cat="literature">
+        <div class="card-head"></div>
         <div class="card-body">
-          <div class="meta">6 min • Literature</div>
-          <h5>Margins, Kerning, Meaning</h5>
-          <p>On typographic nuance and how form teaches content to sing.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="Margins, Kerning, Meaning">Read</a>
-            <span class="chip" data-cat="literature">Lit</span>
+          <div class="meta u-mono">6 min • Literature</div>
+          <h4>Margins, Kerning, Meaning</h4>
+          <p>Typography is craft that teaches thought to breathe.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="Margins, Kerning, Meaning">Read</a>
+            <span class="u-chip" data-cat="literature">Lit</span>
           </div>
         </div>
       </article>
 
-      <article class="card ring" data-cat="philosophy">
-        <div class="card-media"></div>
+      <article class="card" data-cat="philosophy">
+        <div class="card-head"></div>
         <div class="card-body">
-          <div class="meta">10 min • Philosophy</div>
-          <h5>Against Reduction</h5>
-          <p>Resisting the temptation to flatten minds into metrics.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="Against Reduction">Read</a>
-            <span class="chip" data-cat="philosophy">Philo</span>
+          <div class="meta u-mono">10 min • Philosophy</div>
+          <h4>Against Reduction</h4>
+          <p>What matters often refuses metrics.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="Against Reduction">Read</a>
+            <span class="u-chip" data-cat="philosophy">Philo</span>
           </div>
         </div>
       </article>
 
-      <article class="card ring" data-cat="science">
-        <div class="card-media"></div>
+      <article class="card" data-cat="science">
+        <div class="card-head"></div>
         <div class="card-body">
-          <div class="meta">9 min • Science</div>
-          <h5>Planck Time and Desire</h5>
-          <p>On the smallest tick and the longest longing.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="Planck Time and Desire">Read</a>
-            <span class="chip" data-cat="science">Sci</span>
+          <div class="meta u-mono">9 min • Science</div>
+          <h4>Planck Time and Desire</h4>
+          <p>The smallest tick, the longest longing.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="Planck Time and Desire">Read</a>
+            <span class="u-chip" data-cat="science">Sci</span>
           </div>
         </div>
       </article>
 
-      <article class="card ring" data-cat="science">
+      <article class="card" data-cat="science">
+        <div class="card-head"></div>
         <div class="card-body">
-          <div class="meta">7 min • Science</div>
-          <h5>The Gentle Violence of Measurement</h5>
-          <p>When observation alters the observed—and the observer.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="The Gentle Violence of Measurement">Read</a>
-            <span class="chip" data-cat="science">Sci</span>
+          <div class="meta u-mono">7 min • Science</div>
+          <h4>The Gentle Violence of Measurement</h4>
+          <p>Observation changes the observed—and the observer.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="The Gentle Violence of Measurement">Read</a>
+            <span class="u-chip" data-cat="science">Sci</span>
           </div>
         </div>
       </article>
 
-      <article class="card ring" data-cat="literature">
+      <article class="card" data-cat="literature">
+        <div class="card-head"></div>
         <div class="card-body">
-          <div class="meta">11 min • Literature</div>
-          <h5>Footnotes to a Dream</h5>
-          <p>Fragments on Kafka and the data of desire.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="Footnotes to a Dream">Read</a>
-            <span class="chip" data-cat="literature">Lit</span>
+          <div class="meta u-mono">11 min • Literature</div>
+          <h4>Footnotes to a Dream</h4>
+          <p>We annotate the night and call it a model.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="Footnotes to a Dream">Read</a>
+            <span class="u-chip" data-cat="literature">Lit</span>
           </div>
         </div>
       </article>
@@ -433,39 +297,41 @@ body{
   </section>
 
   <!-- ESSAYS -->
-  <section class="section" id="essays" aria-label="Featured essays">
-    <h4>Featured Essays</h4>
-    <div class="grid">
-      <article class="card ring" data-cat="philosophy">
+  <section class="section" id="essays">
+    <h3 class="u-cap">Featured Essays</h3>
+    <div class="cards">
+      <article class="card" data-cat="philosophy">
         <div class="card-body">
-          <div class="meta">Longform • Philosophy</div>
-          <h5>Signals, Symbols, Souls</h5>
-          <p>Notes on representation between neurons and notions.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="Signals, Symbols, Souls">Read</a>
-            <span class="chip" data-cat="philosophy">Philo</span>
+          <div class="meta u-mono">Longform • Philosophy</div>
+          <h4>Signals, Symbols, Souls</h4>
+          <p>Representation from neurons to notions.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="Signals, Symbols, Souls">Read</a>
+            <span class="u-chip" data-cat="philosophy">Philo</span>
           </div>
         </div>
       </article>
-      <article class="card ring" data-cat="tech">
+
+      <article class="card" data-cat="tech">
         <div class="card-body">
-          <div class="meta">Longform • Technology</div>
-          <h5>Latency Is a Literary Device</h5>
-          <p>How waiting creates meaning in machines and novels.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="Latency Is a Literary Device">Read</a>
-            <span class="chip" data-cat="tech">Tech</span>
+          <div class="meta u-mono">Longform • Technology</div>
+          <h4>Latency Is a Literary Device</h4>
+          <p>Waiting shapes meaning in servers and sentences.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="Latency Is a Literary Device">Read</a>
+            <span class="u-chip" data-cat="tech">Tech</span>
           </div>
         </div>
       </article>
-      <article class="card ring" data-cat="science">
+
+      <article class="card" data-cat="science">
         <div class="card-body">
-          <div class="meta">Longform • Science</div>
-          <h5>Elegy for a Constant</h5>
-          <p>When the universal seems to drift under precision.</p>
-          <div style="margin-top:.7rem; display:flex; gap:.5rem;">
-            <a class="button" href="#" data-open="Elegy for a Constant">Read</a>
-            <span class="chip" data-cat="science">Sci</span>
+          <div class="meta u-mono">Longform • Science</div>
+          <h4>Elegy for a Constant</h4>
+          <p>When universals drift under precision.</p>
+          <div style="display:flex; gap:10px">
+            <a class="btn" href="#" data-open="Elegy for a Constant">Read</a>
+            <span class="u-chip" data-cat="science">Sci</span>
           </div>
         </div>
       </article>
@@ -473,189 +339,142 @@ body{
   </section>
 
   <!-- SUBSCRIBE -->
-  <section class="section" id="subscribe" aria-label="Subscribe">
-    <h4>Stay in orbit</h4>
-    <div class="glass inner-edge ring" style="padding:1rem; border-radius:var(--radius-lg); display:flex; gap:.8rem; flex-wrap:wrap; align-items:center;">
-      <div style="flex:1">
-        <div class="kicker">Letters, not spam</div>
-        <div class="gradient-text" style="font-size:1.32rem; line-height:1.2;">Monthly notes on systems, sentences, and stars</div>
+  <section class="section" id="subscribe">
+    <h3 class="u-cap">Stay Sharp</h3>
+    <div class="u-bar u-pad" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+      <div style="flex:1; min-width:220px">
+        <div class="u-mono" style="color:var(--muted)">Letters, not spam</div>
+        <div style="font-weight:900; font-size:1.2rem">Monthly notes on systems and sentences</div>
       </div>
-      <form id="subForm" style="display:flex; gap:.6rem; flex-wrap:wrap;">
-        <input required name="email" type="email" placeholder="email@domain.com" style="padding:.8rem 1rem; border-radius:999px; border:1px solid rgba(20,24,40,0.16); background: rgba(255,255,255,0.95); color:var(--text); outline:none; min-width:240px;">
-        <button class="button button--accent" type="submit">Subscribe</button>
+      <form id="subForm" class="u-mono" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <input required name="email" type="email" placeholder="email@domain.com"
+               style="padding:.7rem .9rem; border: var(--b1); border-radius:4px; background:#fff; min-width:240px;">
+        <button class="btn btn--acc3" type="submit" style="background:var(--acc-3); color:#072e1e">Subscribe</button>
       </form>
     </div>
   </section>
 </main>
 
-<!-- Reader Drawer -->
+<!-- Reader -->
 <section class="reader" id="reader" aria-label="Reading panel" aria-hidden="true">
   <div class="wrap">
-    <button class="button close" id="closeReader" aria-label="Close reader">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      Close
-    </button>
+    <a href="#" class="btn close" id="closeReader">Close</a>
     <h2 id="readerTitle">Title</h2>
-    <div class="byline">By Asteria • <span id="readerMeta">Reading time</span></div>
+    <div class="byline u-mono">By Relay • <span id="readerMeta">Reading time</span></div>
     <article id="readerBody">
       <h3>Opening</h3>
-      <p>This light reading view keeps contrast high on white and pastel backgrounds, tuned for clarity and comfort.</p>
+      <p>This reading surface is plain on purpose: ink, paper, and punchy headings.</p>
       <h3>Idea</h3>
-      <p>Signal and style can coexist: crisp text, soft color, and gentle depth make thinking feel breathable.</p>
+      <p>Cut chrome, keep character. Let language carry the layout.</p>
     </article>
   </div>
 </section>
 
-<footer class="container footer">
-  <span>© <span id="year"></span> Asteria Press</span>
-  <span>Light theme • Glassmorphism • Vanilla JS</span>
+<footer class="wrap footer">
+  <span>© <span id="year"></span> Relay</span>
+  <span class="u-mono">Neo‑brutalist • No framework</span>
 </footer>
 
 <script>
-/* ======= Content registry ======= */
+/* Content registry */
 const posts = {
   "The Algorithm as Critic: Can Gradient Descent Read Poetry?": {
     time: "12 min • Philosophy",
     body: `
       <h3>1 — Machines and Meaning</h3>
-      <p>Transformers quantify context; metaphor wagers on remainder. Between them is criticism.</p>
+      <p>Counting context isn’t reading; it’s preparation. The poem resists paraphrase for a reason.</p>
       <h3>2 — Gradient and Grace</h3>
-      <p>Descent finds minima; reading finds meanings that shift under light.</p>
+      <p>Optimization finds minima; criticism finds moments. Keep them distinct.</p>
     `
   },
   "Edge Compute, Edge Culture": {
     time: "8 min • Technology",
     body: `
       <h3>Latency and Liturgy</h3>
-      <p>Near-user inference edits our sense of presence; design becomes immediate.</p>
+      <p>Near-user inference turns waiting into a feature—not a bug.</p>
     `
   },
   "Margins, Kerning, Meaning": {
     time: "6 min • Literature",
     body: `
       <h3>Typography as Thought</h3>
-      <p>Spacing is attentional ethics; it teaches breath to language.</p>
+      <p>Spacing is cognition made visible.</p>
     `
   },
   "Against Reduction": {
     time: "10 min • Philosophy",
     body: `
       <h3>Metrics, Meet Mystery</h3>
-      <p>What we can count narrows; what matters might not be countable.</p>
+      <p>Some values refuse quantization. That refusal is informative.</p>
     `
   },
   "Planck Time and Desire": {
     time: "9 min • Science",
     body: `
       <h3>Smallest Tick</h3>
-      <p>Discreteness of time meets continuity of longing; a physics of ache.</p>
+      <p>Continuity of ache meets discreteness of time.</p>
     `
   },
   "The Gentle Violence of Measurement": {
     time: "7 min • Science",
     body: `
       <h3>Observer Effect</h3>
-      <p>Every instrument argues for a world; we read the argument back as truth.</p>
+      <p>Every instrument is an argument. Choose arguments wisely.</p>
     `
   },
   "Footnotes to a Dream": {
     time: "11 min • Literature",
     body: `
       <h3>Kafkaesque Data</h3>
-      <p>We annotate the night and call it a model; the dream resists the schema.</p>
+      <p>Annotation dreams of control; the dream dreams otherwise.</p>
     `
   },
   "Signals, Symbols, Souls": {
     time: "Longform • Philosophy",
     body: `
       <h3>Representation</h3>
-      <p>Signals are mapped; symbols are meant; souls are met.</p>
+      <p>Signals map; symbols mean; persons meet.</p>
     `
   },
   "Latency Is a Literary Device": {
     time: "Longform • Technology",
     body: `
       <h3>Meaning of Delay</h3>
-      <p>Waiting shapes narrative tension from servers to sentences.</p>
+      <p>Rhythm, not raw speed, frames experience.</p>
     `
   },
   "Elegy for a Constant": {
     time: "Longform • Science",
     body: `
       <h3>Precision and Drift</h3>
-      <p>Constants console until experiments revise them.</p>
+      <p>We fix numbers to feel fixed. Experiments undo that comfort.</p>
     `
   }
 };
 
-/* ======= Reader open/close ======= */
+/* Reader open/close */
 const reader = document.getElementById('reader');
 const readerTitle = document.getElementById('readerTitle');
 const readerMeta = document.getElementById('readerMeta');
 const readerBody = document.getElementById('readerBody');
-const closeReader = document.getElementById('closeReader');
-
 function openReader(title){
   const post = posts[title];
   if(!post) return;
   readerTitle.textContent = title;
   readerMeta.textContent = post.time;
   readerBody.innerHTML = post.body;
-  reader.classList.add('open');
-  reader.setAttribute('aria-hidden','false');
+  reader.classList.add('open'); reader.setAttribute('aria-hidden','false');
 }
-function closePanel(){
-  reader.classList.remove('open');
-  reader.setAttribute('aria-hidden','true');
-}
+function closeReader(){ reader.classList.remove('open'); reader.setAttribute('aria-hidden','true'); }
 document.addEventListener('click', (e)=>{
   const el = e.target.closest('[data-open]');
-  if(el){
-    e.preventDefault();
-    openReader(el.getAttribute('data-open'));
-  }
+  if(el){ e.preventDefault(); openReader(el.getAttribute('data-open')); }
 });
-closeReader.addEventListener('click', closePanel);
-document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closePanel(); });
+document.getElementById('closeReader').addEventListener('click', (e)=>{ e.preventDefault(); closeReader(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeReader(); });
 
-/* ======= Category filter ======= */
-const chips = document.querySelectorAll('.chip[data-cat]');
-const cards = document.querySelectorAll('.card');
-chips.forEach(ch=>{
-  ch.addEventListener('click', ()=>{
-    const cat = ch.dataset.cat;
-    cards.forEach(c=>{
-      c.style.display = (c.dataset.cat === cat || !cat) ? '' : 'none';
-    });
-    ch.animate([{transform:'translateY(0)'},{transform:'translateY(-3px)'},{transform:'translateY(0)'}],{duration:220, easing:'ease-out'});
-  });
-});
-
-/* ======= Search filter ======= */
-const q = document.getElementById('q');
-q.addEventListener('input', ()=>{
-  const term = q.value.trim().toLowerCase();
-  cards.forEach(c=>{
-    const t = c.querySelector('h5')?.textContent.toLowerCase() ?? '';
-    const p = c.querySelector('p')?.textContent.toLowerCase() ?? '';
-    c.style.display = (t.includes(term) || p.includes(term)) ? '' : 'none';
-  });
-});
-
-/* ======= Footer year ======= */
+/* Year + simple filter */
 document.getElementById('year').textContent = new Date().getFullYear();
-
-/* ======= Subscribe demo ======= */
-document.getElementById('subForm').addEventListener('submit', (e)=>{
-  e.preventDefault();
-  const email = new FormData(e.target).get('email');
-  alert(`Subscribed: ${email}`);
-});
-
-/* ======= Light/dark respect if system switches ======= */
-matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', e=>{
-  // Intentionally staying light by default; adjust here if desired.
-});
 </script>
 </body>
 </html>
