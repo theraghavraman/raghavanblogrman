@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" data-page="post">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title id="docTitle">Post • Athena</title>
+  <meta name="description" content="">
+  <link rel="preload" href="styles.css" as="style">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="theme-auto">
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  <header class="site-header" role="banner">
+    <div class="wrap">
+      <a class="brand" href="/">Athena</a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><button id="themeToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle theme">🌗</button></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+  </header>
+
+  <main id="content" class="article-main" role="main">
+    <article class="post">
+      <header class="post-header">
+        <h1 id="postTitle"></h1>
+        <p class="post-meta">
+          <time id="postDate" datetime=""></time> · <span id="postReading"></span> · <span id="postTags"></span>
+        </p>
+        <figure class="post-hero">
+          <img id="postCover" alt="" loading="eager" decoding="async">
+          <figcaption id="postCaption"></figcaption>
+        </figure>
+        <nav id="toc" class="toc" aria-label="Table of contents"></nav>
+      </header>
+
+      <section id="postBody" class="prose"></section>
+
+      <footer class="post-footer">
+        <section aria-labelledby="aboutAuthor">
+          <h2 id="aboutAuthor">About the author</h2>
+          <p>A short bio goes here. Add links and social profiles.</p>
+        </section>
+
+        <section aria-labelledby="comments" class="comments">
+          <h2 id="comments">Comments</h2>
+          <p>Static site? Embed a provider (Giscus/Utterances/Staticman) or email link.</p>
+        </section>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="wrap">
+      <p>© <span id="year"></span> Athena.</p>
+    </div>
+  </footer>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
