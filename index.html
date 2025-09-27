@@ -4,111 +4,115 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Asteria — Tech, Literature, Philosophy, Science</title>
-<meta name="description" content="A state-of-the-art single-file blog featuring glassmorphism, animated gradients, and elegant typography—covering technology, literature, philosophy, and science." />
+<meta name="description" content="A state-of-the-art single-file blog in a light, white, multi-color pastel style using glassmorphism, elegant typography, and subtle gradients." />
 
 <style>
-/* ============ Root, Theme, Accessibility ============ */
+/* ================= Root: Light Theme, Accessibility ================= */
 :root{
-  --bg-1:#0e1220;
-  --bg-2:#0a0818;
-  --glass: rgba(255,255,255,0.08);
-  --glass-strong: rgba(255,255,255,0.14);
-  --border: rgba(255,255,255,0.22);
-  --inner: rgba(255,255,255,0.35);
-  --text:#e9ecf1;
-  --muted:#b8c0d4;
-  --accent-1:#7bdff6;
-  --accent-2:#b19cd9;
-  --accent-3:#ff9ecd;
-  --accent-4:#7af0b0;
-  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  --page-bg: #fafbff;
+  --paper: rgba(255,255,255,0.65);
+  --paper-strong: rgba(255,255,255,0.82);
+  --paper-border: rgba(20,24,40,0.08);
+  --inner: rgba(255,255,255,0.9);
+  --text: #1a2240;
+  --muted: #4c587a;
+  --muter: #6d79a1;
+  --accent-1:#63b3ed; /* blue */
+  --accent-2:#a78bfa; /* purple */
+  --accent-3:#f472b6; /* pink */
+  --accent-4:#34d399; /* green */
+  --ring: rgba(99,179,237,0.7);
   --radius-xl: 22px;
   --radius-lg: 16px;
   --radius-md: 12px;
-  --radius-sm: 10px;
-  --glass-blur: 14px;
-  --ring: 2px;
+  --glass-blur: 12px;
+  --shadow: 0 10px 24px rgba(16, 24, 40, 0.08);
   --max-w: 1200px;
 }
 
-/* Motion-reduced */
+/* Prefer reduced motion */
 @media (prefers-reduced-motion: reduce){
   * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
 
-/* ============ Global Reset ============ */
+/* Prefer higher contrast: strengthen borders/text */
+@media (prefers-contrast: more){
+  :root{
+    --paper: rgba(255,255,255,0.92);
+    --paper-border: rgba(20,24,40,0.22);
+    --muted: #2a3357;
+  }
+}
+
+/* ================= Global ================= */
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   color:var(--text);
-  background: radial-gradient(1200px 800px at 10% 10%, #1d1b47 0%, transparent 60%),
-              radial-gradient(1000px 700px at 90% 30%, #151a35 0%, transparent 55%),
-              radial-gradient(1200px 900px at 50% 85%, #162a3a 0%, transparent 60%), var(--bg-2);
+  background: var(--page-bg);
   overflow-x:hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Animated ambient gradient layer */
+/* Ambient animated pastel background */
 .bg-anim{
-  position:fixed; inset:-10vmax;
-  background: linear-gradient(-45deg, #2a1744, #102d3f, #531a3b, #0c3f3a);
-  background-size: 400% 400%;
-  filter:saturate(110%);
+  position:fixed; inset:-12vmax;
   z-index:-2;
-  animation: drift 28s ease-in-out infinite alternate;
+  background:
+    radial-gradient(900px 600px at 15% 8%, rgba(255,182,193,0.18), transparent 60%),
+    radial-gradient(1000px 700px at 85% 12%, rgba(167,139,250,0.18), transparent 60%),
+    radial-gradient(1100px 800px at 50% 92%, rgba(99,179,237,0.18), transparent 55%),
+    radial-gradient(900px 700px at 10% 85%, rgba(52,211,153,0.14), transparent 60%),
+    linear-gradient(180deg, #ffffff, #f7f9ff);
+  animation: drift 30s ease-in-out infinite alternate;
   will-change: background-position;
 }
 @keyframes drift{
-  0%{ background-position: 0% 0%; }
-  50%{ background-position: 100% 50%; }
-  100%{ background-position: 0% 100%; }
+  0%{ background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%, 0 0; }
+  100%{ background-position: 10% 8%, 90% 12%, 52% 96%, 6% 86%, 0 0; }
 }
 
-/* Stary particles for depth */
-.canvas-sparks{
-  position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:0.6;
+/* Soft grain for texture */
+.grain{
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.06"/></svg>');
+  background-size: 280px 280px;
+  mix-blend-mode: multiply;
 }
 
-/* Container */
+/* Layout */
 .container{ width:calc(100% - 2rem); max-width:var(--max-w); margin:0 auto; }
 
-/* ============ Glass, Neumorph, Utilities ============ */
+/* ================= Glass, Rings, Utilities ================= */
 .glass{
-  background: var(--glass);
-  backdrop-filter: blur(var(--glass-blur)) saturate(120%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
-  border:1px solid var(--border);
+  background: var(--paper);
+  backdrop-filter: blur(var(--glass-blur)) saturate(130%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(130%);
+  border:1px solid var(--paper-border);
   box-shadow: var(--shadow);
 }
-.inner-edge{ box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08); }
-.neu{
-  box-shadow:
-    8px 8px 20px rgba(0,0,0,0.35),
-    -8px -8px 20px rgba(255,255,255,0.04);
+.inner-edge{ box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45); }
+.ring{
+  position:relative; border-radius: inherit;
 }
-.ring{ position:relative; }
 .ring:after{
-  content:""; position:absolute; inset:-1px;
-  border-radius:inherit;
-  padding:1px;
-  background:
-    linear-gradient(120deg, rgba(123,223,246,0.4), rgba(177,156,217,0.25), rgba(255,158,205,0.35), rgba(122,240,176,0.35));
-  -webkit-mask: 
-    linear-gradient(#000 0 0) content-box, 
-    linear-gradient(#000 0 0);
+  content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none;
+  background: linear-gradient(120deg, rgba(99,179,237,0.35), rgba(167,139,250,0.25), rgba(244,114,182,0.35), rgba(52,211,153,0.35));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
-  border-radius:inherit;
+  padding:1px;
 }
 
-/* Gradient text highlight */
+/* Gradient text */
 .gradient-text{
   background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-4));
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
+  background-size: 220% 220%;
+  -webkit-background-clip: text; background-clip: text;
   color: transparent;
-  animation: hueflow 16s ease-in-out infinite;
+  animation: hueflow 18s ease-in-out infinite;
 }
 @keyframes hueflow{
   0%{ background-position: 0% 50%; }
@@ -118,162 +122,156 @@ body{
 
 /* Buttons */
 .button{
-  display:inline-flex; align-items:center; gap:.6rem;
-  padding:.85rem 1.1rem;
-  border-radius: 999px;
-  text-decoration:none; color:var(--text);
-  background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
-  border:1px solid rgba(255,255,255,0.18);
-  transition: transform .2s ease, filter .2s ease, background .3s ease;
+  display:inline-flex; align-items:center; gap:.55rem;
+  padding:.75rem 1rem; border-radius:999px; text-decoration:none;
+  color:var(--text); font-weight:600; letter-spacing:.01em;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.7));
+  border:1px solid rgba(20,24,40,0.12);
+  transition: transform .18s ease, box-shadow .18s ease, background .25s ease;
+  box-shadow: 0 6px 14px rgba(16,24,40,0.07);
 }
-.button:hover{ transform: translateY(-2px); filter: brightness(1.08); }
+.button:hover{ transform: translateY(-2px); box-shadow: 0 10px 22px rgba(16,24,40,0.10); }
 .button--accent{
-  background: linear-gradient(90deg, rgba(123,223,246,0.16), rgba(177,156,217,0.16));
+  background: linear-gradient(90deg, rgba(99,179,237,0.18), rgba(167,139,250,0.18), rgba(244,114,182,0.18));
   border-image: linear-gradient(90deg, var(--accent-1), var(--accent-2)) 1;
 }
 
 /* Chips */
 .chips{ display:flex; gap:.6rem; flex-wrap:wrap; }
 .chip{
-  padding:.45rem .8rem; border-radius:999px; font-size:.85rem; color:var(--muted);
-  background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18);
-  transition: transform .2s ease, background .3s ease;
+  padding:.42rem .75rem; border-radius:999px; font-size:.86rem; color:var(--muted);
+  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
+  transition: transform .18s ease, background .25s ease;
 }
-.chip:hover{ transform: translateY(-2px); background: rgba(255,255,255,0.12); }
-.chip[data-cat="tech"]{ border-color: rgba(123,223,246,0.55); }
-.chip[data-cat="literature"]{ border-color: rgba(177,156,217,0.55); }
-.chip[data-cat="philosophy"]{ border-color: rgba(255,158,205,0.55); }
-.chip[data-cat="science"]{ border-color: rgba(122,240,176,0.55); }
+.chip:hover{ transform: translateY(-2px); background: var(--paper-strong); }
+.chip[data-cat="tech"]{ border-color: rgba(99,179,237,0.5); }
+.chip[data-cat="literature"]{ border-color: rgba(167,139,250,0.5); }
+.chip[data-cat="philosophy"]{ border-color: rgba(244,114,182,0.5); }
+.chip[data-cat="science"]{ border-color: rgba(52,211,153,0.5); }
 
 /* Header */
 .header{
-  padding: 1rem 0;
+  padding: .9rem 0;
   display:flex; align-items:center; justify-content:space-between; gap:1rem;
 }
-.brand{ display:flex; align-items:center; gap:.9rem; text-decoration:none; color:var(--text); }
+.brand{ display:flex; align-items:center; gap:.8rem; text-decoration:none; color:var(--text); }
 .logo{
   width:44px; height:44px; border-radius:14px;
   background: conic-gradient(from 210deg, var(--accent-1), var(--accent-2), var(--accent-3), var(--accent-4), var(--accent-1));
-  filter: blur(.2px) saturate(115%);
-  position:relative; overflow:hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  position:relative; overflow:hidden; box-shadow: 0 6px 18px rgba(16,24,40,0.10);
 }
 .logo:before{
   content:""; position:absolute; inset:1px; border-radius:12px;
-  background: rgba(5,8,14,0.55);
-  border:1px solid rgba(255,255,255,0.18);
-  backdrop-filter: blur(6px);
+  background: rgba(255,255,255,0.6);
+  border:1px solid rgba(20,24,40,0.12);
+  backdrop-filter: blur(5px);
 }
-.brand h1{ font-size:1.05rem; letter-spacing:.12em; text-transform:uppercase; margin:0; color:var(--muted); }
+.brand h1{ font-size:1.02rem; letter-spacing:.12em; text-transform:uppercase; margin:0; color:var(--muted); }
 
-/* Nav */
+/* Nav + search */
 .nav{ display:flex; gap:.4rem; flex-wrap:wrap; align-items:center;}
 .nav a{ font-size:.95rem }
 .search{
-  display:flex; align-items:center; gap:.6rem; padding:.55rem .8rem; border-radius:999px; color:var(--muted);
-  background: rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.18);
+  display:flex; align-items:center; gap:.5rem; padding:.5rem .75rem; border-radius:999px; color:var(--muted);
+  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
 }
 .search input{
   background: transparent; border:0; outline:0; color:var(--text); width:12ch;
 }
-.search input::placeholder{ color:#9aa5bd; }
+.search input::placeholder{ color:#8893b3; }
 
-/* ============ Hero ============ */
+/* Hero */
 .hero{
-  margin-top: .3rem;
-  border-radius: var(--radius-xl);
-  position:relative; overflow:hidden;
+  margin-top: .3rem; border-radius: var(--radius-xl); position:relative; overflow:hidden;
 }
 .hero::before{
-  content:"";
-  position:absolute; inset:0;
-  background: radial-gradient(800px 400px at 10% 10%, rgba(123,223,246,0.2), transparent 60%),
-              radial-gradient(700px 360px at 85% 20%, rgba(177,156,217,0.18), transparent 55%),
-              radial-gradient(900px 480px at 45% 95%, rgba(122,240,176,0.18), transparent 60%);
-  pointer-events:none;
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(700px 360px at 12% 10%, rgba(99,179,237,0.20), transparent 60%),
+    radial-gradient(700px 360px at 88% 18%, rgba(167,139,250,0.18), transparent 55%),
+    radial-gradient(900px 500px at 45% 95%, rgba(52,211,153,0.16), transparent 60%);
 }
 .hero-content{
-  display:grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; padding: clamp(1.2rem, 2.5vw, 2rem);
+  display:grid; grid-template-columns: 1.2fr 1fr; gap: 2rem;
+  padding: clamp(1rem, 2.2vw, 1.6rem);
 }
 .hero-left{
-  padding: clamp(1rem, 2.5vw, 2rem); border-radius: var(--radius-lg);
+  padding: clamp(1rem, 2.2vw, 1.6rem); border-radius: var(--radius-lg);
 }
-.kicker{ color:#c8d0e4; letter-spacing:.22em; text-transform:uppercase; font-size:.8rem; margin-bottom:.6rem; opacity:.9; }
-.hero h2{
-  font-size: clamp(1.9rem, 4vw, 3rem); line-height:1.12; margin:.1rem 0 .6rem;
-}
+.kicker{ color:#6d79a1; letter-spacing:.22em; text-transform:uppercase; font-size:.78rem; margin-bottom:.55rem; }
+.hero h2{ font-size: clamp(1.9rem, 4vw, 3rem); line-height:1.12; margin:.1rem 0 .6rem; }
 .hero p{ color:var(--muted); font-size:1.05rem; margin:0 0 1.1rem; }
-.hero-cta{ display:flex; gap:.7rem; flex-wrap:wrap; }
 
-/* Spotlight card on right */
+/* Spotlight */
 .spotlight{
   border-radius: var(--radius-lg);
   position:relative; overflow:hidden;
-  display:flex; flex-direction:column; justify-content:flex-end;
-  min-height: 360px;
+  display:flex; flex-direction:column; justify-content:flex-end; min-height: 320px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.95), rgba(255,255,255,0.78));
+  border:1px solid rgba(20,24,40,0.12);
 }
 .spotlight .tag{
-  position:absolute; top:16px; left:16px;
-  padding:.4rem .7rem; border-radius:999px; font-size:.78rem; letter-spacing:.05em; text-transform:uppercase;
-  background: rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.22);
-  backdrop-filter: blur(6px);
+  position:absolute; top:14px; left:14px;
+  padding:.35rem .65rem; border-radius:999px; font-size:.76rem; text-transform:uppercase;
+  background: rgba(255,255,255,0.95); border:1px solid rgba(20,24,40,0.12);
 }
-.spotlight h3{ margin:0; font-size:1.35rem; }
-.spotlight p{ margin:.35rem 0 0; color:#d7ddef; }
-.spotlight-footer{ display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:.7rem; }
+.spotlight h3{ margin:0; font-size:1.32rem; }
+.spotlight p{ margin:.35rem 0 0; color:#374267; }
+.spotlight-footer{ display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:.6rem; }
 
-/* ============ Grid of Posts ============ */
+/* Sections */
 .section{ margin: 2.2rem 0; }
-.section h4{ margin:.2rem 0 1rem; color:#dbe2f5; letter-spacing:.18em; text-transform:uppercase; font-size:.82rem; opacity:.9; }
-.grid{
-  display:grid; gap:1.2rem;
-  grid-template-columns: repeat(12, 1fr);
-}
+.section h4{ margin:.2rem 0 1rem; color:#5b6793; letter-spacing:.18em; text-transform:uppercase; font-size:.82rem; }
+
+/* Grid */
+.grid{ display:grid; gap:1.1rem; grid-template-columns: repeat(12, 1fr); }
 .card{
-  grid-column: span 4;
-  border-radius: var(--radius-lg);
-  overflow:hidden; position:relative;
-  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  grid-column: span 4; border-radius: var(--radius-lg); overflow:hidden; position:relative;
+  transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
+  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
 }
-.card:hover{ transform: translateY(-4px); }
+.card:hover{ transform: translateY(-4px); box-shadow: 0 16px 28px rgba(16,24,40,0.12); }
 .card-media{
-  height: 160px; position:relative; overflow:hidden;
-  background: linear-gradient(135deg, rgba(123,223,246,0.18), rgba(177,156,217,0.18));
+  height: 150px; position:relative; overflow:hidden;
+  background: linear-gradient(135deg, rgba(99,179,237,0.22), rgba(167,139,250,0.22), rgba(244,114,182,0.22));
 }
 .card-media::after{
   content:""; position:absolute; inset:0;
-  background: radial-gradient(380px 220px at 85% 15%, rgba(255,255,255,0.35), transparent 60%),
-              radial-gradient(420px 260px at 10% 85%, rgba(255,255,255,0.2), transparent 60%);
-  mix-blend-mode: overlay; opacity:.7;
+  background: radial-gradient(340px 200px at 85% 15%, rgba(255,255,255,0.7), transparent 60%),
+              radial-gradient(360px 220px at 10% 85%, rgba(255,255,255,0.55), transparent 60%);
+  mix-blend-mode: screen; opacity:.7;
 }
 .card-body{ padding:1rem; }
-.card .meta{ display:flex; gap:.6rem; align-items:center; color:#c8d0e4; font-size:.85rem; opacity:.9; }
-.card h5{ margin:.55rem 0 .35rem; font-size:1.12rem; }
-.card p{ margin:0; color:var(--muted); }
+.card .meta{ display:flex; gap:.6rem; align-items:center; color:#5c6999; font-size:.86rem; }
+.card h5{ margin:.55rem 0 .35rem; font-size:1.1rem; }
+.card p{ margin:0; color:var(--muter); }
 
-/* ============ Reading Drawer ============ */
+/* Reader drawer (light sheet) */
 .reader{
   position: fixed; inset:auto 0 0 0; translate: 0 110%;
-  transition: translate .45s cubic-bezier(.2,.8,.2,1);
+  transition: translate .42s cubic-bezier(.2,.8,.2,1);
   border-top-left-radius: 22px; border-top-right-radius:22px;
   max-height: 90vh; overflow:auto;
+  background: var(--paper-strong);
+  border:1px solid rgba(20,24,40,0.12);
+  box-shadow: 0 -10px 28px rgba(16,24,40,0.12);
 }
 .reader.open{ translate: 0 0; }
-.reader .wrap{ padding: 1.2rem; max-width: 840px; margin: 0 auto; }
-.reader h2{ margin:.3rem 0 .6rem; font-size:1.7rem; }
-.reader .byline{ color:#cfd5e8; font-size:.95rem; }
-.reader article{ color:#dfe5f7; line-height:1.75; }
-.reader article h3{ margin:1.2rem 0 .4rem; }
-.reader .close{
-  position:sticky; top:.8rem; margin-left:auto; display:inline-flex; align-items:center; gap:.4rem;
-}
+.reader .wrap{ padding: 1.1rem; max-width: 840px; margin: 0 auto; }
+.reader h2{ margin:.2rem 0 .6rem; font-size:1.7rem; }
+.reader .byline{ color:#56618a; font-size:.95rem; }
+.reader article{ color:#2a3357; line-height:1.72; }
+.reader article h3{ margin:1.1rem 0 .4rem; }
+.reader .close{ position:sticky; top:.8rem; margin-left:auto; display:inline-flex; align-items:center; gap:.4rem; }
 
-/* ============ Footer ============ */
+/* Footer */
 .footer{
-  margin: 2.4rem 0 3rem; padding:1rem; border-radius: var(--radius-lg);
-  color:#c8cfe2; font-size:.95rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:.8rem;
+  margin: 2.4rem 3px 3rem; padding:1rem; border-radius: var(--radius-lg);
+  color:#4c587a; font-size:.95rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:.8rem;
+  background: rgba(255,255,255,0.9); border:1px solid rgba(20,24,40,0.12);
 }
 
-/* ============ Responsive ============ */
+/* Responsive */
 @media (max-width: 980px){
   .hero-content{ grid-template-columns: 1fr; }
   .grid .card{ grid-column: span 6; }
@@ -284,38 +282,33 @@ body{
   .hero p{ font-size:1rem; }
 }
 
-/* ============ Tiny Anim details ============ */
-.shimmer{
-  position:relative; overflow:hidden;
-}
+/* Subtle shimmer */
+.shimmer{ position:relative; overflow:hidden; }
 .shimmer::after{
-  content:""; position:absolute; inset: -200%;
-  background: linear-gradient(120deg, transparent 45%, rgba(255,255,255,0.25) 50%, transparent 55%);
-  animation: shine 5.5s ease-in-out infinite;
+  content:""; position:absolute; inset:-200%;
+  background: linear-gradient(120deg, transparent 45%, rgba(255,255,255,0.45) 50%, transparent 55%);
+  animation: shine 6s ease-in-out infinite;
 }
-@keyframes shine{
-  0%{ transform: translateX(-30%); }
-  100%{ transform: translateX(30%); }
-}
+@keyframes shine{ 0%{ transform: translateX(-30%);} 100%{ transform: translateX(30%);} }
 </style>
 </head>
 
 <body>
 <div class="bg-anim" aria-hidden="true"></div>
-<canvas class="canvas-sparks" id="sparks" width="1920" height="1080" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
 
 <header class="container header">
-  <a class="brand" href="#">
+  <a class="brand" href="#" aria-label="Asteria Home">
     <div class="logo ring" aria-hidden="true"></div>
     <h1>Asteria Press</h1>
   </a>
-  <nav class="nav">
+  <nav class="nav" aria-label="Primary">
     <a class="button" href="#latest">Latest</a>
     <a class="button" href="#essays">Essays</a>
     <a class="button" href="#reviews">Reviews</a>
     <a class="button button--accent" href="#subscribe">Subscribe</a>
   </nav>
-  <label class="search">
+  <label class="search" aria-label="Search posts">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     <input id="q" type="search" placeholder="Search…" />
   </label>
@@ -323,18 +316,18 @@ body{
 
 <main class="container">
   <!-- HERO -->
-  <section class="hero glass ring inner-edge" id="hero">
+  <section class="hero glass ring inner-edge" id="hero" role="region" aria-label="Hero">
     <div class="hero-content">
       <div class="hero-left">
         <div class="kicker">Technology • Literature • Philosophy • Science</div>
         <h2 class="gradient-text">Where ideas meet elegant engineering</h2>
         <p>Deep dives and lyrical essays at the edge of code and culture—crafted for minds that love systems and sentences alike.</p>
-        <div class="hero-cta">
+        <div style="display:flex; gap:.7rem; flex-wrap:wrap;">
           <a href="#latest" class="button">Read latest</a>
           <a href="#subscribe" class="button button--accent">Get updates</a>
         </div>
-        <div class="section" style="margin-top:1.2rem">
-          <div class="chips">
+        <div class="section" style="margin-top:1rem">
+          <div class="chips" role="group" aria-label="Filter categories">
             <button class="chip" data-cat="tech">Technology</button>
             <button class="chip" data-cat="literature">Literature</button>
             <button class="chip" data-cat="philosophy">Philosophy</button>
@@ -343,9 +336,9 @@ body{
         </div>
       </div>
 
-      <div class="spotlight glass shimmer" role="article" aria-labelledby="spot-title">
+      <div class="spotlight shimmer" role="article" aria-labelledby="spot-title">
         <span class="tag">Spotlight</span>
-        <div style="padding:1rem 1rem 1.1rem; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.35) 100%);">
+        <div style="padding:1rem 1rem 1.1rem; background: linear-gradient(180deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.65) 100%);">
           <h3 id="spot-title">The Algorithm as Critic: Can Gradient Descent Read Poetry?</h3>
           <p>Exploring meaning-making from transformers to transcendence—and what machines misunderstand about metaphor.</p>
           <div class="spotlight-footer">
@@ -358,11 +351,10 @@ body{
   </section>
 
   <!-- LATEST -->
-  <section class="section" id="latest">
+  <section class="section" id="latest" aria-label="Latest posts">
     <h4>Latest</h4>
     <div class="grid">
-      <!-- Card 1 -->
-      <article class="card glass inner-edge" data-cat="tech">
+      <article class="card ring" data-cat="tech">
         <div class="card-media"></div>
         <div class="card-body">
           <div class="meta">8 min • Technology</div>
@@ -374,8 +366,8 @@ body{
           </div>
         </div>
       </article>
-      <!-- Card 2 -->
-      <article class="card glass inner-edge" data-cat="literature">
+
+      <article class="card ring" data-cat="literature">
         <div class="card-media"></div>
         <div class="card-body">
           <div class="meta">6 min • Literature</div>
@@ -387,8 +379,8 @@ body{
           </div>
         </div>
       </article>
-      <!-- Card 3 -->
-      <article class="card glass inner-edge" data-cat="philosophy">
+
+      <article class="card ring" data-cat="philosophy">
         <div class="card-media"></div>
         <div class="card-body">
           <div class="meta">10 min • Philosophy</div>
@@ -400,8 +392,8 @@ body{
           </div>
         </div>
       </article>
-      <!-- Card 4 -->
-      <article class="card glass inner-edge" data-cat="science">
+
+      <article class="card ring" data-cat="science">
         <div class="card-media"></div>
         <div class="card-body">
           <div class="meta">9 min • Science</div>
@@ -413,9 +405,8 @@ body{
           </div>
         </div>
       </article>
-      <!-- Card 5 -->
-      <article class="card glass inner-edge" data-cat="science">
-        <div class="card-media"></div>
+
+      <article class="card ring" data-cat="science">
         <div class="card-body">
           <div class="meta">7 min • Science</div>
           <h5>The Gentle Violence of Measurement</h5>
@@ -426,9 +417,8 @@ body{
           </div>
         </div>
       </article>
-      <!-- Card 6 -->
-      <article class="card glass inner-edge" data-cat="literature">
-        <div class="card-media"></div>
+
+      <article class="card ring" data-cat="literature">
         <div class="card-body">
           <div class="meta">11 min • Literature</div>
           <h5>Footnotes to a Dream</h5>
@@ -443,10 +433,10 @@ body{
   </section>
 
   <!-- ESSAYS -->
-  <section class="section" id="essays">
+  <section class="section" id="essays" aria-label="Featured essays">
     <h4>Featured Essays</h4>
     <div class="grid">
-      <article class="card glass inner-edge" data-cat="philosophy">
+      <article class="card ring" data-cat="philosophy">
         <div class="card-body">
           <div class="meta">Longform • Philosophy</div>
           <h5>Signals, Symbols, Souls</h5>
@@ -457,7 +447,7 @@ body{
           </div>
         </div>
       </article>
-      <article class="card glass inner-edge" data-cat="tech">
+      <article class="card ring" data-cat="tech">
         <div class="card-body">
           <div class="meta">Longform • Technology</div>
           <h5>Latency Is a Literary Device</h5>
@@ -468,7 +458,7 @@ body{
           </div>
         </div>
       </article>
-      <article class="card glass inner-edge" data-cat="science">
+      <article class="card ring" data-cat="science">
         <div class="card-body">
           <div class="meta">Longform • Science</div>
           <h5>Elegy for a Constant</h5>
@@ -483,15 +473,15 @@ body{
   </section>
 
   <!-- SUBSCRIBE -->
-  <section class="section" id="subscribe">
+  <section class="section" id="subscribe" aria-label="Subscribe">
     <h4>Stay in orbit</h4>
-    <div class="glass inner-edge" style="padding:1rem; border-radius:var(--radius-lg); display:flex; gap:.8rem; flex-wrap:wrap; align-items:center;">
+    <div class="glass inner-edge ring" style="padding:1rem; border-radius:var(--radius-lg); display:flex; gap:.8rem; flex-wrap:wrap; align-items:center;">
       <div style="flex:1">
         <div class="kicker">Letters, not spam</div>
-        <div class="gradient-text" style="font-size:1.35rem; line-height:1.2;">Monthly notes on systems, sentences, and stars</div>
+        <div class="gradient-text" style="font-size:1.32rem; line-height:1.2;">Monthly notes on systems, sentences, and stars</div>
       </div>
       <form id="subForm" style="display:flex; gap:.6rem; flex-wrap:wrap;">
-        <input required name="email" type="email" placeholder="email@domain.com" style="padding:.8rem 1rem; border-radius:999px; border:1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.06); color:var(--text); outline:none; min-width:240px;">
+        <input required name="email" type="email" placeholder="email@domain.com" style="padding:.8rem 1rem; border-radius:999px; border:1px solid rgba(20,24,40,0.16); background: rgba(255,255,255,0.95); color:var(--text); outline:none; min-width:240px;">
         <button class="button button--accent" type="submit">Subscribe</button>
       </form>
     </div>
@@ -499,9 +489,9 @@ body{
 </main>
 
 <!-- Reader Drawer -->
-<section class="reader glass inner-edge" id="reader" aria-label="Reading panel" aria-hidden="true">
+<section class="reader" id="reader" aria-label="Reading panel" aria-hidden="true">
   <div class="wrap">
-    <button class="button close" id="closeReader">
+    <button class="button close" id="closeReader" aria-label="Close reader">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       Close
     </button>
@@ -509,99 +499,63 @@ body{
     <div class="byline">By Asteria • <span id="readerMeta">Reading time</span></div>
     <article id="readerBody">
       <h3>Opening</h3>
-      <p>This is a minimal reading view to demonstrate the single-file experience—swap this content from JSON or static arrays to grow into a full site.</p>
+      <p>This light reading view keeps contrast high on white and pastel backgrounds, tuned for clarity and comfort.</p>
       <h3>Idea</h3>
-      <p>Blend systems thinking with sentence craft, so every paragraph carries signal and soul.</p>
+      <p>Signal and style can coexist: crisp text, soft color, and gentle depth make thinking feel breathable.</p>
     </article>
   </div>
 </section>
 
-<footer class="container footer glass inner-edge">
+<footer class="container footer">
   <span>© <span id="year"></span> Asteria Press</span>
-  <span>Built with semantic HTML, modern CSS, and vanilla JS</span>
+  <span>Light theme • Glassmorphism • Vanilla JS</span>
 </footer>
 
 <script>
-/* ======= Animated spark field ======= */
-const canvas = document.getElementById('sparks');
-const ctx = canvas.getContext('2d');
-let W, H, sparks=[];
-function size(){ W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
-addEventListener('resize', size, {passive:true}); size();
-function seed(n=100){
-  sparks = Array.from({length:n}, () => ({
-    x: Math.random()*W, y: Math.random()*H,
-    r: Math.random()*1.6+0.4,
-    a: Math.random()*Math.PI*2,
-    s: Math.random()*0.35+0.05,
-    hue: 180 + Math.random()*120
-  }));
-}
-seed(120);
-function loop(){
-  ctx.clearRect(0,0,W,H);
-  for(const p of sparks){
-    p.x += Math.cos(p.a)*p.s; p.y += Math.sin(p.a)*p.s;
-    p.a += (Math.random()-0.5)*0.06;
-    if(p.x< -10) p.x=W+10; if(p.x>W+10) p.x=-10;
-    if(p.y< -10) p.y=H+10; if(p.y>H+10) p.y=-10;
-    const g = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*6);
-    g.addColorStop(0, `hsla(${p.hue},80%,60%,0.12)`);
-    g.addColorStop(1, `hsla(${p.hue},80%,60%,0)`);
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x,p.y,p.r*6,0,Math.PI*2); ctx.fill();
-  }
-  requestAnimationFrame(loop);
-}
-loop();
-
-/* ======= Content registry & open-in-reader ======= */
+/* ======= Content registry ======= */
 const posts = {
   "The Algorithm as Critic: Can Gradient Descent Read Poetry?": {
     time: "12 min • Philosophy",
     body: `
       <h3>1 — Machines and Meaning</h3>
-      <p>Transformers quantify context, but metaphor exceeds counting: it wagers that the unsaid can be modeled by surprise.</p>
+      <p>Transformers quantify context; metaphor wagers on remainder. Between them is criticism.</p>
       <h3>2 — Gradient and Grace</h3>
-      <p>Descent converges to minima; criticism ascends to meanings that are local yet luminous.</p>
-      <h3>3 — After the Loss</h3>
-      <p>When a poem refuses paraphrase, it trains a different reader—one unafraid of remainder.</p>
+      <p>Descent finds minima; reading finds meanings that shift under light.</p>
     `
   },
   "Edge Compute, Edge Culture": {
     time: "8 min • Technology",
     body: `
       <h3>Latency and Liturgy</h3>
-      <p>The wait becomes a chorus: near-user inference edits our sense of presence.</p>
-      <h3>Design Notes</h3>
-      <p>Architectures migrate outward; aesthetics follow with light, fast surfaces.</p>
+      <p>Near-user inference edits our sense of presence; design becomes immediate.</p>
     `
   },
   "Margins, Kerning, Meaning": {
     time: "6 min • Literature",
     body: `
       <h3>Typography as Thought</h3>
-      <p>Spacing is an ethics of attention; it teaches breath to language.</p>
+      <p>Spacing is attentional ethics; it teaches breath to language.</p>
     `
   },
   "Against Reduction": {
     time: "10 min • Philosophy",
     body: `
       <h3>Metrics, Meet Mystery</h3>
-      <p>What is measured narrows; what matters often hides where counting ends.</p>
+      <p>What we can count narrows; what matters might not be countable.</p>
     `
   },
   "Planck Time and Desire": {
     time: "9 min • Science",
     body: `
       <h3>Smallest Tick</h3>
-      <p>The instant is granular, yet longing is continuous; together they write a physics of ache.</p>
+      <p>Discreteness of time meets continuity of longing; a physics of ache.</p>
     `
   },
   "The Gentle Violence of Measurement": {
     time: "7 min • Science",
     body: `
       <h3>Observer Effect</h3>
-      <p>Every instrument is also an argument about what the world is allowed to say.</p>
+      <p>Every instrument argues for a world; we read the argument back as truth.</p>
     `
   },
   "Footnotes to a Dream": {
@@ -629,11 +583,12 @@ const posts = {
     time: "Longform • Science",
     body: `
       <h3>Precision and Drift</h3>
-      <p>Constants are consolations; experiments are elegies that revise them.</p>
+      <p>Constants console until experiments revise them.</p>
     `
   }
 };
 
+/* ======= Reader open/close ======= */
 const reader = document.getElementById('reader');
 const readerTitle = document.getElementById('readerTitle');
 const readerMeta = document.getElementById('readerMeta');
@@ -661,8 +616,9 @@ document.addEventListener('click', (e)=>{
   }
 });
 closeReader.addEventListener('click', closePanel);
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closePanel(); });
 
-/* ======= Filter by chips ======= */
+/* ======= Category filter ======= */
 const chips = document.querySelectorAll('.chip[data-cat]');
 const cards = document.querySelectorAll('.card');
 chips.forEach(ch=>{
@@ -671,12 +627,11 @@ chips.forEach(ch=>{
     cards.forEach(c=>{
       c.style.display = (c.dataset.cat === cat || !cat) ? '' : 'none';
     });
-    // Tiny haptic visual
     ch.animate([{transform:'translateY(0)'},{transform:'translateY(-3px)'},{transform:'translateY(0)'}],{duration:220, easing:'ease-out'});
   });
 });
 
-/* ======= Simple search filter ======= */
+/* ======= Search filter ======= */
 const q = document.getElementById('q');
 q.addEventListener('input', ()=>{
   const term = q.value.trim().toLowerCase();
@@ -697,50 +652,10 @@ document.getElementById('subForm').addEventListener('submit', (e)=>{
   alert(`Subscribed: ${email}`);
 });
 
-/* ======= Keyboard: close reader with ESC ======= */
-document.addEventListener('keydown', (e)=>{ if(e.key =To switch the website from dark mode to a light purple theme, you can adjust the CSS variables and backgrounds in the <style> block. Here is how to do it:
-
-1. Update root color variables
-:root {
-  --bg-1: #f7f3fb;       /* Light lavender */
-  --bg-2: #f0ebf7;       /* Slightly deeper lavender */
-  --glass: rgba(255, 255, 255, 0.6); /* Softer glass on light */
-  --glass-strong: rgba(255, 255, 255, 0.8);
-  --border: rgba(160, 120, 200, 0.4);
-  --inner: rgba(140, 100, 180, 0.35);
-  --text: #2e1f3f;       /* Deep purple text */
-  --muted: #6b4e87;      /* Muted purple for subtext */
-  --accent-1: #b892ff;   /* Soft violet */
-  --accent-2: #d3a9ff;   /* Pastel lavender */
-  --accent-3: #f6b8ff;   /* Pink lavender */
-  --accent-4: #c5a3f0;   /* Gentle lilac */
-  --shadow: 0 10px 30px rgba(70, 50, 120, 0.15);
-}
-
-2. Change the body background
-body {
-  background: radial-gradient(1200px 800px at 10% 10%, #fdfaff 0%, transparent 60%),
-              radial-gradient(1000px 700px at 90% 30%, #f3ebff 0%, transparent 55%),
-              radial-gradient(1200px 900px at 50% 85%, #f8f1ff 0%, transparent 60%), var(--bg-2);
-  color: var(--text);
-}
-
-3. Adjust the animated gradient background
-.bg-anim {
-  background: linear-gradient(-45deg, #e5d4ff, #f0e8ff, #d6c6f5, #f6edff);
-  background-size: 400% 400%;
-}
-
-4. Glass and chip adjustments
-* Glass elements (.glass) already work, but look better with a slightly darker border.
-* Chips and buttons should retain enough contrast against the light purple background.
-
-5. Text and accents
-* All headings, body text, and muted text automatically switch using --text and --muted.
-* The gradient text will now shift in pastel purples and pinks.
-
-Apply these updates in the <style> section to get a soft light purple aesthetic across the site. It will feel airy, elegant, and easy on the eyes.
-== 'Escape') closePanel(); });
+/* ======= Light/dark respect if system switches ======= */
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', e=>{
+  // Intentionally staying light by default; adjust here if desired.
+});
 </script>
 </body>
 </html>
