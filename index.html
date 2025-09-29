@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Glassbook: Science and Philosophy and Technology and Literature</title>
+<title>Glassbook — Science • Philosophy • Technology • Literature</title>
 <meta name="description" content="A single-file accessible glassmorphic flipbook with realistic page turns, deep links, search-highlighting, thumbnails, notes, and print mode." />
 
 <style>
@@ -50,66 +50,66 @@
 }
 
 /* =================== Global =================== */
-*{ box-sizing: border-box }
-html, body { height: 100%; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
+*{ box-sizing:border-box }
+html,body{ height:100% }
+html{ scroll-behavior:smooth }
+body{
+  margin:0;
   background:
     radial-gradient(1200px 600px at 10% 10%, rgba(99,179,237,0.14), transparent 60%),
     radial-gradient(1200px 600px at 90% 15%, rgba(167,139,250,0.14), transparent 60%),
     linear-gradient(180deg, #f7faff, #ecf2ff 38%, #f9fbff 100%);
-  color: var(--ink);
+  color:var(--ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x:hidden;
 }
 
 /* Gentle dynamic background tint by section */
-body[data-section="science"]{ background: linear-gradient(180deg, #f7fffb, #ebfff6 40%, #f8fffc); }
-body[data-section="philosophy"]{ background: linear-gradient(180deg, #fff7fb, #ffeff7 40%, #fff7fb); }
-body[data-section="tech"]{ background: linear-gradient(180deg, #f7fbff, #eef5ff 40%, #f9fbff); }
-body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f3edff 40%, #fbf7ff); }
+body[data-section="science"]{ background: linear-gradient(180deg,#f7fffb,#ebfff6 40%,#f8fffc); }
+body[data-section="philosophy"]{ background: linear-gradient(180deg,#fff7fb,#ffeff7 40%,#fff7fb); }
+body[data-section="tech"]{ background: linear-gradient(180deg,#f7fbff,#eef5ff 40%,#f9fbff); }
+body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3edff 40%,#fbf7ff); }
 
 /* Noise texture */
-.noise {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .05;
-  background-image: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="1"/></svg>');
+.noise{
+  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.05;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/200/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="1"/></svg>');
   background-size: 280px 280px;
   mix-blend-mode: multiply;
 }
 
 /* =================== Header =================== */
 .header{
-  position: relative; z-index: 3;
-  width: calc(100% - 2rem); max-width: 1200px; margin: 10px auto 8px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  position:relative; z-index:3;
+  width:calc(100% - 2rem); max-width:1200px; margin: 10px auto 8px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
 }
-.brand{ display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
 .logo{
-  width: 42px; height: 42px; border-radius: 12px;
+  width:42px; height:42px; border-radius:12px;
   background: conic-gradient(from 210deg, var(--a1), var(--a2), var(--a3), var(--a4), var(--a1));
-  position: relative; overflow: hidden; border: 1px solid var(--border);
+  position:relative; overflow:hidden; border:1px solid var(--border);
   box-shadow: 0 8px 22px rgba(15,21,51,0.12);
-  flex: 0 0 42px;
+  flex:0 0 42px;
 }
 .logo::after{
-  content: ""; position: absolute; inset: 2px; border-radius: 10px;
+  content:""; position:absolute; inset:2px; border-radius:10px;
   background: rgba(255,255,255,0.55);
   border:1px solid rgba(20,24,40,0.12);
   backdrop-filter: blur(4px);
 }
-.brand h1{ margin: 0; font-size: 1.05rem; letter-spacing:.12em; text-transform: uppercase; color:#465185; font-weight: 900; }
+.brand h1{ margin:0; font-size:1.05rem; letter-spacing:.12em; text-transform:uppercase; color:#465185; font-weight:900; }
 
-.controls{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.controls{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .btn{
-  display: inline-flex; align-items: center; justify-content: center; gap:.5rem; padding:.55rem .85rem;
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.55rem .85rem;
   border-radius:12px; background: rgba(255,255,255,0.92);
-  border: 1px solid var(--border); color: var(--ink);
+  border:1px solid var(--border); color:var(--ink);
   box-shadow: 0 6px 14px rgba(15,21,51,0.08);
-  text-decoration: none; font-weight: 800; min-height: 44px; min-width: 44px;
+  text-decoration:none; font-weight:800; min-height:44px; min-width:44px;
 }
-.btn:hover{ filter: brightness(1.03) }
+.btn:hover{ filter:brightness(1.03) }
 .btn:focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; }
 .select, .input{
   padding:.55rem .7rem; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--ink); font-weight:700; min-height:44px;
@@ -174,11 +174,11 @@ body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23f)"/></svg>');
   background-size: 320px 320px;
 }
-.page{ position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; padding: 16px; }
-.headerline{ display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
-.kicker{ text-transform: uppercase; letter-spacing:.18em; color:#6572a4; font-size:.78rem; font-weight: 800; }
-.pageno{ color:#5b6793; font-weight: 800; font-size:.8rem; }
-.hrule{ height: 1px; background: linear-gradient(90deg, rgba(20,24,40,0.12), rgba(255,255,255,0.9), rgba(20,24,40,0.12)); margin-bottom: 8px; border-radius: 1px; }
+.page{ position:absolute; inset:0; display:grid; grid-template-rows: auto 1fr auto; padding: 16px; }
+.headerline{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
+.kicker{ text-transform:uppercase; letter-spacing:.18em; color:#6572a4; font-size:.78rem; font-weight:800; }
+.pageno{ color:#5b6793; font-weight:800; font-size:.8rem; }
+.hrule{ height:1px; background: linear-gradient(90deg, rgba(20,24,40,0.12), rgba(255,255,255,0.9), rgba(20,24,40,0.12)); margin-bottom:8px; border-radius:1px; }
 .title{ font-weight:900; font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height:1.14; margin:2px 0 6px; font-family: "Georgia", "Times New Roman", serif; }
 .subtitle{ color:var(--muted); font-weight:700; margin:0 0 8px; }
 .body{ color:#1b234f; line-height:1.72; font-size:1rem; }
@@ -193,7 +193,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f
 
 /* Section color tabs (outer edges) */
 .sheet.right .paper{ border-right: 4px solid transparent; }
-.sheet.left .paper{ border-left: 4px solid transparent; }
+.sheet.left  .paper{ border-left: 4px solid transparent; }
 .sheet[data-section="science"] .paper{ border-color: var(--cat-science); }
 .sheet[data-section="philosophy"] .paper{ border-color: var(--cat-philo); }
 .sheet[data-section="tech"] .paper{ border-color: var(--cat-tech); }
@@ -243,76 +243,30 @@ body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f
 
 /* Floating mobile nav buttons */
 .fab{
-  position: fixed; bottom: 14px; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+  position: fixed; bottom: 14px; width:56px; height:56px; border-radius:50%; display:grid; place-items:center;
   background:#fff; border:1px solid var(--border); box-shadow: 0 10px 20px rgba(15,21,51,0.18); z-index:60;
 }
-.fab.left { left: 14px; } .fab.right { right: 14px; }
-.fab:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+.fab.left{ left: 14px; } .fab.right{ right: 14px; }
+.fab:focus-visible{ outline: 3px solid var(--focus); outline-offset: 3px; }
 
 /* Search highlight using CSS Custom Highlight API fallback */
-::highlight(search-hit) { background: #ffec80; color: #161616; }
+::highlight(search-hit){ background: #ffec80; color: #161616; }
 
 /* High-contrast switch */
-.toggle { display: inline-flex; align-items: center; gap: 6px; padding: .45rem .6rem; border: 1px solid var(--border); border-radius: 999px; background: #fff; font-weight: 800; }
+.toggle{ display:inline-flex; align-items:center; gap:6px; padding:.45rem .6rem; border:1px solid var(--border); border-radius:999px; background:#fff; font-weight:800; }
 
 /* Print: linearize pages in order */
-@media print {
-  body { background: #fff !important; }
-  .header, .spine, .index, .hud, .thumbs, .fab, .kb-help, .navzone { display: none !important; }
-  .stage { perspective: none; }
-  .book-wrap, .book, .sheet, .paper { position: static; transform: none !important; height: auto; box-shadow: none !important; }
-  .sheet, .paper, .page { width: 100%; }
+@media print{
+  body{ background:#fff !important; }
+  .header, .spine, .index, .hud, .thumbs, .fab, .kb-help, .navzone{ display:none !important; }
+  .stage{ perspective: none; }
+  .book-wrap, .book, .sheet, .paper{ position:static; transform:none !important; height:auto; box-shadow:none !important; }
+  .sheet, .paper, .page{ width:100%; }
 }
 
 /* Backdrop-filter fallback */
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))){
   .paper{ background: rgba(255,255,255,0.96); }
-
-  /* ===== GPU flip, backface hiding, and small a11y/perf fixes ===== */
-.stage { perspective: 2000px; } /* keep perspective on stable parent */ /* compositor-friendly */
-
-.book { transform-style: preserve-3d; contain: layout paint; will-change: transform; }
-
-.sheet {
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  will-change: transform;
-  transition: transform var(--flip-dur) cubic-bezier(.2,.8,.2,1), z-index .2s linear;
-}
-
-.sheet.right { transform-origin: right center; }
-.sheet.left  { transform-origin: left center; }
-
-.sheet .paper {
-  transform: translateZ(0);              /* older engines promotion nudge */
-  will-change: transform, opacity;       /* overridden to auto outside flip */
-  backface-visibility: hidden;           /* reduce text shimmer on rotate */
-}
-
-.sheet .paper { will-change: auto; }     /* default after flip */
-.sheet.flipping .paper { will-change: transform, opacity; } /* during flip */
-
-.sheet.right.turned { transform: rotateY(-180deg); }
-.sheet.left.turned  { transform: rotateY(180deg); }
-
-.page { backface-visibility: hidden; transform: translateZ(0); }
-
-.curl { will-change: opacity; transition: opacity .3s ease; }
-
-/* Focus visibility improvements */
-.index button:focus-visible,
-.thumb:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-
-/* Thumbs semantics-friendly */
-.thumbs { list-style: none; }
-.thumb  { display: inline-block; }
-
-/* Print coherency */
-@media print{
-  .sheet, .page { page-break-inside: avoid; }
-  .sheet { page-break-after: always; }
-}
-
 }
 </style>
 </head>
@@ -341,7 +295,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f
 
   <div class="toolbar" role="group" aria-label="Tools">
     <label class="toggle"><input type="checkbox" id="hcToggle" /> High contrast</label>
-    <input class="input" id="searchInput" type="search" placeholder="Search textâ€¦" aria-label="Search in book" />
+    <input class="input" id="searchInput" type="search" placeholder="Search text…" aria-label="Search in book" />
     <button class="btn" id="kbBtn" aria-haspopup="dialog" aria-controls="kb" aria-expanded="false">Keyboard</button>
   </div>
 </header>
@@ -353,7 +307,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f
     <ul>
       <li>Left/Right: Previous/Next page</li>
       <li>Home/End: First/Last spread</li>
-      <li>1â€“6: Jump to sections</li>
+      <li>1–6: Jump to sections</li>
       <li>Esc: Close overlays</li>
       <li>Enter: Flip to next</li>
     </ul>
@@ -415,10 +369,10 @@ body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f
           <div class="page">
             <div class="headerline"><div class="kicker">Table of Contents</div><div class="pageno">i</div></div>
             <div class="hrule"></div>
-            <h2 class="title">Glass Book</h2>
+            <h2 class="title">This issue</h2>
             <div class="body">
               <p><strong>Science</strong>: Planck Time and Desire—on the smallest tick and the longest longing.</p>
-              <p><strong>Philosophy</strong>: Against Reduction—why not all meaning fit a metric.</p>
+              <p><strong>Philosophy</strong>: Against Reduction—why not all meaning fits a metric.</p>
               <p><strong>Technology</strong>: Edge Compute, Edge Culture—presence near the margins.</p>
               <p><strong>Literature</strong>: Footnotes to a Dream—Kafka, annotation, and the data of desire.</p>
               <p><strong>Essays</strong>: Signals, Symbols, Souls—representation between neurons and notions.</p>
@@ -471,7 +425,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f
             <h2 class="title">Against Reduction</h2>
             <div class="subtitle">What matters often refuses the comfort of metrics.</div>
             <div class="body">
-              <p>Counting can be a courage and a comfort. Some values survive statistics by stepping aside; theyâ€™re present as remainder, not residue.</p>
+              <p>Counting can be a courage and a comfort. Some values survive statistics by stepping aside; they’re present as remainder, not residue.</p>
               <p>Philosophy isn’t anti-measure; it is for a measured refusal to flatten wonder. The remainder teaches.</p>
             </div>
             <div class="tags"><span class="tag">Meaning</span></div>
@@ -606,7 +560,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f
 </main>
 
 <footer class="header" style="justify-content:center; margin-top:6px;" role="contentinfo">
-  <span style="color:#5a6695; font-weight:800;">Â© <span id="year"></span> Glassbook and Single-file flipbook</span>
+  <span style="color:#5a6695; font-weight:800;">© <span id="year"></span> Glassbook • Single-file flipbook</span>
 </footer>
 
 <!-- Floating mobile FABs -->
@@ -621,7 +575,6 @@ const sheets = Array.from(document.querySelectorAll('.sheet'));
 const totalPairs = Math.ceil(sheets.length/2);
 const pairs = [];
 for (let i=0;i<totalPairs;i++){
-}
   const r = sheets.find(s => +s.dataset.pair === i && s.classList.contains('right'));
   const l = sheets.find(s => +s.dataset.pair === i && s.classList.contains('left'));
   pairs.push({r,l});
@@ -641,7 +594,7 @@ function announcePage(){
 /* Progress bar */
 const progBar = document.getElementById('progBar');
 function updateProgress(){
-  const pct = Math.min(100, Math.max(0, (spread /pairs.length)*100));
+  const pct = Math.min(100, Math.max(0, (spread/(pairs.length))*100));
   progBar.style.width = pct + '%';
 }
 
@@ -686,7 +639,7 @@ function goTo(target){ spread = Math.max(0, Math.min(pairs.length, target)); syn
 
 /* Controls */
 ['nextBtn','nextHud','fabNext','zoneRight'].forEach(id=>document.getElementById(id).addEventListener('click', next));
-['prevBtn','prevHud','fabPrev','zoneLeft‘].forEach(id=>document.getElementById(id).addEventListener('click', prev));
+['prevBtn','prevHud','fabPrev','zoneLeft' ].forEach(id=>document.getElementById(id).addEventListener('click', prev));
 document.getElementById('jumpSelect').addEventListener('change', (e)=> goTo(+e.target.value));
 
 /* Index jump */
@@ -735,12 +688,12 @@ document.addEventListener('wheel', (e)=>{
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
   scrollAcc += e.deltaY;
-  if (scrollAcc > 200) { next(); scrollAcc = 0; }
-  if (scrollAcc < -200) { prev(); scrollAcc = 0; }
-}, {passive: true});
+  if (scrollAcc > 200){ next(); scrollAcc=0; }
+  if (scrollAcc < -200){ prev(); scrollAcc=0; }
+}, {passive:true});
 
 /* Cursor hints (desktop) */
-function setCursorZones() {
+function setCursorZones(){
   const left = document.getElementById('zoneLeft');
   const right = document.getElementById('zoneRight');
   left.style.cursor = 'w-resize';
@@ -755,15 +708,15 @@ hcToggle.addEventListener('change', ()=>{
 });
 
 /* Hash routing: #page-X */
-function updateHash() {
+function updateHash(){
   const h = `#page-${spread}`;
-  if (location.hash !== h) {
-    history.replaceState(null, '', h);
+  if (location.hash !== h){
+    history.replaceState(null,'',h);
   }
 }
-function readHash() {
+function readHash(){
   const m = location.hash.match(/#page-(\d+)/);
-  return m ? Math.max(0, Math.min(pairs.length, parseInt(m[1], 10))) : 0;
+  return m ? Math.max(0, Math.min(pairs.length, parseInt(m[1],10))) : 0;
 }
 window.addEventListener('hashchange', ()=> goTo(readHash()) );
 
@@ -795,29 +748,29 @@ const searchInput = document.getElementById('searchInput');
 let highlightsSupported = !!(CSS && CSS.highlights);
 let searchRanges = [];
 function clearHighlights(){
-  if (highlightsSupported) { CSS.highlights.clear(); }
-  else {
+  if (highlightsSupported){ CSS.highlights.clear(); }
+  else{
     // Simple fallback: unwrap <mark data-hit>
-    document.querySelectorAll('mark[data-hit]').forEach(el => {
+    document.querySelectorAll('mark[data-hit]').forEach(el=>{
       const parent = el.parentNode; parent.replaceChild(document.createTextNode(el.textContent), el); parent.normalize();
     });
   }
 }
-function applyHighlights(str) {
+function applyHighlights(str){
   clearHighlights();
   if (!str) return;
   const contentRoot = document.querySelector('.book');
-  if (highlightsSupported) {
+  if (highlightsSupported){
     const walker = document.createTreeWalker(contentRoot, NodeFilter.SHOW_TEXT);
     const ranges = [];
     let node; const q = str.toLowerCase();
-    while (node = walker.nextNode()) {
+    while(node = walker.nextNode()){
       const text = node.textContent.toLowerCase();
-      let idx = 0;
-      while ((idx = text.indexOf(q, idx)) !== -1) {
+      let idx=0;
+      while((idx = text.indexOf(q, idx)) !== -1){
         const r = new Range();
         r.setStart(node, idx);
-        r.setEnd(node, idx + q.length);
+        r.setEnd(node, idx+q.length);
         ranges.push(r);
         idx += q.length;
       }
@@ -852,17 +805,17 @@ document.addEventListener('mouseup', ()=>{
 });
 
 /* FPS guard: disable heavy visuals if frames drop */
-let lowPerf = false;
-(function fpsGuard() {
-  let last = performance.now(); let drops = 0;
-  function raf(t) {
+let lowPerf=false;
+(function fpsGuard(){
+  let last = performance.now(); let drops=0;
+  function raf(t){
     const dt = t - last; last = t;
     if (dt > 50) drops++; // rough frame drop
-    if (drops > 6 && !lowPerf) {
+    if (drops > 6 && !lowPerf){
       lowPerf = true;
-      document.querySelectorAll('.curl').forEach(el => el.style.display='none‘none’);
-      document.querySelector('.noise')?.setAttribute('style', 'display:none');
-      document.documentElement.style.setProperty('--flip-dur', '.5s');
+      document.querySelectorAll('.curl').forEach(el=> el.style.display='none');
+      document.querySelector('.noise')?.setAttribute('style','display:none');
+      document.documentElement.style.setProperty('--flip-dur','.5s');
       console.log('Performance guard: disabled curls/noise');
     }
     requestAnimationFrame(raf);
@@ -871,17 +824,17 @@ let lowPerf = false;
 })();
 
 /* Backdrop-filter tuner for low-end devices */
-(function backdropTuner() {
-  const test = CSS.supports('backdrop-filter', 'blur(12px)') || CSS.supports('-webkit-backdrop-filter', 'blur(12px)');
-  if (!test) {
-    document.querySelectorAll('.paper').forEach(p => p.style.background='rgba(255,255,255,0.96)');
+(function backdropTuner(){
+  const test = CSS.supports('backdrop-filter','blur(12px)') || CSS.supports('-webkit-backdrop-filter','blur(12px)');
+  if (!test){
+    document.querySelectorAll('.paper').forEach(p=> p.style.background='rgba(255,255,255,0.96)');
   }
 })();
 
 /* Lazy hydration: attach hover/edge listeners only near current spread */
-function hydrateEdges() {
+function hydrateEdges(){
   const range = 2; // pairs around current
-  sheets.forEach((s, idx) => {
+  sheets.forEach((s, idx)=>{
     const pairIdx = +s.dataset.pair;
     const near = Math.abs(pairIdx - spread) <= range;
     s.querySelector('.curl').style.opacity = near ? '' : '0';
@@ -889,26 +842,26 @@ function hydrateEdges() {
 }
 
 /* Update URL hash and load on start */
-function initFromHash() { goTo(readHash()); }
+function initFromHash(){ goTo(readHash()); }
 
 /* Dynamic edge sheen with pointer */
-document.addEventListener('pointermove', (e) => {
+document.addEventListener('pointermove', (e)=>{
   const rect = document.querySelector('.book-wrap').getBoundingClientRect();
-  const relX = (e.clientX - rect.left) / rect.width;
-  const sheen = Math.max(0, Math.min(1, Math.abs(relX - 0.5) * 2));
+  const relX = (e.clientX - rect.left)/rect.width;
+  const sheen = Math.max(0, Math.min(1, Math.abs(relX-0.5)*2));
   document.querySelectorAll('.paper::before'); // no direct access; leave as static sheen
 });
 
 /* One-hand FAB visibility on mobile */
-function updateFAB() {
+function updateFAB(){
   const mobile = matchMedia('(max-width: 700px)').matches;
   document.getElementById('fabPrev').style.display = mobile ? 'grid' : 'none';
   document.getElementById('fabNext').style.display = mobile ? 'grid' : 'none';
 }
-addEventListener('resize', updateFAB, {passive: true});
+addEventListener('resize', updateFAB, {passive:true});
 
 /* Print-friendly page count label */
-window.addEventListener('beforeprint', ()=> document.querySelector('.tip').textContent = 'Printing linearized pagesâ€¦' );
+window.addEventListener('beforeprint', ()=> document.querySelector('.tip').textContent = 'Printing linearized pages…' );
 
 /* Year */
 document.getElementById('year').textContent = new Date().getFullYear();
@@ -934,129 +887,6 @@ hydrateEdges();
 
 /* Hash deep link on load even without user interaction */
 window.addEventListener('DOMContentLoaded', ()=> { if (!location.hash) updateHash(); });
-
-  /* ===== Flip timing helper tied to CSS durations ===== */
-function getFlipMs(el){
-  const cs = getComputedStyle(el);
-  const durs = cs.transitionDuration.split(',').map(s=>parseFloat(s)*1000);
-  const valid = durs.filter(n=>!Number.isNaN(n) && n>0);
-  return (valid.length ? Math.max(...valid) : 800);
-}
-
-/* ===== Accessibility: mark active in index and select ===== */
-const indexRail = document.getElementById('index');
-function markIndexCurrent(){
-  if (!indexRail) return;
-  indexRail.querySelectorAll('button[data-go]').forEach((b,i)=>{
-    const active = i === spread;
-    if (active) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
-  });
-}
-function markSelectCurrent(){
-  const sel = document.getElementById('jumpSelect');
-  if (sel) sel.value = String(spread);
-}
-
-/* ===== Wrap sync to add transient GPU promotion + edge hydration ===== */
-const __orig_sync = sync;
-sync = function(){
-  __orig_sync();
-
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (!reduceMotion){
-    const p = pairs[Math.max(0, Math.min(pairs.length-1, spread))];
-    [p?.r, p?.l].forEach(el=>{
-      if (!el) return;
-      el.classList.add('flipping');
-      const ms = getFlipMs(el);
-      setTimeout(()=> el.classList.remove('flipping'), ms + 50);
-    });
-  }
-
-  // ensure curls/thumbnails density is near the active spread only
-  hydrateEdges();
-
-  // a11y markers
-  markIndexCurrent();
-  markSelectCurrent();
-};
-
-/* ===== Dialog focus safety for Keyboard overlay ===== */
-let __lastFocused = null;
-function openKB(){
-  kb.style.display='flex';
-  kbBtn.setAttribute('aria-expanded','true');
-  kb.setAttribute('aria-modal','true');
-  __lastFocused = document.activeElement;
-  kb.tabIndex = -1;
-  kb.focus();
-}
-function closeKB(){
-  kb.style.display='none';
-  kbBtn.setAttribute('aria-expanded','false');
-  kb.removeAttribute('aria-modal');
-  if (__lastFocused && __lastFocused.focus) __lastFocused.focus();
-}
-
-/* ===== Safer search fallback: wrap text nodes, not innerHTML ===== */
-function applyHighlights(str){
-  clearHighlights();
-  if (!str) return;
-  const root = document.querySelector('.book');
-  if (highlightsSupported){
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const ranges=[]; let node; const q=str.toLowerCase();
-    while(node = walker.nextNode()){
-      const t = node.textContent.toLowerCase(); let i=0;
-      while((i = t.indexOf(q, i)) !== -1){
-        const r = new Range(); r.setStart(node, i); r.setEnd(node, i+q.length);
-        ranges.push(r); i += q.length;
-      }
-    }
-    const hl = new Highlight(...ranges);
-    CSS.highlights.set('search-hit', hl);
-  } else {
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const q = str.toLowerCase(); const targets=[]; let node;
-    while(node = walker.nextNode()){
-      if (!node.parentElement.closest('.page')) continue;
-      const txt = node.textContent; const low = txt.toLowerCase();
-      let i=0; const parts=[];
-      while(true){
-        const j = low.indexOf(q, i);
-        if (j === -1){ parts.push(document.createTextNode(txt.slice(i))); break; }
-        if (j>i) parts.push(document.createTextNode(txt.slice(i, j)));
-        const m = document.createElement('mark'); m.setAttribute('data-hit',''); m.textContent = txt.slice(j, j+q.length);
-        parts.push(m); i = j+q.length;
-      }
-      targets.push([node, parts]);
-    }
-    targets.forEach(([node, parts])=>{
-      const frag = document.createDocumentFragment();
-      parts.forEach(p=>frag.appendChild(p));
-      node.parentNode.replaceChild(frag, node);
-    });
-  }
-}
-
-/* ===== Debounced hash updates to avoid thrash during fast flips ===== */
-let __hashRAF = null;
-function updateHash(){
-  const h = `#page-${spread}`;
-  if (location.hash === h) return;
-  if (__hashRAF) cancelAnimationFrame(__hashRAF);
-  __hashRAF = requestAnimationFrame(()=> history.replaceState(null,'',h));
-}
-
-/* ===== Ensure hydrateEdges runs on init too (it already runs in sync) ===== */
-hydrateEdges();
-
-/* ===== Optional: pause pointer sheen work when lowPerf is true ===== */
-if (typeof lowPerf !== 'undefined' && lowPerf){
-  // here one could remove heavy listeners if any are added later
-}
-
 
 </script>
 </body>
