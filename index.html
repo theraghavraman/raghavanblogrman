@@ -441,7 +441,41 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 .btn, .fab {
   touch-action: manipulation; /* Faster tap response */
 }
-  
+
+  /* ---- Optimal mobile rendering and font scaling for performance ---- */
+@media (max-width: 480px) {
+  /* Lightweight backgrounds and borders for glassmorphic elements */
+  .page.glass {
+    background: #fff !important;
+    box-shadow: none !important;
+    border: 1px solid #e3e8fd;
+    transition: none !important;
+  }
+
+  /* Make logo and SVGs smaller */
+  .logo svg { width: 24px; height: 24px; }
+  img, svg { max-width: 94vw; height: auto; }
+
+  /* Responsive font sizes using clamp variables */
+  .title { font-size: var(--fs-title-mobile) !important; }
+  .subtitle { font-size: var(--fs-subtitle-mobile) !important; }
+  .body { font-size: var(--fs-body-mobile) !important; }
+  .hrule { font-size: var(--fs-hrule-mobile) !important; }
+  .btn, .fab, .select { font-size: var(--fs-button-mobile) !important; }
+  .toolbar, .toggle .label-text { font-size: var(--fs-toolbar-mobile) !important; }
+
+  .controls, .toolbar {
+    flex-direction: column !important;
+    gap: 6px !important;
+    margin-top: 0.4em;
+  }
+
+  /* Remove/limit heavy transitions on mobile */
+  .sheet, .paper {
+    transition: none !important;
+  }
+}
+
 
   
 </style>
