@@ -2,51 +2,39 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<!-- SEO Improvements -->
-<title>Glassbook — Science • Philosophy • Technology • Literature</title>
-<meta name="description" content="A single-file accessible glassmorphic flipbook with realistic page turns, deep links, search-highlighting, thumbnails, notes, and print mode." />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="theme-color" content="#eef3ff" />
-<link rel="apple-touch-icon" href="icon.png" />
-<link rel="manifest" href="manifest.json" />
-<link rel="canonical" href="https://glassbook.example.com/" />
-<meta name="robots" content="index,follow" />
-<meta property="og:title" content="Glassbook — Science • Philosophy • Technology • Literature" />
-<meta property="og:description" content="A single-file accessible glassmorphic flipbook with realistic page turns, deep links, search-highlighting, thumbnails, notes, and print mode." />
-<meta property="og:image" content="og-image.png" />
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Glassbook — Science • Philosophy • Technology • Literature" />
-<meta name="twitter:description" content="A single-file accessible glassmorphic flipbook with realistic page turns, deep links, search-highlighting, thumbnails, notes, and print mode." />
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-<meta name="color-scheme" content="light dark" />
-<link rel="preload" href="fonts/Inter.woff2" as="font" crossorigin />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-<!-- End SEO Improvements -->
+<title>Glassbook â€” Science â€¢ Philosophy â€¢ Technology â€¢ Literature</title>
+<meta name="description" content="A single-file accessible glassmorphic flipbook with realistic page turns, deep links, search-highlighting, thumbnails, notes, and print mode." />
 
-<!-- Styles -->
 <style>
-:root {
+/* =================== Root, Modes, Tokens =================== */
+:root{
   --page-bg: #eef3ff;
   --ink: #0f1533;
   --muted: #4e5b86;
+
   --glass: rgba(255,255,255,0.22);
   --glass-strong: rgba(255,255,255,0.35);
   --edge: rgba(255,255,255,0.55);
   --border: rgba(20,24,40,0.14);
   --shadow: rgba(15,21,51,0.22);
+
   --a1:#63b3ed; --a2:#a78bfa; --a3:#f472b6; --a4:#34d399; --a5:#f6ad55;
   --cat-science:#34d399; --cat-philo:#f472b6; --cat-tech:#63b3ed; --cat-lit:#a78bfa;
+
   --book-w: min(1100px, 94vw);
   --book-h: min(720px, 80vh);
   --gutter: 16px; --radius: 18px;
   --flip-dur: .8s; --sheet-thickness: 2px;
+
   --focus: #2251ff;
   --contrast-bg: #ffffff;
   --contrast-ink: #0b0e22;
+
   --hud-h: 56px;
-  color-scheme: light dark;
 }
+
+/* High-contrast toggle variable gate */
 :root[data-contrast="high"]{
   --glass: rgba(255,255,255,0.95);
   --glass-strong: rgba(255,255,255,1);
@@ -55,134 +43,1020 @@
   --ink:#0b0e22;
   --muted:#313a63;
 }
-@media (prefers-reduced-motion: reduce) {
-  :root { --flip-dur: .001ms; }
-}
-html, body { height:100%; scroll-behavior:smooth; }
-body { margin:0; background: var(--page-bg); color:var(--ink); font-family: Inter,system-ui,sans-serif; }
-body[data-section="science"] { background: linear-gradient(180deg,#f7fffb,#ebfff6 40%,#f8fffc); }
-body[data-section="philosophy"] { background: linear-gradient(180deg,#fff7fb,#ffeff7 40%,#fff7fb); }
-body[data-section="tech"] { background: linear-gradient(180deg,#f7fbff,#eef5ff 40%,#f9fbff); }
-body[data-section="literature"] { background: linear-gradient(180deg,#fbf7ff,#f3edff 40%,#fbf7ff); }
 
-/* GRID, FLEX, COLUMN, GAP, NESTING, @layer, @supports */
-.book-wrap {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--gutter);
-  width: var(--book-w);
-  height: var(--book-h);
-  container-type: size;
+/* Motion safety */
+@media (prefers-reduced-motion: reduce){
+  :root{ --flip-dur: .001ms; }
 }
-.book {
-  contain: layout paint;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  align-items: stretch;
+
+/* =================== Global =================== */
+*{ box-sizing:border-box }
+html,body{ height:100% }
+html{ scroll-behavior:smooth }
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(99,179,237,0.14), transparent 60%),
+    radial-gradient(1200px 600px at 90% 15%, rgba(167,139,250,0.14), transparent 60%),
+    linear-gradient(180deg, #f7faff, #ecf2ff 38%, #f9fbff 100%);
+  color:var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  overflow-x:hidden;
 }
-/* CSS Logical Props, Blend, Mask, Shape */
-.logo {
-  aspect-ratio: 1 / 1;
-  background: conic-gradient(from 210deg, var(--a1), var(--a2), var(--a3), var(--a4), var(--a1));
-  mask-image: linear-gradient(to right, transparent, black 16px, black calc(100% - 16px), transparent);
+
+/* Gentle dynamic background tint by section */
+body[data-section="science"]{ background: linear-gradient(180deg,#f7fffb,#ebfff6 40%,#f8fffc); }
+body[data-section="philosophy"]{ background: linear-gradient(180deg,#fff7fb,#ffeff7 40%,#fff7fb); }
+body[data-section="tech"]{ background: linear-gradient(180deg,#f7fbff,#eef5ff 40%,#f9fbff); }
+body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3edff 40%,#fbf7ff); }
+
+/* Noise texture */
+.noise{
+  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.05;
+  background-image: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="1"/></svg>');
+  background-size: 280px 280px;
   mix-blend-mode: multiply;
 }
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: space-between;
-  align-items: center;
-}
-.kb-card { background: #fff; border-radius: 12px; box-shadow: 0 6px 14px rgba(15,21,51,0.08); }
-.sheet { contain: layout paint; clip-path: inset(0 round var(--radius)); }
 
-/* CSS Container queries */
-@container (max-width: 700px) {
-  .book-wrap { grid-template-columns: 1fr; height: min(530px, 96vh); }
+/* =================== Header =================== */
+.header{
+  position:relative; z-index:3;
+  width:calc(100% - 2rem); max-width:1200px; margin: 10px auto 8px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
 }
-@media (max-width:700px) {
-  .fab { display: grid !important; }
+.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+.logo{
+  width:42px; height:42px; border-radius:12px;
+  background: conic-gradient(from 210deg, var(--a1), var(--a2), var(--a3), var(--a4), var(--a1));
+  position:relative; overflow:hidden; border:1px solid var(--border);
+  box-shadow: 0 8px 22px rgba(15,21,51,0.12);
+  flex:0 0 42px;
 }
-@layer base, theme, utilities;
-@layer base {
-  .body { font-size: clamp(1rem,2vw,1.14rem); }
+.logo::after{
+  content:""; position:absolute; inset:2px; border-radius:10px;
+  background: rgba(255,255,255,0.55);
+  border:1px solid rgba(20,24,40,0.12);
+  backdrop-filter: blur(4px);
 }
-@supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
-  .paper { backdrop-filter: blur(10px) saturate(140%); }
+.brand h1{ margin:0; font-size:1.05rem; letter-spacing:.12em; text-transform:uppercase; color:#465185; font-weight:900; }
+
+.controls{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.55rem .85rem;
+  border-radius:12px; background: rgba(255,255,255,0.92);
+  border:1px solid var(--border); color:var(--ink);
+  box-shadow: 0 6px 14px rgba(15,21,51,0.08);
+  text-decoration:none; font-weight:800; min-height:44px; min-width:44px;
 }
-@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))) {
-  .paper { background: rgba(255,255,255,0.96); }
+.btn:hover{ filter:brightness(1.03) }
+.btn:focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; }
+.select, .input{
+  padding:.55rem .7rem; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--ink); font-weight:700; min-height:44px;
 }
-[hidden], .hide { display:none !important; }
+
+/* Search and HC toggle group */
+.toolbar{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+/* Keyboard help overlay */
+.kb-help{
+  position: fixed; inset:0; background: rgba(0,0,0,0.45); display:none; align-items:center; justify-content:center; z-index:50;
+}
+.kb-card{
+  background:#fff; color:#1b234f; border-radius:12px; padding:18px; width:min(480px,92vw);
+  border:1px solid rgba(20,24,40,0.18);
+}
+.kb-card h3{ margin:0 0 8px; }
+.kb-card ul{ margin:8px 0 0; padding-left:18px; }
+
+/* =================== Stage / Book =================== */
+.stage{ position:relative; z-index:1; width:100%; display:grid; place-items:center; padding: 6px 0 18px; perspective: 2000px; }
+
+.book-wrap{ position:relative; width: var(--book-w); height: var(--book-h); transform-style: preserve-3d; }
+.book{ position:absolute; inset:0; transform-style: preserve-3d; border-radius: calc(var(--radius) + 4px); contain: layout paint; }
+
+.board{
+  position:absolute; inset:0; transform: translateZ(calc(var(--sheet-thickness) * -18));
+  border-radius: calc(var(--radius) + 4px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.75));
+  border:1px solid var(--border);
+  box-shadow: 0 24px 40px rgba(15,21,51,0.18), 0 0 0 1px rgba(255,255,255,0.6) inset;
+}
+.spine{
+  position:absolute; top:0; bottom:0; left: calc(50% - 6px); width:12px;
+  background: linear-gradient(90deg, rgba(20,24,40,0.08), rgba(255,255,255,0.8), rgba(20,24,40,0.08));
+  border-left:1px solid rgba(20,24,40,0.10); border-right:1px solid rgba(20,24,40,0.10);
+  z-index:3; pointer-events:none; border-radius: 8px;
+}
+
+/* Sheets / Pages */
+.sheet{
+  position:absolute; top:0; bottom:0; width:50%; transform-style: preserve-3d;
+  transform-origin: left center;
+  transition: transform var(--flip-dur) cubic-bezier(.2,.8,.2,1), z-index .2s linear;
+  contain: paint;
+}
+.sheet.right{ left:50%; transform-origin: right center; }
+.sheet .paper{
+  position:absolute; inset:0; border-radius: var(--radius);
+  background: var(--glass); border:1px solid var(--border);
+  backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: 0 18px 36px rgba(15,21,51,0.18), inset 0 0 0 1px rgba(255,255,255,0.5);
+  overflow:hidden;
+}
+.paper::before{
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.35), transparent 35%), linear-gradient(180deg, rgba(255,255,255,0.2), transparent 50%, rgba(0,0,0,0.04) 100%);
+  pointer-events:none; mix-blend-mode: screen;
+}
+.paper::after{
+  content:""; position:absolute; inset:0; opacity:.06; pointer-events:none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23f)"/></svg>');
+  background-size: 320px 320px;
+}
+.page{ position:absolute; inset:0; display:grid; grid-template-rows: auto 1fr auto; padding: 16px; }
+.headerline{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
+.kicker{ text-transform:uppercase; letter-spacing:.18em; color:#6572a4; font-size:.78rem; font-weight:800; }
+.pageno{ color:#5b6793; font-weight:800; font-size:.8rem; }
+.hrule{ height:1px; background: linear-gradient(90deg, rgba(20,24,40,0.12), rgba(255,255,255,0.9), rgba(20,24,40,0.12)); margin-bottom:8px; border-radius:1px; }
+.title{ font-weight:900; font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height:1.14; margin:2px 0 6px; font-family: "Georgia", "Times New Roman", serif; }
+.subtitle{ color:var(--muted); font-weight:700; margin:0 0 8px; }
+.body{ color:#1b234f; line-height:1.72; font-size:1rem; }
+.body p{ margin:.55rem 0 }
+.pull{ margin:.7rem 0; padding:.6rem .8rem; border-left: 4px solid currentColor; background: rgba(255,255,255,0.6); font-weight:800; }
+.tags{ display:flex; gap:6px; flex-wrap:wrap; }
+.tag{ padding:.32rem .6rem; border-radius:999px; font-size:.78rem; font-weight:800; color:#20305f; background: rgba(255,255,255,0.92); border:1px solid rgba(20,24,40,0.12); }
+
+/* Two-column option for long pages */
+.page[data-cols="2"] .body{ column-count: 2; column-gap: 26px; }
+@media (max-width: 900px){ .page[data-cols="2"] .body{ column-count: 1; } }
+
+/* Section color tabs (outer edges) */
+.sheet.right .paper{ border-right: 4px solid transparent; }
+.sheet.left  .paper{ border-left: 4px solid transparent; }
+.sheet[data-section="science"] .paper{ border-color: var(--cat-science); }
+.sheet[data-section="philosophy"] .paper{ border-color: var(--cat-philo); }
+.sheet[data-section="tech"] .paper{ border-color: var(--cat-tech); }
+.sheet[data-section="literature"] .paper{ border-color: var(--cat-lit); }
+
+.curl{ position:absolute; top:0; bottom:0; width:28px; background: linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1)); pointer-events:none; mix-blend-mode: screen; opacity:.0; transition: opacity .3s ease; }
+.sheet.right .curl{ left: 0; } .sheet.left .curl{ right: 0; }
+
+/* Turn states */
+.sheet.right.turned{ transform: rotateY(-180deg); z-index: 2; }
+.sheet.left.turned{ transform: rotateY(180deg); z-index: 2; }
+.sheet:hover .curl{ opacity:.7 }
+
+/* Depth staging */
+.sheet{ z-index: 2; }
+.sheet[data-i="1"]{ z-index: 6; } .sheet[data-i="2"]{ z-index: 8; } .sheet[data-i="3"]{ z-index: 10; } .sheet[data-i="4"]{ z-index: 12; }
+.sheet[data-i="5"]{ z-index: 14; } .sheet[data-i="6"]{ z-index: 16; } .sheet[data-i="7"]{ z-index: 18; } .sheet[data-i="8"]{ z-index: 20; }
+.sheet[data-i="9"]{ z-index: 22; } .sheet[data-i="10"]{ z-index: 24; } .sheet[data-i="11"]{ z-index: 26; } .sheet[data-i="12"]{ z-index: 28; }
+
+/* Nav zones */
+.navzone{ position:absolute; top:0; bottom:0; width: 18%; z-index: 20; cursor: pointer; }
+.navzone.left{ left:0; } .navzone.right{ right:0; }
+
+/* HUD + progress */
+.hud{
+  position:absolute; bottom: calc(-1 * var(--hud-h)); left:50%; transform: translateX(-50%);
+  display:flex; align-items:center; gap:8px; z-index:4;
+}
+.progress{ height:10px; background: rgba(255,255,255,0.85); border:1px solid var(--border); border-radius:999px; overflow:hidden; width:220px; }
+.progress > span{ display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--a1), var(--a2)); }
+
+/* Index rail */
+.index{ position:absolute; left:50%; transform: translateX(-50%); top:-52px; display:flex; align-items:center; gap:6px; flex-wrap:wrap; z-index:4; }
+.index button{ padding:.38rem .6rem; border-radius:999px; border:1px solid var(--border); background:rgba(255,255,255,0.92); font-weight:800; color:#223167; min-height:36px; }
+.index button[data-cat="science"]{ border-color: rgba(52,211,153,0.6); }
+.index button[data-cat="philosophy"]{ border-color: rgba(244,114,182,0.6); }
+.index button[data-cat="tech"]{ border-color: rgba(99,179,237,0.6); }
+.index button[data-cat="literature"]{ border-color: rgba(167,139,250,0.6); }
+
+/* Thumbnails scrubber */
+.thumbs{
+  position:absolute; bottom: calc(-1 * (var(--hud-h) + 64px)); left:50%; transform: translateX(-50%);
+  display:flex; gap:8px; max-width: min(92vw, 1000px); overflow:auto; padding:6px; z-index:3;
+}
+.thumb{ flex:0 0 80px; height: 54px; border:1px solid var(--border); background:#fff; border-radius:8px; position:relative; cursor:pointer; }
+.thumb::after{ content: attr(data-pg); position:absolute; bottom:2px; right:6px; font-weight:800; color:#5c6aa0; font-size:.78rem; }
+
+/* Floating mobile nav buttons */
+.fab{
+  position: fixed; bottom: 14px; width:56px; height:56px; border-radius:50%; display:grid; place-items:center;
+  background:#fff; border:1px solid var(--border); box-shadow: 0 10px 20px rgba(15,21,51,0.18); z-index:60;
+}
+.fab.left{ left: 14px; } .fab.right{ right: 14px; }
+.fab:focus-visible{ outline: 3px solid var(--focus); outline-offset: 3px; }
+
+/* Search highlight using CSS Custom Highlight API fallback */
+::highlight(search-hit){ background: #ffec80; color: #161616; }
+
+/* High-contrast switch */
+.toggle{ display:inline-flex; align-items:center; gap:6px; padding:.45rem .6rem; border:1px solid var(--border); border-radius:999px; background:#fff; font-weight:800; }
+
+/* Print: linearize pages in order */
+@media print{
+  body{ background:#fff !important; }
+  .header, .spine, .index, .hud, .thumbs, .fab, .kb-help, .navzone{ display:none !important; }
+  .stage{ perspective: none; }
+  .book-wrap, .book, .sheet, .paper{ position:static; transform:none !important; height:auto; box-shadow:none !important; }
+  .sheet, .paper, .page{ width:100%; }
+}
+
+/* Backdrop-filter fallback */
+@supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))){
+  .paper{ background: rgba(255,255,255,0.96); }
+
+  /* ===== GPU flip, backface hiding, and small a11y/perf fixes ===== */
+.stage { perspective: 2000px; } /* keep perspective on stable parent */ /* compositor-friendly */
+
+.book { transform-style: preserve-3d; contain: layout paint; will-change: transform; }
+
+.sheet {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+  transition: transform var(--flip-dur) cubic-bezier(.2,.8,.2,1), z-index .2s linear;
+}
+
+.sheet.right { transform-origin: right center; }
+.sheet.left  { transform-origin: left center; }
+
+.sheet .paper {
+  transform: translateZ(0);              /* older engines promotion nudge */
+  will-change: transform, opacity;       /* overridden to auto outside flip */
+  backface-visibility: hidden;           /* reduce text shimmer on rotate */
+}
+
+.sheet .paper { will-change: auto; }     /* default after flip */
+.sheet.flipping .paper { will-change: transform, opacity; } /* during flip */
+
+.sheet.right.turned { transform: rotateY(-180deg); }
+.sheet.left.turned  { transform: rotateY(180deg); }
+
+.page { backface-visibility: hidden; transform: translateZ(0); }
+
+.curl { will-change: opacity; transition: opacity .3s ease; }
+
+/* Focus visibility improvements */
+.index button:focus-visible,
+.thumb:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* Thumbs semantics-friendly */
+.thumbs { list-style: none; }
+.thumb  { display: inline-block; }
+
+/* Print coherency */
+@media print{
+  .sheet, .page { page-break-inside: avoid; }
+  .sheet { page-break-after: always; }
+}
+
+}
 </style>
 </head>
+
 <body>
 <div class="noise" aria-hidden="true" role="presentation"></div>
 
 <header class="header" role="banner">
-  <a class="brand" href="#" aria-label="Glassbook Home"><div class="logo"></div><h1>Glassbook</h1></a>
-  <nav class="controls" role="navigation" aria-label="Navigation controls">
-    <button class="btn" id="prevBtn" aria-label="Previous page" title="Previous (Arrow Left)" tabindex="0"><kbd>←</kbd></button>
-    <button class="btn" id="nextBtn" aria-label="Next page" title="Next (Arrow Right)" tabindex="0"><kbd>→</kbd></button>
-    <select class="select" id="jumpSelect" aria-label="Jump to section" autocomplete="section">
-      <optgroup label="Sections">
-        <option value="0">Cover</option>
-        <option value="1" data-section="science">Science</option>
-        <option value="2" data-section="philosophy">Philosophy</option>
-        <option value="3" data-section="tech">Technology</option>
-        <option value="4" data-section="literature">Literature</option>
-        <option value="5">Essays</option>
-      </optgroup>
+  <a class="brand" href="#" aria-label="Glassbook Home">
+    <div class="logo" aria-hidden="true"></div>
+    <h1>Glassbook</h1>
+  </a>
+
+  <div class="controls" role="group" aria-label="Navigation controls">
+    <button class="btn" id="prevBtn" aria-label="Previous page" title="Previous (Arrow Left)">&#9664;</button>
+    <button class="btn" id="nextBtn" aria-label="Next page" title="Next (Arrow Right)">&#9654;</button>
+    <select class="select" id="jumpSelect" aria-label="Jump to section">
+      <option value="0">Cover</option>
+      <option value="1" data-section="science">Science</option>
+      <option value="2" data-section="philosophy">Philosophy</option>
+      <option value="3" data-section="tech">Technology</option>
+      <option value="4" data-section="literature">Literature</option>
+      <option value="5">Essays</option>
     </select>
-  </nav>
+  </div>
+
   <div class="toolbar" role="group" aria-label="Tools">
     <label class="toggle"><input type="checkbox" id="hcToggle" /> High contrast</label>
-    <input class="input" id="searchInput" type="search" placeholder="Search text…" aria-label="Search in book" spellcheck="true" autocomplete="on" />
+    <input class="input" id="searchInput" type="search" placeholder="Search textâ€¦" aria-label="Search in book" />
     <button class="btn" id="kbBtn" aria-haspopup="dialog" aria-controls="kb" aria-expanded="false">Keyboard</button>
   </div>
 </header>
 
+<!-- Keyboard help -->
+<div class="kb-help" id="kb" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">
+  <div class="kb-card">
+    <h3>Keyboard</h3>
+    <ul>
+      <li>Left/Right: Previous/Next page</li>
+      <li>Home/End: First/Last spread</li>
+      <li>1â€“6: Jump to sections</li>
+      <li>Esc: Close overlays</li>
+      <li>Enter: Flip to next</li>
+    </ul>
+    <div style="margin-top:10px; display:flex; justify-content:flex-end;">
+      <button class="btn" id="kbClose">Close</button>
+    </div>
+  </div>
+</div>
+
 <main class="stage" role="main">
-  <div class="book-wrap" id="bookWrap">
-    <!-- Sheets/Page Sections would go here (as in original) -->
-    <!-- ...Truncated for brevity... -->
-    <div class="hud" aria-label="HUD">
-      <button class="btn" id="prevHud" aria-label="Previous page"><kbd>Prev</kbd></button>
-      <progress max="10" value="1"></progress>
-      <div class="btn" id="pageLabel" aria-live="polite">Page 1 of 10</div>
-      <button class="btn" id="nextHud" aria-label="Next page"><kbd>Next</kbd></button>
+  <div class="book-wrap">
+    <div class="book" id="book" aria-live="polite" aria-atomic="true">
+      <div class="board" aria-hidden="true"></div>
+      <div class="spine" aria-hidden="true"></div>
+
+      <!-- Index rail -->
+      <div class="index" id="index" role="navigation" aria-label="Sections">
+        <button data-go="0">Cover</button>
+        <button data-go="1" data-cat="science">Science</button>
+        <button data-go="2" data-cat="philosophy">Philosophy</button>
+        <button data-go="3" data-cat="tech">Tech</button>
+        <button data-go="4" data-cat="literature">Literature</button>
+        <button data-go="5">Essays</button>
+      </div>
+
+      <!-- Nav zones -->
+      <div class="navzone left" id="zoneLeft" aria-label="Flip left" tabindex="0"></div>
+      <div class="navzone right" id="zoneRight" aria-label="Flip right" tabindex="0"></div>
+
+      <!-- Thumbnails -->
+      <div class="thumbs" id="thumbs" aria-label="Page thumbnails"></div>
+
+      <!-- Sheets (same content as prior version; some pages use data-cols="2") -->
+      <!-- For brevity, the content below mirrors prior text but includes pull quotes and section attributes -->
+      <section class="sheet right" data-i="1" data-pair="0" data-section="tech" role="article" aria-label="Cover, page 0">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">The Daily Aether</div><div class="pageno">Cover</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Science, Philosophy, Tech, Literatureâ€”on frosted pages</h2>
+            <div class="subtitle">Flip the glass and the story continues.</div>
+            <div class="body">
+              <p>Welcome to a living broadsheet where ideas move as pages turn. Use arrow keys or tap edges. Index jumps instantly. Single file, vanilla JS.</p>
+              <p class="pull" style="color:var(--a1)">â€œTurn the page; the thought continues.â€</p>
+              <div class="tags">
+                <span class="tag" style="border-color:var(--cat-science)">Science</span>
+                <span class="tag" style="border-color:var(--cat-philo)">Philosophy</span>
+                <span class="tag" style="border-color:var(--cat-tech)">Technology</span>
+                <span class="tag" style="border-color:var(--cat-lit)">Literature</span>
+              </div>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet left" data-i="2" data-pair="0" data-section="tech" role="article" aria-label="Table of contents, page i">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">Table of Contents</div><div class="pageno">i</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Glass Book</h2>
+            <div class="body">
+              <p><strong>Science</strong>: Planck Time and Desireâ€”on the smallest tick and the longest longing.</p>
+              <p><strong>Philosophy</strong>: Against Reductionâ€”why not all meaning fits a metric.</p>
+              <p><strong>Technology</strong>: Edge Compute, Edge Cultureâ€”presence near the margins.</p>
+              <p><strong>Literature</strong>: Footnotes to a Dreamâ€”Kafka, annotation, and the data of desire.</p>
+              <p><strong>Essays</strong>: Signals, Symbols, Soulsâ€”representation between neurons and notions.</p>
+            </div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet right" data-i="3" data-pair="1" data-section="science" role="article" aria-label="Science, page 1">
+        <div class="paper">
+          <div class="page" data-cols="2">
+            <div class="headerline"><div class="kicker">Science</div><div class="pageno">1</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Planck Time and Desire</h2>
+            <div class="subtitle">When the instant is granular, but longing is continuous.</div>
+            <div class="body">
+              <p>Between the quantum tick and the human ache sits a paradox: discreteness beneath a feeling that doesnâ€™t split. Models refine constants; experience resists rounding.</p>
+              <p class="pull" style="color:var(--a4)">â€œPrecision measures; desire remembers.â€</p>
+              <p>The book of nature has margins full of corrections; the book of love does not submit errata. Yet both are revised by better instruments, including attention.</p>
+            </div>
+            <div class="tags"><span class="tag">Physics</span><span class="tag">Time</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet left" data-i="4" data-pair="1" data-section="science" role="article" aria-label="Science, page 2">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">Science</div><div class="pageno">2</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">The Gentle Violence of Measurement</h2>
+            <div class="subtitle">Observation changes what is observedâ€”and who observes.</div>
+            <div class="body">
+              <p>Every instrument is also an argument about what the world is allowed to say. Calibration is a creed; the readout is a confession.</p>
+              <p>Constants consoleâ€”until experiments write their elegy.</p>
+            </div>
+            <div class="tags"><span class="tag">Measurement</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet right" data-i="5" data-pair="2" data-section="philosophy" role="article" aria-label="Philosophy, page 3">
+        <div class="paper">
+          <div class="page" data-cols="2">
+            <div class="headerline"><div class="kicker">Philosophy</div><div class="pageno">3</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Against Reduction</h2>
+            <div class="subtitle">What matters often refuses the comfort of metrics.</div>
+            <div class="body">
+              <p>Counting can be a courage and a comfort. Some values survive statistics by stepping aside; theyâ€™re present as remainder, not residue.</p>
+              <p>Philosophy isnâ€™t anti-measure; it is for a measured refusal to flatten wonder. The remainder teaches.</p>
+            </div>
+            <div class="tags"><span class="tag">Meaning</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet left" data-i="6" data-pair="2" data-section="philosophy" role="article" aria-label="Philosophy, page 4">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">Philosophy</div><div class="pageno">4</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">The Algorithm as Critic</h2>
+            <div class="subtitle">Transformers quantify context; metaphors wager on remainder.</div>
+            <div class="body">
+              <p>Optimization converges to minima; reading converges to meanings. Keep them distinct; the dialogue stays fruitful instead of flat.</p>
+            </div>
+            <div class="tags"><span class="tag">Critique</span><span class="tag">AI</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet right" data-i="7" data-pair="3" data-section="tech" role="article" aria-label="Technology, page 5">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">Technology</div><div class="pageno">5</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Edge Compute, Edge Culture</h2>
+            <div class="subtitle">Near-user inference edits our sense of presence.</div>
+            <div class="body">
+              <p>When the server steps closer, the story does too. Latency becomes a literary device: tension authored by time saved.</p>
+              <p>Architectures migrate outward; aesthetics followâ€”light, responsive, humane.</p>
+            </div>
+            <div class="tags"><span class="tag">Edge</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet left" data-i="8" data-pair="3" data-section="tech" role="article" aria-label="Technology, page 6">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">Technology</div><div class="pageno">6</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Latency Is a Literary Device</h2>
+            <div class="subtitle">Waiting shapes meaning in servers and sentences.</div>
+            <div class="body">
+              <p>Speed isnâ€™t the only kindness. Rhythm makes memory; delay makes desire legible.</p>
+            </div>
+            <div class="tags"><span class="tag">Latency</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet right" data-i="9" data-pair="4" data-section="literature" role="article" aria-label="Literature, page 7">
+        <div class="paper">
+          <div class="page" data-cols="2">
+            <div class="headerline"><div class="kicker">Literature</div><div class="pageno">7</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Footnotes to a Dream</h2>
+            <div class="subtitle">We annotate the night and call it a model; the dream resists.</div>
+            <div class="body">
+              <p>Criticism is choreography. It doesnâ€™t pin the butterfly; it learns to dance with it.</p>
+            </div>
+            <div class="tags"><span class="tag">Kafka</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet left" data-i="10" data-pair="4" data-section="literature" role="article" aria-label="Literature, page 8">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">Literature</div><div class="pageno">8</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Margins, Kerning, Meaning</h2>
+            <div class="subtitle">Typography as thought: spacing teaches breath.</div>
+            <div class="body">
+              <p>Form is a teacher. A good margin is not empty; itâ€™s an agreement to listen.</p>
+            </div>
+            <div class="tags"><span class="tag">Typography</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet right" data-i="11" data-pair="5" data-section="philosophy" role="article" aria-label="Essays, page 9">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">Essays</div><div class="pageno">9</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Signals, Symbols, Souls</h2>
+            <div class="subtitle">Representation between neurons and notions.</div>
+            <div class="body">
+              <p>Signals are mapped; symbols are meant; souls are met. Each asks patience of the others.</p>
+            </div>
+            <div class="tags"><span class="tag">Cognition</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <section class="sheet left" data-i="12" data-pair="5" data-section="tech" role="article" aria-label="Back Matter, page 10">
+        <div class="paper">
+          <div class="page">
+            <div class="headerline"><div class="kicker">Back Matter</div><div class="pageno">10</div></div>
+            <div class="hrule"></div>
+            <h2 class="title">Colophon</h2>
+            <div class="body">
+              <p>Set in system fonts for speed; composed with CSS perspective, transforms, and frosted glass layers. Explore search, notes, thumbnails, and print.</p>
+            </div>
+            <div class="tags"><span class="tag">Single file</span><span class="tag">Vanilla JS</span></div>
+          </div>
+          <div class="curl"></div>
+        </div>
+      </section>
+
+      <!-- HUD -->
+      <div class="hud" aria-label="HUD">
+        <button class="btn" id="prevHud" aria-label="Previous page">Prev</button>
+        <div class="progress" aria-hidden="true"><span id="progBar"></span></div>
+        <div class="btn" id="pageLabel" aria-live="polite">Page 0 of 10</div>
+        <button class="btn" id="nextHud" aria-label="Next page">Next</button>
+      </div>
+
+      <div class="tip" id="tip" style="position:absolute; bottom:-70px; left:50%; transform:translateX(-50%); color:#5c6aa0; font-weight:800;">Tip: Arrow keys, tap edges, or use thumbnails</div>
     </div>
   </div>
 </main>
-<footer class="header" role="contentinfo"><address>© <span id="year"></span> Glassbook • Single-file flipbook</address></footer>
+
+<footer class="header" style="justify-content:center; margin-top:6px;" role="contentinfo">
+  <span style="color:#5a6695; font-weight:800;">Â© <span id="year"></span> Glassbook â€¢ Single-file flipbook</span>
+</footer>
+
 <!-- Floating mobile FABs -->
-<button class="fab left" id="fabPrev" aria-label="Previous"><kbd>←</kbd></button>
-<button class="fab right" id="fabNext" aria-label="Next"><kbd>→</kbd></button>
+<button class="fab left" id="fabPrev" aria-label="Previous">&#9664;</button>
+<button class="fab right" id="fabNext" aria-label="Next">&#9654;</button>
 
-<script type="module">
-// Major JS Improvements
-// Web Workers, Service Worker, Intersection Observer, Async/Await, Storage, etc. (Truncated, see original and append new features below)
+<script>
+/* =================== Flipbook Engine + 30 Enhancements =================== */
 
-// Example: Intersection Observer highlights HUD when page is in focus
-const hud = document.querySelector('.hud');
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(entry => { hud.classList.toggle('focus', entry.isIntersecting); });
-});
-io.observe(hud);
+/* Sheets and pairs */
+const sheets = Array.from(document.querySelectorAll('.sheet'));
+const totalPairs = Math.ceil(sheets.length/2);
+const pairs = [];
+for (let i=0;i<totalPairs;i++){
+  const r = sheets.find(s => +s.dataset.pair === i && s.classList.contains('right'));
+  const l = sheets.find(s => +s.dataset.pair === i && s.classList.contains('left'));
+  pairs.push({r,l});
+}
+let spread = 0;
 
-// Async/Await Example for IndexedDB (storing notes)
-async function saveNoteToDB(note) {
-  const db = await new Promise(resolve => { const req = indexedDB.open('glassbook',1); req.onsuccess = e => resolve(e.target.result); });
-  const tx = db.transaction('notes','readwrite'); tx.objectStore('notes').add(note); tx.oncomplete = () => db.close();
+/* Accessibility announcer and section tint */
+const pageLabel = document.getElementById('pageLabel');
+function announcePage(){
+  const totalPages = (pairs.length * 2);
+  const currentPage = Math.min(spread*2, totalPages);
+  pageLabel.textContent = `Page ${currentPage} of ${totalPages}`;
+  const sec = activeSection();
+  document.body.setAttribute('data-section', sec || '');
 }
 
-// Service Worker Registration
-if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+/* Progress bar */
+const progBar = document.getElementById('progBar');
+function updateProgress(){
+  const pct = Math.min(100, Math.max(0, (spread/(pairs.length))*100));
+  progBar.style.width = pct + '%';
+}
 
-// Progressive enhancements, multiple API examples, event delegation, etc.
-// (Append remaining 50+ features according to guide)
-// ...Truncated: See guide for full implementation...
+/* Sync UI state */
+function sync(){
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  pairs.forEach((p,idx)=>{
+    if (!p.r || !p.l) return;
+    const turned = (idx < spread);
+    [p.r, p.l].forEach(el=>{
+      if (reduceMotion){
+        // Cross-fade alternative
+        el.style.transition = 'opacity 120ms ease';
+        el.style.opacity = turned ? 0 : 1;
+        el.classList.toggle('turned', false);
+      } else {
+        el.style.transition = '';
+        el.style.opacity = 1;
+        el.classList.toggle('turned', turned);
+      }
+    });
+    // z-index staging
+    if (turned){
+      p.r.style.zIndex = 2 + idx*2;
+      p.l.style.zIndex = 3 + idx*2;
+    } else {
+      const base = 10 + (pairs.length - idx)*2;
+      p.r.style.zIndex = base;
+      p.l.style.zIndex = base+1;
+    }
+  });
+  updateProgress();
+  announcePage();
+  updateHash();
+  ensureThumbnails();
+}
+
+/* Flip controls */
+function next(){ if (spread < pairs.length){ spread++; sync(); } }
+function prev(){ if (spread > 0){ spread--; sync(); } }
+function goTo(target){ spread = Math.max(0, Math.min(pairs.length, target)); sync(); }
+
+/* Controls */
+['nextBtn','nextHud','fabNext','zoneRight'].forEach(id=>document.getElementById(id).addEventListener('click', next));
+['prevBtn','prevHud','fabPrev','zoneLeft' ].forEach(id=>document.getElementById(id).addEventListener('click', prev));
+document.getElementById('jumpSelect').addEventListener('change', (e)=> goTo(+e.target.value));
+
+/* Index jump */
+document.getElementById('index').addEventListener('click', (e)=>{
+  const b = e.target.closest('button[data-go]');
+  if (!b) return;
+  goTo(+b.dataset.go);
+});
+
+/* Keyboard */
+document.addEventListener('keydown', (e)=>{
+  if (e.key === 'ArrowRight') next();
+  else if (e.key === 'ArrowLeft') prev();
+  else if (e.key === 'Home') goTo(0);
+  else if (e.key === 'End') goTo(pairs.length);
+  else if (/[1-6]/.test(e.key)) goTo(+e.key-1);
+  else if (e.key === 'Enter') next();
+  else if (e.key === 'Escape') closeOverlays();
+});
+
+/* KB overlay */
+const kb = document.getElementById('kb'); const kbBtn = document.getElementById('kbBtn'); const kbClose = document.getElementById('kbClose');
+function openKB(){ kb.style.display='flex'; kbBtn.setAttribute('aria-expanded','true'); }
+function closeKB(){ kb.style.display='none'; kbBtn.setAttribute('aria-expanded','false'); }
+kbBtn.addEventListener('click', ()=> kb.style.display==='flex'? closeKB(): openKB());
+kbClose.addEventListener('click', closeKB);
+
+/* Mobile double-tap zoom */
+let zoomed=false;
+function toggleZoom(){
+  const wrap = document.querySelector('.book-wrap');
+  zoomed = !zoomed;
+  wrap.style.transform = zoomed ? 'scale(1.18)' : 'scale(1)';
+  wrap.style.transition = 'transform 200ms ease';
+}
+let lastTap=0;
+document.querySelector('.book-wrap').addEventListener('click', (e)=>{
+  const now = Date.now();
+  if (now - lastTap < 280){ toggleZoom(); }
+  lastTap = now;
+});
+
+/* Scroll-to-flip nudge */
+let scrollAcc=0;
+document.addEventListener('wheel', (e)=>{
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+  scrollAcc += e.deltaY;
+  if (scrollAcc > 200){ next(); scrollAcc=0; }
+  if (scrollAcc < -200){ prev(); scrollAcc=0; }
+}, {passive:true});
+
+/* Cursor hints (desktop) */
+function setCursorZones(){
+  const left = document.getElementById('zoneLeft');
+  const right = document.getElementById('zoneRight');
+  left.style.cursor = 'w-resize';
+  right.style.cursor = 'e-resize';
+}
+setCursorZones();
+
+/* High-contrast toggle */
+const hcToggle = document.getElementById('hcToggle');
+hcToggle.addEventListener('change', ()=>{
+  document.documentElement.setAttribute('data-contrast', hcToggle.checked ? 'high' : 'normal');
+});
+
+/* Hash routing: #page-X */
+function updateHash(){
+  const h = `#page-${spread}`;
+  if (location.hash !== h){
+    history.replaceState(null,'',h);
+  }
+}
+function readHash(){
+  const m = location.hash.match(/#page-(\d+)/);
+  return m ? Math.max(0, Math.min(pairs.length, parseInt(m[1],10))) : 0;
+}
+window.addEventListener('hashchange', ()=> goTo(readHash()) );
+
+/* Active section from current pair */
+function activeSection(){
+  const idx = Math.min(spread*2+1, sheets.length)-1;
+  const s = sheets[Math.max(0, idx)];
+  return s?.dataset?.section || '';
+}
+
+/* Thumbnails generation (lazy) */
+const thumbs = document.getElementById('thumbs');
+let thumbsReady=false;
+function ensureThumbnails(){
+  if (thumbsReady) return;
+  // Generate one per sheet pair (front page number)
+  for (let i=0;i<pairs.length;i++){
+    const t = document.createElement('button');
+    t.className='thumb'; t.dataset.pg = String(i*2);
+    t.title = `Go to page ${i*2}`;
+    t.addEventListener('click', ()=> goTo(i));
+    thumbs.appendChild(t);
+  }
+  thumbsReady=true;
+}
+
+/* Search with highlight (Custom Highlight API with fallback) */
+const searchInput = document.getElementById('searchInput');
+let highlightsSupported = !!(CSS && CSS.highlights);
+let searchRanges = [];
+function clearHighlights(){
+  if (highlightsSupported){ CSS.highlights.clear(); }
+  else{
+    // Simple fallback: unwrap <mark data-hit>
+    document.querySelectorAll('mark[data-hit]').forEach(el=>{
+      const parent = el.parentNode; parent.replaceChild(document.createTextNode(el.textContent), el); parent.normalize();
+    });
+  }
+}
+function applyHighlights(str){
+  clearHighlights();
+  if (!str) return;
+  const contentRoot = document.querySelector('.book');
+  if (highlightsSupported){
+    const walker = document.createTreeWalker(contentRoot, NodeFilter.SHOW_TEXT);
+    const ranges = [];
+    let node; const q = str.toLowerCase();
+    while(node = walker.nextNode()){
+      const text = node.textContent.toLowerCase();
+      let idx=0;
+      while((idx = text.indexOf(q, idx)) !== -1){
+        const r = new Range();
+        r.setStart(node, idx);
+        r.setEnd(node, idx+q.length);
+        ranges.push(r);
+        idx += q.length;
+      }
+    }
+    const hl = new Highlight(...ranges);
+    CSS.highlights.set('search-hit', hl);
+  } else {
+    // naive fallback: wrap matches inside paragraphs
+    document.querySelectorAll('.page .body, .page .title, .page .subtitle').forEach(block=>{
+      const html = block.innerHTML;
+      const safe = str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      block.innerHTML = html.replace(new RegExp(`(${safe})`,'gi'), '<mark data-hit>$1</mark>');
+    });
+  }
+}
+searchInput.addEventListener('input', (e)=> applyHighlights(e.target.value.trim()) );
+
+/* Notes and highlights (selection) */
+document.addEventListener('mouseup', ()=>{
+  const sel = getSelection();
+  if (!sel || sel.isCollapsed) return;
+  const text = sel.toString().trim();
+  if (!text) return;
+  const ok = confirm('Add highlight to Notes?');
+  if (!ok) return;
+  const note = { text, page: spread*2, t: Date.now() };
+  const key = 'glassbook-notes';
+  const list = JSON.parse(localStorage.getItem(key) || '[]');
+  list.push(note);
+  localStorage.setItem(key, JSON.stringify(list));
+  alert('Saved to Notes (local).');
+});
+
+/* FPS guard: disable heavy visuals if frames drop */
+let lowPerf=false;
+(function fpsGuard(){
+  let last = performance.now(); let drops=0;
+  function raf(t){
+    const dt = t - last; last = t;
+    if (dt > 50) drops++; // rough frame drop
+    if (drops > 6 && !lowPerf){
+      lowPerf = true;
+      document.querySelectorAll('.curl').forEach(el=> el.style.display='none');
+      document.querySelector('.noise')?.setAttribute('style','display:none');
+      document.documentElement.style.setProperty('--flip-dur','.5s');
+      console.log('Performance guard: disabled curls/noise');
+    }
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+})();
+
+/* Backdrop-filter tuner for low-end devices */
+(function backdropTuner(){
+  const test = CSS.supports('backdrop-filter','blur(12px)') || CSS.supports('-webkit-backdrop-filter','blur(12px)');
+  if (!test){
+    document.querySelectorAll('.paper').forEach(p=> p.style.background='rgba(255,255,255,0.96)');
+  }
+})();
+
+/* Lazy hydration: attach hover/edge listeners only near current spread */
+function hydrateEdges(){
+  const range = 2; // pairs around current
+  sheets.forEach((s, idx)=>{
+    const pairIdx = +s.dataset.pair;
+    const near = Math.abs(pairIdx - spread) <= range;
+    s.querySelector('.curl').style.opacity = near ? '' : '0';
+  });
+}
+
+/* Update URL hash and load on start */
+function initFromHash(){ goTo(readHash()); }
+
+/* Dynamic edge sheen with pointer */
+document.addEventListener('pointermove', (e)=>{
+  const rect = document.querySelector('.book-wrap').getBoundingClientRect();
+  const relX = (e.clientX - rect.left)/rect.width;
+  const sheen = Math.max(0, Math.min(1, Math.abs(relX-0.5)*2));
+  document.querySelectorAll('.paper::before'); // no direct access; leave as static sheen
+});
+
+/* One-hand FAB visibility on mobile */
+function updateFAB(){
+  const mobile = matchMedia('(max-width: 700px)').matches;
+  document.getElementById('fabPrev').style.display = mobile ? 'grid' : 'none';
+  document.getElementById('fabNext').style.display = mobile ? 'grid' : 'none';
+}
+addEventListener('resize', updateFAB, {passive:true});
+
+/* Print-friendly page count label */
+window.addEventListener('beforeprint', ()=> document.querySelector('.tip').textContent = 'Printing linearized pagesâ€¦' );
+
+/* Year */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* Init */
+document.getElementById('fabPrev').addEventListener('click', prev);
+document.getElementById('fabNext').addEventListener('click', next);
+document.getElementById('prevHud').addEventListener('click', prev);
+document.getElementById('nextHud').addEventListener('click', next);
+
+/* Open/close overlays */
+function closeOverlays(){ closeKB(); }
+
+/* Maintain tab order: zoneLeft -> prev -> index -> next -> zoneRight */
+document.getElementById('zoneLeft').setAttribute('tabindex','0');
+document.getElementById('zoneRight').setAttribute('tabindex','0');
+
+/* Initial build */
+updateFAB();
+initFromHash();
+sync();
+hydrateEdges();
+
+/* Hash deep link on load even without user interaction */
+window.addEventListener('DOMContentLoaded', ()=> { if (!location.hash) updateHash(); });
+
+  /* ===== Flip timing helper tied to CSS durations ===== */
+function getFlipMs(el){
+  const cs = getComputedStyle(el);
+  const durs = cs.transitionDuration.split(',').map(s=>parseFloat(s)*1000);
+  const valid = durs.filter(n=>!Number.isNaN(n) && n>0);
+  return (valid.length ? Math.max(...valid) : 800);
+}
+
+/* ===== Accessibility: mark active in index and select ===== */
+const indexRail = document.getElementById('index');
+function markIndexCurrent(){
+  if (!indexRail) return;
+  indexRail.querySelectorAll('button[data-go]').forEach((b,i)=>{
+    const active = i === spread;
+    if (active) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+  });
+}
+function markSelectCurrent(){
+  const sel = document.getElementById('jumpSelect');
+  if (sel) sel.value = String(spread);
+}
+
+/* ===== Wrap sync to add transient GPU promotion + edge hydration ===== */
+const __orig_sync = sync;
+sync = function(){
+  __orig_sync();
+
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion){
+    const p = pairs[Math.max(0, Math.min(pairs.length-1, spread))];
+    [p?.r, p?.l].forEach(el=>{
+      if (!el) return;
+      el.classList.add('flipping');
+      const ms = getFlipMs(el);
+      setTimeout(()=> el.classList.remove('flipping'), ms + 50);
+    });
+  }
+
+  // ensure curls/thumbnails density is near the active spread only
+  hydrateEdges();
+
+  // a11y markers
+  markIndexCurrent();
+  markSelectCurrent();
+};
+
+/* ===== Dialog focus safety for Keyboard overlay ===== */
+let __lastFocused = null;
+function openKB(){
+  kb.style.display='flex';
+  kbBtn.setAttribute('aria-expanded','true');
+  kb.setAttribute('aria-modal','true');
+  __lastFocused = document.activeElement;
+  kb.tabIndex = -1;
+  kb.focus();
+}
+function closeKB(){
+  kb.style.display='none';
+  kbBtn.setAttribute('aria-expanded','false');
+  kb.removeAttribute('aria-modal');
+  if (__lastFocused && __lastFocused.focus) __lastFocused.focus();
+}
+
+/* ===== Safer search fallback: wrap text nodes, not innerHTML ===== */
+function applyHighlights(str){
+  clearHighlights();
+  if (!str) return;
+  const root = document.querySelector('.book');
+  if (highlightsSupported){
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const ranges=[]; let node; const q=str.toLowerCase();
+    while(node = walker.nextNode()){
+      const t = node.textContent.toLowerCase(); let i=0;
+      while((i = t.indexOf(q, i)) !== -1){
+        const r = new Range(); r.setStart(node, i); r.setEnd(node, i+q.length);
+        ranges.push(r); i += q.length;
+      }
+    }
+    const hl = new Highlight(...ranges);
+    CSS.highlights.set('search-hit', hl);
+  } else {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const q = str.toLowerCase(); const targets=[]; let node;
+    while(node = walker.nextNode()){
+      if (!node.parentElement.closest('.page')) continue;
+      const txt = node.textContent; const low = txt.toLowerCase();
+      let i=0; const parts=[];
+      while(true){
+        const j = low.indexOf(q, i);
+        if (j === -1){ parts.push(document.createTextNode(txt.slice(i))); break; }
+        if (j>i) parts.push(document.createTextNode(txt.slice(i, j)));
+        const m = document.createElement('mark'); m.setAttribute('data-hit',''); m.textContent = txt.slice(j, j+q.length);
+        parts.push(m); i = j+q.length;
+      }
+      targets.push([node, parts]);
+    }
+    targets.forEach(([node, parts])=>{
+      const frag = document.createDocumentFragment();
+      parts.forEach(p=>frag.appendChild(p));
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+}
+
+/* ===== Debounced hash updates to avoid thrash during fast flips ===== */
+let __hashRAF = null;
+function updateHash(){
+  const h = `#page-${spread}`;
+  if (location.hash === h) return;
+  if (__hashRAF) cancelAnimationFrame(__hashRAF);
+  __hashRAF = requestAnimationFrame(()=> history.replaceState(null,'',h));
+}
+
+/* ===== Ensure hydrateEdges runs on init too (it already runs in sync) ===== */
+hydrateEdges();
+
+/* ===== Optional: pause pointer sheen work when lowPerf is true ===== */
+if (typeof lowPerf !== 'undefined' && lowPerf){
+  // here one could remove heavy listeners if any are added later
+}
+
+
 </script>
 </body>
 </html>
