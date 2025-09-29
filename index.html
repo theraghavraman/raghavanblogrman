@@ -1119,31 +1119,7 @@ window.addEventListener('DOMContentLoaded', ()=> { if (!location.hash) updateHas
 window.addEventListener('orientationchange', () => {
   document.querySelector('.book-wrap').style.transform = 'scale(1)';
 });
-
-  /* High-contrast toggle */
-const hcToggle = document.getElementById('hcToggle');
-const ROOT = document.documentElement;
-const HC_KEY = 'glassbook-contrast';
-
-function applyHC(enabled){
-  if (enabled){
-    ROOT.setAttribute('data-contrast', 'high');
-    hcToggle.checked = true;
-  } else {
-    ROOT.removeAttribute('data-contrast');
-    hcToggle.checked = false;
-  }
-}
-
-/* initial state from storage or OS preference */
-const storedHC = localStorage.getItem(HC_KEY);
-const prefersHC = false; // can be extended to read a custom media query if desired
-applyHC(storedHC === 'high' || storedHC === '1');
-
-
-
 </script>
-
 
 
 </body>
