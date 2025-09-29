@@ -476,6 +476,58 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
   }
 }
 
+  @media (max-width: 480px) {
+  /* 1. Lightweight glass performance: use solid/translucent backgrounds */
+  .page.glass, .sheet, .paper { 
+    background: #fff !important; 
+    box-shadow: none !important;
+    border: 1px solid #e3e8fd;
+    backdrop-filter: none !important;
+    transition: none !important;
+  }
+  .noise { display: none !important; } /* Disable noise for performance */
+  .curl { display: none !important; }  /* Disable page curl effect */
+
+  /* 2. Layout: single-column/header stack; reduced spacing */
+  .header { flex-direction: column !important; gap: var(--spacing-small) !important; }
+  .controls, .toolbar { flex-direction: column !important; gap: var(--spacing-small) !important; }
+  .page.glass, .sheet { padding: var(--spacing-small) !important; margin: var(--spacing-small) 0 !important; }
+
+  /* 3. Font readability: clamp vars, lower bounds */
+  .title { font-size: clamp(1.05rem, 2vw, 1.3rem) !important; }
+  .subtitle, .body, .hrule { font-size: clamp(0.85rem, 2vw, 1.1rem) !important; }
+  .btn, .fab, .select { font-size: clamp(1rem, 3vw, 1.3rem) !important; padding: 0.8em 1.2em !important; }
+  .toolbar, .toggle .label-text { font-size: clamp(0.95rem, 2vw, 1.15rem) !important; }
+  
+  /* 4. Usable navigation: bigger, sticky FABs/buttons */
+  .fab, .btn {
+    min-width: 48px !important; min-height: 48px !important;
+    font-size: 1.2em !important;
+    position: sticky; bottom: 8px; z-index: 30;
+    margin-bottom: 10px !important;
+  }
+  .indexRail, #thumbs { display: none !important; }
+  
+  /* 5. Tools: sticky search input; collapse tools */
+  #searchInput { position: sticky; top: 0; z-index: 50; background: #fff; }
+  .toolbar { flex-direction: column !important; }
+
+  /* 6. Book flip portrait: linearize or offer single page */
+  .book-wrap, .sheet, .page.glass { width: 100vw !important; min-width: 0 !important; max-width: 100vw !important; }
+}
+
+@media (orientation: portrait) and (max-width: 700px) {
+  .book-wrap { width: 100vw !important; min-width: 0 !important; max-width: 100vw !important; }
+  .page.glass { width: 98vw !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page.glass, .sheet, .paper {
+    transition: none !important;
+  }
+  .curl, .noise { display: none !important; }
+}
+
 
   
 </style>
@@ -1119,6 +1171,34 @@ window.addEventListener('DOMContentLoaded', ()=> { if (!location.hash) updateHas
 window.addEventListener('orientationchange', () => {
   document.querySelector('.book-wrap').style.transform = 'scale(1)';
 });
+
+  // --- Mobile orientation: reset zoom/scale on orientation change ---
+window.addEventListener('orientationchange', () => {
+  const wrap = document.querySelector('.book-wrap');
+  if(wrap) {
+    wrap.style.transform = 'scale(1)';
+    wrap.style.width = '100vw';
+    wrap.style.height = '100vh';
+  }
+});
+
+// --- Optional: pinch-zoom disables for reduced-motion users on mobile ---
+const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)');
+function safeMotion(fn){
+  if (!prefersReduced.matches) fn();
+}
+let lastTap = 0;
+document.querySelector('.book-wrap').addEventListener('click', (e) => {
+  const now = Date.now();
+  if (now - lastTap < 280) safeMotion(toggleZoom);
+  lastTap = now;
+});
+
+// --- Hide/disable curl and noise for low-end devices (duplicate CSS disables too) ---
+document.querySelectorAll('.curl, .noise').forEach(el => el.style.display = 'none');
+
+
+  
 </script>
 
 
