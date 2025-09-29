@@ -303,6 +303,40 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
   font-weight: 500; color: var(--ink); margin-left: 4px;
 }
 
+  .header {
+  background: linear-gradient(90deg, #63b3ed 40%, #a78bfa 100%);
+  color: #fff;
+  box-shadow: 0 2px 16px rgba(15,21,51,0.15);
+  padding: 0.5em 1.5em;
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  display: flex; align-items: center; gap: 0.7em; text-decoration: none;
+}
+.logo svg, .logo {
+  display: block; width: 32px; height: 32px;
+}
+.header h1 {
+  font-family: 'Segoe UI', 'Arial', sans-serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 0;
+  background: linear-gradient(90deg,#f472b6 20%,#34d399 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+  .brand:hover .logo svg circle {
+  fill: #f472b6;
+  stroke: #34d399;
+  transition: fill 0.3s, stroke 0.3s;
+}
+.brand:hover h1 {
+  filter: brightness(1.2);
+}
+
+  
+
   
 </style>
 </head>
@@ -312,9 +346,16 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 
 <header class="header" role="banner">
   <a class="brand" href="#" aria-label="Glassbook Home">
-    <div class="logo" aria-hidden="true"></div>
+    <div class="logo" aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="28" fill="#63b3ed" stroke="#4e5b86" stroke-width="4"/>
+        <ellipse cx="32" cy="24" rx="10" ry="16" fill="rgba(255,255,255,0.32)" />
+      </svg>
+    </div>
     <h1>Glassbook</h1>
   </a>
+
+
 
   <div class="controls" role="group" aria-label="Navigation controls">
     <button class="btn" id="prevBtn" aria-label="Previous page" title="Previous (Arrow Left)">&#9664;</button>
