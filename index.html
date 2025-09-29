@@ -313,12 +313,178 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
   filter: brightness(1.2);
 }
 
+  :root {
+  /* Layout */
+  --book-w: min(1100px, 94vw);
+  --book-h: min(80vh, 720px);
+
+  /* Breakpoints */
+  --bp-mobile: 480px;
+  --bp-tablet: 700px;
+
+  /* Spacing */
+  --spacing-small: 6px;
+  --spacing-medium: 12px;
+  --spacing-large: 18px;
+
+  /* =================== Typography =================== */
+  /* Main content */
+  --fs-title: clamp(1rem, 1.4rem, 2rem);
+  --fs-subtitle: clamp(0.85rem, 1rem, 1.3rem);
+  --fs-body: clamp(0.9rem, 1rem, 1.2rem);
+  --fs-small: clamp(0.75rem, 0.85rem, 1rem);
+  --fs-pull: clamp(1rem, 1.1rem, 1.4rem);
+  --fs-hrule: clamp(0.65rem, 0.75rem, 0.9rem);
+
+  /* UI & Navigation */
+  --fs-button: clamp(0.8rem, 0.9rem, 1.1rem);
+  --fs-toolbar: clamp(0.75rem, 0.85rem, 1rem);
+
+  /* =================== Mobile Typography (Dynamic Scaling w/ clamp) =================== */
+  --fs-title-mobile: clamp(0.9rem, 0.9rem + 0.5vw, 1.6rem);
+  --fs-subtitle-mobile: clamp(0.75rem, 0.75rem + 0.3vw, 1.2rem);
+  --fs-body-mobile: clamp(0.8rem, 0.8rem + 0.3vw, 1.1rem);
+  --fs-small-mobile: clamp(0.7rem, 0.7rem + 0.25vw, 0.95rem);
+  --fs-pull-mobile: clamp(0.9rem, 0.9rem + 0.35vw, 1.3rem);
+  --fs-hrule-mobile: clamp(0.65rem, 0.65rem + 0.2vw, 0.85rem);
+  --fs-button-mobile: clamp(0.75rem, 0.75rem + 0.25vw, 1rem);
+  --fs-toolbar-mobile: clamp(0.7rem, 0.7rem + 0.2vw, 0.95rem);
+}
+
+/* =================== Responsive Layout =================== */
+@media (max-width: var(--bp-tablet)) {
+  .book-wrap {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  .page {
+    padding: var(--spacing-medium);
+  }
+  .header {
+    flex-direction: column;
+    gap: var(--spacing-small);
+  }
+}
+
+@media (max-width: var(--bp-mobile)) {
+  /* Dynamic font-size for mobile scaling */
+  .page .title { font-size: var(--fs-title-mobile); }
+  .page .subtitle { font-size: var(--fs-subtitle-mobile); }
+  .page .body { font-size: var(--fs-body-mobile); }
+  .page .pageno,
+  .page .kicker,
+  .tag { font-size: var(--fs-small-mobile); }
+  .page .pull { font-size: var(--fs-pull-mobile); }
+  .page .hrule { font-size: var(--fs-hrule-mobile); }
+  .btn, .fab, .select { font-size: var(--fs-button-mobile); }
+  .toolbar, .toggle .label-text { font-size: var(--fs-toolbar-mobile); }
+
+  .page { padding: var(--spacing-small); }
+  .controls, .toolbar { flex-direction: column; gap: var(--spacing-small); }
+  #searchInput { position: sticky; top: 0; z-index: 50; }
+}
+
+/* =================== Main Typography =================== */
+.page .title { font-size: var(--fs-title); }
+.page .subtitle { font-size: var(--fs-subtitle); }
+.page .body { font-size: var(--fs-body); }
+.page .pageno,
+.page .kicker,
+.tag { font-size: var(--fs-small); }
+.page .pull { font-size: var(--fs-pull); }
+.page .hrule { font-size: var(--fs-hrule); }
+.btn, .fab, .select { font-size: var(--fs-button); }
+.toolbar, .toggle .label-text { font-size: var(--fs-toolbar); }
+
+/* =================== Interaction Feedback =================== */
+.btn, .tag, .toggle .label-text, .fab, .select {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease,
+              box-shadow 0.3s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+.btn:hover, .btn:focus-visible,
+.fab:hover, .fab:focus-visible {
+  filter: brightness(1.05);
+  transform: scale(1.05);
+  color: #2251ff;
+  background-color: rgba(255,255,255,0.96);
+  box-shadow: 0 0 8px rgba(34,81,255,0.3);
+  font-size: inherit;
+}
+
+.tag:hover, .tag:focus-visible {
+  background-color: rgba(255,255,255,0.95);
+  transform: scale(1.05);
+  color: #1b234f;
+  font-size: inherit;
+}
+
+.toggle:hover .label-text, .toggle:focus-visible .label-text {
+  filter: brightness(1.2);
+  color: #2251ff;
+  font-size: inherit;
+}
+
+.select:hover, .select:focus-visible {
+  border-color: #2251ff;
+  box-shadow: 0 0 6px rgba(34,81,255,0.3);
+  transform: scale(1.02);
+  font-size: inherit;
+}
+
+/* =================== Mobile Controls and Thumbnails =================== */
+.thumbs {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.btn, .fab {
+  touch-action: manipulation; /* Faster tap response */
+}
   
 
   
 </style>
 </head>
+<div class="noise" aria-hidden="true" role="presentation"></div>
 
+<header class="header" role="banner">
+  <!-- Brand -->
+  <a class="brand" href="#" aria-label="Glassbook Home">
+    <div class="logo" aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 64 64">
+        <circle cx="32" cy="32" r="28" fill="#63b3ed" stroke="#4e5b86" stroke-width="4"/>
+        <ellipse cx="32" cy="24" rx="10" ry="16" fill="rgba(255,255,255,0.32)" />
+      </svg>
+    </div>
+    <h1>Glassbook</h1>
+  </a>
+
+  <!-- Controls -->
+  <div class="controls" role="group" aria-label="Navigation controls">
+    <button class="btn" id="prevBtn" aria-label="Previous page" title="Previous (Arrow Left)">◄</button>
+    <button class="btn" id="nextBtn" aria-label="Next page" title="Next (Arrow Right)">►</button>
+    <select class="select" id="jumpSelect" aria-label="Jump to section">
+      <option value="0">Cover</option>
+      <option value="1" data-section="science">Science</option>
+      <option value="2" data-section="philosophy">Philosophy</option>
+      <option value="3" data-section="tech">Technology</option>
+      <option value="4" data-section="literature">Literature</option>
+      <option value="5">Essays</option>
+    </select>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar" role="group" aria-label="Tools">
+    <label class="toggle hc-switch" for="hcToggle">
+      <input type="checkbox" id="hcToggle" />
+      <span class="slider"></span>
+      <span class="label-text">High contrast</span>
+    </label>
+    <input class="input" id="searchInput" type="search" placeholder="Search text…" aria-label="Search in book" />
+    <button class="btn" id="kbBtn" aria-haspopup="dialog" aria-controls="kb" aria-expanded="false">Keyboard</button>
+  </div>
+</header>
 <body>
 <div class="noise" aria-hidden="true" role="presentation"></div>
 
@@ -947,6 +1113,15 @@ hydrateEdges();
 /* Hash deep link on load even without user interaction */
 window.addEventListener('DOMContentLoaded', ()=> { if (!location.hash) updateHash(); });
 
+
+
+  
+// Recalculate scaling on orientation change (mobile)
+window.addEventListener('orientationchange', () => {
+  document.querySelector('.book-wrap').style.transform = 'scale(1)';
+});
 </script>
+
+
 </body>
 </html>
