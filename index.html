@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Glassbook ” Science and Philosophy and Technology and Literature</title>
+<title>Glassbook: Science and Philosophy and Technology and Literature</title>
 <meta name="description" content="A single-file accessible glassmorphic flipbook with realistic page turns, deep links, search-highlighting, thumbnails, notes, and print mode." />
 
 <style>
@@ -50,30 +50,30 @@
 }
 
 /* =================== Global =================== */
-*{ box-sizing:border-box }
-html,body{ height:100% }
-html{ scroll-behavior:smooth }
-body{
-  margin:0;
+*{ box-sizing: border-box }
+html, body { height: 100%; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
   background:
     radial-gradient(1200px 600px at 10% 10%, rgba(99,179,237,0.14), transparent 60%),
     radial-gradient(1200px 600px at 90% 15%, rgba(167,139,250,0.14), transparent 60%),
     linear-gradient(180deg, #f7faff, #ecf2ff 38%, #f9fbff 100%);
-  color:var(--ink);
+  color: var(--ink);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-  overflow-x:hidden;
+  overflow-x: hidden;
 }
 
 /* Gentle dynamic background tint by section */
-body[data-section="science"]{ background: linear-gradient(180deg,#f7fffb,#ebfff6 40%,#f8fffc); }
-body[data-section="philosophy"]{ background: linear-gradient(180deg,#fff7fb,#ffeff7 40%,#fff7fb); }
-body[data-section="tech"]{ background: linear-gradient(180deg,#f7fbff,#eef5ff 40%,#f9fbff); }
-body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3edff 40%,#fbf7ff); }
+body[data-section="science"]{ background: linear-gradient(180deg, #f7fffb, #ebfff6 40%, #f8fffc); }
+body[data-section="philosophy"]{ background: linear-gradient(180deg, #fff7fb, #ffeff7 40%, #fff7fb); }
+body[data-section="tech"]{ background: linear-gradient(180deg, #f7fbff, #eef5ff 40%, #f9fbff); }
+body[data-section="literature"]{ background: linear-gradient(180deg, #fbf7ff, #f3edff 40%, #fbf7ff); }
 
 /* Noise texture */
-.noise{
-  position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.05;
+.noise {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .05;
   background-image: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140" viewBox="0 0 140 140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="1"/></svg>');
   background-size: 280px 280px;
   mix-blend-mode: multiply;
@@ -81,35 +81,35 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 
 /* =================== Header =================== */
 .header{
-  position:relative; z-index:3;
-  width:calc(100% - 2rem); max-width:1200px; margin: 10px auto 8px;
-  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  position: relative; z-index: 3;
+  width: calc(100% - 2rem); max-width: 1200px; margin: 10px auto 8px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
 }
-.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; color:inherit; }
+.brand{ display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
 .logo{
-  width:42px; height:42px; border-radius:12px;
+  width: 42px; height: 42px; border-radius: 12px;
   background: conic-gradient(from 210deg, var(--a1), var(--a2), var(--a3), var(--a4), var(--a1));
-  position:relative; overflow:hidden; border:1px solid var(--border);
+  position: relative; overflow: hidden; border: 1px solid var(--border);
   box-shadow: 0 8px 22px rgba(15,21,51,0.12);
-  flex:0 0 42px;
+  flex: 0 0 42px;
 }
 .logo::after{
-  content:""; position:absolute; inset:2px; border-radius:10px;
+  content: ""; position: absolute; inset: 2px; border-radius: 10px;
   background: rgba(255,255,255,0.55);
   border:1px solid rgba(20,24,40,0.12);
   backdrop-filter: blur(4px);
 }
-.brand h1{ margin:0; font-size:1.05rem; letter-spacing:.12em; text-transform:uppercase; color:#465185; font-weight:900; }
+.brand h1{ margin: 0; font-size: 1.05rem; letter-spacing:.12em; text-transform: uppercase; color:#465185; font-weight: 900; }
 
-.controls{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.controls{ display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.55rem .85rem;
+  display: inline-flex; align-items: center; justify-content: center; gap:.5rem; padding:.55rem .85rem;
   border-radius:12px; background: rgba(255,255,255,0.92);
-  border:1px solid var(--border); color:var(--ink);
+  border: 1px solid var(--border); color: var(--ink);
   box-shadow: 0 6px 14px rgba(15,21,51,0.08);
-  text-decoration:none; font-weight:800; min-height:44px; min-width:44px;
+  text-decoration: none; font-weight: 800; min-height: 44px; min-width: 44px;
 }
-.btn:hover{ filter:brightness(1.03) }
+.btn:hover{ filter: brightness(1.03) }
 .btn:focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; }
 .select, .input{
   padding:.55rem .7rem; border-radius:12px; border:1px solid var(--border); background:#fff; color:var(--ink); font-weight:700; min-height:44px;
@@ -174,11 +174,11 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23f)"/></svg>');
   background-size: 320px 320px;
 }
-.page{ position:absolute; inset:0; display:grid; grid-template-rows: auto 1fr auto; padding: 16px; }
-.headerline{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
-.kicker{ text-transform:uppercase; letter-spacing:.18em; color:#6572a4; font-size:.78rem; font-weight:800; }
-.pageno{ color:#5b6793; font-weight:800; font-size:.8rem; }
-.hrule{ height:1px; background: linear-gradient(90deg, rgba(20,24,40,0.12), rgba(255,255,255,0.9), rgba(20,24,40,0.12)); margin-bottom:8px; border-radius:1px; }
+.page{ position: absolute; inset: 0; display: grid; grid-template-rows: auto 1fr auto; padding: 16px; }
+.headerline{ display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.kicker{ text-transform: uppercase; letter-spacing:.18em; color:#6572a4; font-size:.78rem; font-weight: 800; }
+.pageno{ color:#5b6793; font-weight: 800; font-size:.8rem; }
+.hrule{ height: 1px; background: linear-gradient(90deg, rgba(20,24,40,0.12), rgba(255,255,255,0.9), rgba(20,24,40,0.12)); margin-bottom: 8px; border-radius: 1px; }
 .title{ font-weight:900; font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height:1.14; margin:2px 0 6px; font-family: "Georgia", "Times New Roman", serif; }
 .subtitle{ color:var(--muted); font-weight:700; margin:0 0 8px; }
 .body{ color:#1b234f; line-height:1.72; font-size:1rem; }
@@ -193,7 +193,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 
 /* Section color tabs (outer edges) */
 .sheet.right .paper{ border-right: 4px solid transparent; }
-.sheet.left  .paper{ border-left: 4px solid transparent; }
+.sheet.left .paper{ border-left: 4px solid transparent; }
 .sheet[data-section="science"] .paper{ border-color: var(--cat-science); }
 .sheet[data-section="philosophy"] .paper{ border-color: var(--cat-philo); }
 .sheet[data-section="tech"] .paper{ border-color: var(--cat-tech); }
@@ -243,25 +243,25 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 
 /* Floating mobile nav buttons */
 .fab{
-  position: fixed; bottom: 14px; width:56px; height:56px; border-radius:50%; display:grid; place-items:center;
+  position: fixed; bottom: 14px; width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
   background:#fff; border:1px solid var(--border); box-shadow: 0 10px 20px rgba(15,21,51,0.18); z-index:60;
 }
-.fab.left{ left: 14px; } .fab.right{ right: 14px; }
-.fab:focus-visible{ outline: 3px solid var(--focus); outline-offset: 3px; }
+.fab.left { left: 14px; } .fab.right { right: 14px; }
+.fab:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 
 /* Search highlight using CSS Custom Highlight API fallback */
-::highlight(search-hit){ background: #ffec80; color: #161616; }
+::highlight(search-hit) { background: #ffec80; color: #161616; }
 
 /* High-contrast switch */
-.toggle{ display:inline-flex; align-items:center; gap:6px; padding:.45rem .6rem; border:1px solid var(--border); border-radius:999px; background:#fff; font-weight:800; }
+.toggle { display: inline-flex; align-items: center; gap: 6px; padding: .45rem .6rem; border: 1px solid var(--border); border-radius: 999px; background: #fff; font-weight: 800; }
 
 /* Print: linearize pages in order */
-@media print{
-  body{ background:#fff !important; }
-  .header, .spine, .index, .hud, .thumbs, .fab, .kb-help, .navzone{ display:none !important; }
-  .stage{ perspective: none; }
-  .book-wrap, .book, .sheet, .paper{ position:static; transform:none !important; height:auto; box-shadow:none !important; }
-  .sheet, .paper, .page{ width:100%; }
+@media print {
+  body { background: #fff !important; }
+  .header, .spine, .index, .hud, .thumbs, .fab, .kb-help, .navzone { display: none !important; }
+  .stage { perspective: none; }
+  .book-wrap, .book, .sheet, .paper { position: static; transform: none !important; height: auto; box-shadow: none !important; }
+  .sheet, .paper, .page { width: 100%; }
 }
 
 /* Backdrop-filter fallback */
@@ -393,11 +393,11 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
           <div class="page">
             <div class="headerline"><div class="kicker">The Daily Aether</div><div class="pageno">Cover</div></div>
             <div class="hrule"></div>
-            <h2 class="title">Science, Philosophy, Tech, Literatureâ€”on frosted pages</h2>
+            <h2 class="title">Science, Philosophy, Tech, Literature—on frosted pages</h2>
             <div class="subtitle">Flip the glass and the story continues.</div>
             <div class="body">
               <p>Welcome to a living broadsheet where ideas move as pages turn. Use arrow keys or tap edges. Index jumps instantly. Single file, vanilla JS.</p>
-              <p class="pull" style="color:var(--a1)">â€œTurn the page; the thought continues.â€</p>
+              <p class="pull" style="color:var(--a1)">“Turn the page; the thought continues.”</p>
               <div class="tags">
                 <span class="tag" style="border-color:var(--cat-science)">Science</span>
                 <span class="tag" style="border-color:var(--cat-philo)">Philosophy</span>
@@ -417,11 +417,11 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
             <div class="hrule"></div>
             <h2 class="title">Glass Book</h2>
             <div class="body">
-              <p><strong>Science</strong>: Planck Time and Desireâ€”on the smallest tick and the longest longing.</p>
-              <p><strong>Philosophy</strong>: Against Reductionâ€”why not all meaning fits a metric.</p>
-              <p><strong>Technology</strong>: Edge Compute, Edge Cultureâ€”presence near the margins.</p>
-              <p><strong>Literature</strong>: Footnotes to a Dreamâ€”Kafka, annotation, and the data of desire.</p>
-              <p><strong>Essays</strong>: Signals, Symbols, Soulsâ€”representation between neurons and notions.</p>
+              <p><strong>Science</strong>: Planck Time and Desire—on the smallest tick and the longest longing.</p>
+              <p><strong>Philosophy</strong>: Against Reduction—why not all meaning fit a metric.</p>
+              <p><strong>Technology</strong>: Edge Compute, Edge Culture—presence near the margins.</p>
+              <p><strong>Literature</strong>: Footnotes to a Dream—Kafka, annotation, and the data of desire.</p>
+              <p><strong>Essays</strong>: Signals, Symbols, Souls—representation between neurons and notions.</p>
             </div>
           </div>
           <div class="curl"></div>
@@ -436,8 +436,8 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
             <h2 class="title">Planck Time and Desire</h2>
             <div class="subtitle">When the instant is granular, but longing is continuous.</div>
             <div class="body">
-              <p>Between the quantum tick and the human ache sits a paradox: discreteness beneath a feeling that doesnâ€™t split. Models refine constants; experience resists rounding.</p>
-              <p class="pull" style="color:var(--a4)">â€œPrecision measures; desire remembers.â€</p>
+              <p>Between the quantum tick and the human ache sits a paradox: discreteness beneath a feeling that doesn’t split. Models refine constants; experience resists rounding.</p>
+              <p class="pull" style="color:var(--a4)">“Precision measures; desire remembers.”</p>
               <p>The book of nature has margins full of corrections; the book of love does not submit errata. Yet both are revised by better instruments, including attention.</p>
             </div>
             <div class="tags"><span class="tag">Physics</span><span class="tag">Time</span></div>
@@ -452,10 +452,10 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
             <div class="headerline"><div class="kicker">Science</div><div class="pageno">2</div></div>
             <div class="hrule"></div>
             <h2 class="title">The Gentle Violence of Measurement</h2>
-            <div class="subtitle">Observation changes what is observedâ€”and who observes.</div>
+            <div class="subtitle">Observation changes what is observed—and who observes.</div>
             <div class="body">
               <p>Every instrument is also an argument about what the world is allowed to say. Calibration is a creed; the readout is a confession.</p>
-              <p>Constants consoleâ€”until experiments write their elegy.</p>
+              <p>Constants console—until experiments write their elegy.</p>
             </div>
             <div class="tags"><span class="tag">Measurement</span></div>
           </div>
@@ -472,7 +472,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
             <div class="subtitle">What matters often refuses the comfort of metrics.</div>
             <div class="body">
               <p>Counting can be a courage and a comfort. Some values survive statistics by stepping aside; theyâ€™re present as remainder, not residue.</p>
-              <p>Philosophy isnâ€™t anti-measure; it is for a measured refusal to flatten wonder. The remainder teaches.</p>
+              <p>Philosophy isn’t anti-measure; it is for a measured refusal to flatten wonder. The remainder teaches.</p>
             </div>
             <div class="tags"><span class="tag">Meaning</span></div>
           </div>
@@ -505,7 +505,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
             <div class="subtitle">Near-user inference edits our sense of presence.</div>
             <div class="body">
               <p>When the server steps closer, the story does too. Latency becomes a literary device: tension authored by time saved.</p>
-              <p>Architectures migrate outward; aesthetics followâ€”light, responsive, humane.</p>
+              <p>Architectures migrate outward; aesthetics follow—light, responsive, humane.</p>
             </div>
             <div class="tags"><span class="tag">Edge</span></div>
           </div>
@@ -521,7 +521,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
             <h2 class="title">Latency Is a Literary Device</h2>
             <div class="subtitle">Waiting shapes meaning in servers and sentences.</div>
             <div class="body">
-              <p>Speed isnâ€™t the only kindness. Rhythm makes memory; delay makes desire legible.</p>
+              <p>Speed isn’t the only kindness. Rhythm makes memory; delay makes desire legible.</p>
             </div>
             <div class="tags"><span class="tag">Latency</span></div>
           </div>
@@ -537,7 +537,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
             <h2 class="title">Footnotes to a Dream</h2>
             <div class="subtitle">We annotate the night and call it a model; the dream resists.</div>
             <div class="body">
-              <p>Criticism is choreography. It doesnâ€™t pin the butterfly; it learns to dance with it.</p>
+              <p>Criticism is choreography. It doesn’t pin the butterfly; it learns to dance with it.</p>
             </div>
             <div class="tags"><span class="tag">Kafka</span></div>
           </div>
@@ -553,7 +553,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
             <h2 class="title">Margins, Kerning, Meaning</h2>
             <div class="subtitle">Typography as thought: spacing teaches breath.</div>
             <div class="body">
-              <p>Form is a teacher. A good margin is not empty; itâ€™s an agreement to listen.</p>
+              <p>Form is a teacher. A good margin is not empty; it’s an agreement to listen.</p>
             </div>
             <div class="tags"><span class="tag">Typography</span></div>
           </div>
@@ -621,6 +621,7 @@ const sheets = Array.from(document.querySelectorAll('.sheet'));
 const totalPairs = Math.ceil(sheets.length/2);
 const pairs = [];
 for (let i=0;i<totalPairs;i++){
+}
   const r = sheets.find(s => +s.dataset.pair === i && s.classList.contains('right'));
   const l = sheets.find(s => +s.dataset.pair === i && s.classList.contains('left'));
   pairs.push({r,l});
@@ -640,7 +641,7 @@ function announcePage(){
 /* Progress bar */
 const progBar = document.getElementById('progBar');
 function updateProgress(){
-  const pct = Math.min(100, Math.max(0, (spread/(pairs.length))*100));
+  const pct = Math.min(100, Math.max(0, (spread /pairs.length)*100));
   progBar.style.width = pct + '%';
 }
 
@@ -685,7 +686,7 @@ function goTo(target){ spread = Math.max(0, Math.min(pairs.length, target)); syn
 
 /* Controls */
 ['nextBtn','nextHud','fabNext','zoneRight'].forEach(id=>document.getElementById(id).addEventListener('click', next));
-['prevBtn','prevHud','fabPrev','zoneLeft' ].forEach(id=>document.getElementById(id).addEventListener('click', prev));
+['prevBtn','prevHud','fabPrev','zoneLeft‘].forEach(id=>document.getElementById(id).addEventListener('click', prev));
 document.getElementById('jumpSelect').addEventListener('change', (e)=> goTo(+e.target.value));
 
 /* Index jump */
@@ -734,12 +735,12 @@ document.addEventListener('wheel', (e)=>{
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
   scrollAcc += e.deltaY;
-  if (scrollAcc > 200){ next(); scrollAcc=0; }
-  if (scrollAcc < -200){ prev(); scrollAcc=0; }
-}, {passive:true});
+  if (scrollAcc > 200) { next(); scrollAcc = 0; }
+  if (scrollAcc < -200) { prev(); scrollAcc = 0; }
+}, {passive: true});
 
 /* Cursor hints (desktop) */
-function setCursorZones(){
+function setCursorZones() {
   const left = document.getElementById('zoneLeft');
   const right = document.getElementById('zoneRight');
   left.style.cursor = 'w-resize';
@@ -754,15 +755,15 @@ hcToggle.addEventListener('change', ()=>{
 });
 
 /* Hash routing: #page-X */
-function updateHash(){
+function updateHash() {
   const h = `#page-${spread}`;
-  if (location.hash !== h){
-    history.replaceState(null,'',h);
+  if (location.hash !== h) {
+    history.replaceState(null, '', h);
   }
 }
-function readHash(){
+function readHash() {
   const m = location.hash.match(/#page-(\d+)/);
-  return m ? Math.max(0, Math.min(pairs.length, parseInt(m[1],10))) : 0;
+  return m ? Math.max(0, Math.min(pairs.length, parseInt(m[1], 10))) : 0;
 }
 window.addEventListener('hashchange', ()=> goTo(readHash()) );
 
@@ -794,29 +795,29 @@ const searchInput = document.getElementById('searchInput');
 let highlightsSupported = !!(CSS && CSS.highlights);
 let searchRanges = [];
 function clearHighlights(){
-  if (highlightsSupported){ CSS.highlights.clear(); }
-  else{
+  if (highlightsSupported) { CSS.highlights.clear(); }
+  else {
     // Simple fallback: unwrap <mark data-hit>
-    document.querySelectorAll('mark[data-hit]').forEach(el=>{
+    document.querySelectorAll('mark[data-hit]').forEach(el => {
       const parent = el.parentNode; parent.replaceChild(document.createTextNode(el.textContent), el); parent.normalize();
     });
   }
 }
-function applyHighlights(str){
+function applyHighlights(str) {
   clearHighlights();
   if (!str) return;
   const contentRoot = document.querySelector('.book');
-  if (highlightsSupported){
+  if (highlightsSupported) {
     const walker = document.createTreeWalker(contentRoot, NodeFilter.SHOW_TEXT);
     const ranges = [];
     let node; const q = str.toLowerCase();
-    while(node = walker.nextNode()){
+    while (node = walker.nextNode()) {
       const text = node.textContent.toLowerCase();
-      let idx=0;
-      while((idx = text.indexOf(q, idx)) !== -1){
+      let idx = 0;
+      while ((idx = text.indexOf(q, idx)) !== -1) {
         const r = new Range();
         r.setStart(node, idx);
-        r.setEnd(node, idx+q.length);
+        r.setEnd(node, idx + q.length);
         ranges.push(r);
         idx += q.length;
       }
@@ -851,17 +852,17 @@ document.addEventListener('mouseup', ()=>{
 });
 
 /* FPS guard: disable heavy visuals if frames drop */
-let lowPerf=false;
-(function fpsGuard(){
-  let last = performance.now(); let drops=0;
-  function raf(t){
+let lowPerf = false;
+(function fpsGuard() {
+  let last = performance.now(); let drops = 0;
+  function raf(t) {
     const dt = t - last; last = t;
     if (dt > 50) drops++; // rough frame drop
-    if (drops > 6 && !lowPerf){
+    if (drops > 6 && !lowPerf) {
       lowPerf = true;
-      document.querySelectorAll('.curl').forEach(el=> el.style.display='none');
-      document.querySelector('.noise')?.setAttribute('style','display:none');
-      document.documentElement.style.setProperty('--flip-dur','.5s');
+      document.querySelectorAll('.curl').forEach(el => el.style.display='none‘none’);
+      document.querySelector('.noise')?.setAttribute('style', 'display:none');
+      document.documentElement.style.setProperty('--flip-dur', '.5s');
       console.log('Performance guard: disabled curls/noise');
     }
     requestAnimationFrame(raf);
@@ -870,17 +871,17 @@ let lowPerf=false;
 })();
 
 /* Backdrop-filter tuner for low-end devices */
-(function backdropTuner(){
-  const test = CSS.supports('backdrop-filter','blur(12px)') || CSS.supports('-webkit-backdrop-filter','blur(12px)');
-  if (!test){
-    document.querySelectorAll('.paper').forEach(p=> p.style.background='rgba(255,255,255,0.96)');
+(function backdropTuner() {
+  const test = CSS.supports('backdrop-filter', 'blur(12px)') || CSS.supports('-webkit-backdrop-filter', 'blur(12px)');
+  if (!test) {
+    document.querySelectorAll('.paper').forEach(p => p.style.background='rgba(255,255,255,0.96)');
   }
 })();
 
 /* Lazy hydration: attach hover/edge listeners only near current spread */
-function hydrateEdges(){
+function hydrateEdges() {
   const range = 2; // pairs around current
-  sheets.forEach((s, idx)=>{
+  sheets.forEach((s, idx) => {
     const pairIdx = +s.dataset.pair;
     const near = Math.abs(pairIdx - spread) <= range;
     s.querySelector('.curl').style.opacity = near ? '' : '0';
@@ -888,23 +889,23 @@ function hydrateEdges(){
 }
 
 /* Update URL hash and load on start */
-function initFromHash(){ goTo(readHash()); }
+function initFromHash() { goTo(readHash()); }
 
 /* Dynamic edge sheen with pointer */
-document.addEventListener('pointermove', (e)=>{
+document.addEventListener('pointermove', (e) => {
   const rect = document.querySelector('.book-wrap').getBoundingClientRect();
-  const relX = (e.clientX - rect.left)/rect.width;
-  const sheen = Math.max(0, Math.min(1, Math.abs(relX-0.5)*2));
+  const relX = (e.clientX - rect.left) / rect.width;
+  const sheen = Math.max(0, Math.min(1, Math.abs(relX - 0.5) * 2));
   document.querySelectorAll('.paper::before'); // no direct access; leave as static sheen
 });
 
 /* One-hand FAB visibility on mobile */
-function updateFAB(){
+function updateFAB() {
   const mobile = matchMedia('(max-width: 700px)').matches;
   document.getElementById('fabPrev').style.display = mobile ? 'grid' : 'none';
   document.getElementById('fabNext').style.display = mobile ? 'grid' : 'none';
 }
-addEventListener('resize', updateFAB, {passive:true});
+addEventListener('resize', updateFAB, {passive: true});
 
 /* Print-friendly page count label */
 window.addEventListener('beforeprint', ()=> document.querySelector('.tip').textContent = 'Printing linearized pagesâ€¦' );
