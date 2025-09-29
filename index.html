@@ -1119,8 +1119,8 @@ window.addEventListener('DOMContentLoaded', ()=> { if (!location.hash) updateHas
 window.addEventListener('orientationchange', () => {
   document.querySelector('.book-wrap').style.transform = 'scale(1)';
 });
-</script>
-/* High-contrast toggle */
+
+  /* High-contrast toggle */
 const hcToggle = document.getElementById('hcToggle');
 const ROOT = document.documentElement;
 const HC_KEY = 'glassbook-contrast';
@@ -1246,6 +1246,8 @@ document.querySelector('.book-wrap').addEventListener('click', (e)=>{
   }
   lastTap = now;
 });
+
+</script>
 
 
 
