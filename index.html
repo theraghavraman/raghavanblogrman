@@ -268,6 +268,42 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 @supports not ((backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px))){
   .paper{ background: rgba(255,255,255,0.96); }
 }
+
+  .hc-switch {
+  display: flex; align-items: center; cursor: pointer;
+  gap: 8px;
+}
+.hc-switch input[type="checkbox"] {
+  display: none;
+}
+.hc-switch .slider {
+  width: 42px; height: 24px;
+  background: var(--glass-strong);
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 2px 8px var(--shadow);
+  transition: background .2s;
+}
+.hc-switch .slider::after {
+  content: '';
+  position: absolute; left: 2px; top: 2px;
+  width: 20px; height: 20px;
+  background: var(--a1);
+  border-radius: 50%;
+  box-shadow: 0 1px 4px var(--shadow);
+  transition: left .2s, background .3s;
+}
+.hc-switch input:checked + .slider {
+  background: var(--focus);
+}
+.hc-switch input:checked + .slider::after {
+  left: 20px; background: var(--a3);
+}
+.hc-switch .label-text {
+  font-weight: 500; color: var(--ink); margin-left: 4px;
+}
+
+  
 </style>
 </head>
 
@@ -294,7 +330,11 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
   </div>
 
   <div class="toolbar" role="group" aria-label="Tools">
-    <label class="toggle"><input type="checkbox" id="hcToggle" /> High contrast</label>
+<label class="toggle hc-switch" for="hcToggle">
+  <input type="checkbox" id="hcToggle" />
+  <span class="slider"></span>
+  <span class="label-text">High contrast</span>
+</label>
     <input class="input" id="searchInput" type="search" placeholder="Search text…" aria-label="Search in book" />
     <button class="btn" id="kbBtn" aria-haspopup="dialog" aria-controls="kb" aria-expanded="false">Keyboard</button>
   </div>
@@ -369,7 +409,7 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
           <div class="page">
             <div class="headerline"><div class="kicker">Table of Contents</div><div class="pageno">i</div></div>
             <div class="hrule"></div>
-            <h2 class="title">This issue</h2>
+            <h2 class="title">Glassbook</h2>
             <div class="body">
               <p><strong>Science</strong>: Planck Time and Desire—on the smallest tick and the longest longing.</p>
               <p><strong>Philosophy</strong>: Against Reduction—why not all meaning fits a metric.</p>
