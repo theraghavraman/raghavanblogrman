@@ -3,11 +3,31 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <title>Glassbook — Science • Philosophy • Technology • Literature</title>
 <meta name="description" content="A single-file accessible glassmorphic flipbook with realistic page turns, deep links, search-highlighting, thumbnails, notes, and print mode." />
 
 <style>
+/* --- Mobile tap target improvements --- */
+.btn, .fab, .select, .thumb, .index button {
+  min-width: 48px;
+  min-height: 48px;
+  font-size: 1.1em;
+}
+
+/* --- Mobile nav visibility --- */
+@media (max-width: 700px) {
+  .fab.left, .fab.right {
+    display: grid !important;
+  }
+  .hud {
+    display: none !important;
+  }
+  /* Hide header navigation and index buttons on mobile */
+  .header .controls, .header .toolbar, .index {
+    display: none !important;
+  }
+}
 /* =================== Root, Modes, Tokens =================== */
 :root{
   --page-bg: #eef3ff;
@@ -368,6 +388,11 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 }
 
 @media (max-width: var(--bp-mobile)) {
+  /* Make nav zones easier to tap on mobile */
+  .navzone {
+    width: 32%;
+    min-height: 60px;
+  }
   /* Dynamic font-size for mobile scaling */
   .page .title { font-size: var(--fs-title-mobile); }
   .page .subtitle { font-size: var(--fs-subtitle-mobile); }
@@ -383,9 +408,17 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
   .page { padding: var(--spacing-small); }
   .controls, .toolbar { flex-direction: column; gap: var(--spacing-small); }
   #searchInput { position: sticky; top: 0; z-index: 50; }
+  /* Make search input easier to tap */
+  #searchInput {
+    min-height: 48px;
+    font-size: 1.1em;
+  }
 }
 
 /* =================== Main Typography =================== */
+.page .title, .page .subtitle, .page .body, .btn, .fab, .select, .toolbar, .toggle .label-text {
+  word-break: break-word;
+}
 .page .title { font-size: var(--fs-title); }
 .page .subtitle { font-size: var(--fs-subtitle); }
 .page .body { font-size: var(--fs-body); }
@@ -444,6 +477,12 @@ body[data-section="literature"]{ background: linear-gradient(180deg,#fbf7ff,#f3e
 }
 
   /* ---- Optimal mobile rendering and font scaling for performance ---- */
+  /* Make index buttons easier to tap */
+  .index button {
+    min-width: 48px;
+    min-height: 48px;
+    font-size: 1.1em;
+  }
 @media (max-width: 480px) {
   /* Lightweight backgrounds and borders for glassmorphic elements */
   .page.glass {
